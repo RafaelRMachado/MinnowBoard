@@ -1,0 +1,1225 @@
+//
+// This file contains 'Framework Code' and is licensed as such
+// under the terms of your license agreement with Intel or your
+// vendor.  This file may not be modified, except as allowed by
+// additional terms of your license agreement.
+//
+## @file
+# Minnow flash device information for the IA32 architecture.
+#
+# This package provides platform specific modules.
+# Copyright (c) 2010-2013, Intel Corporation.
+#
+# All rights reserved.
+#    This software and associated documentation (if any) is furnished
+#    under a license and may only be used or copied in accordance
+#    with the terms of the license. Except as permitted by such
+#    license, no part of this software or documentation may be
+#    reproduced, stored in a retrieval system, or transmitted in any
+#    form or by any means without the express written consent of
+#    Intel Corporation.
+#
+##
+
+################################################################################
+#
+# FD Section
+# The [FD] Section is made up of the definition statements and a
+# description of what goes into  the Flash Device Image.  Each FD section
+# defines one flash "device" image.  A flash device image may be one of
+# the following: Removable media bootable image (like a boot floppy
+# image,) an Option ROM image (that would be "flashed" into an add-in
+# card,) a System "Flash"  image (that would be burned into a system's
+# flash) or an Update ("Capsule") image that will be used to update and
+# existing system flash.
+#
+################################################################################
+!if $(FLASH_4_MB) == TRUE
+  #
+  #  4 MB Flash
+  #
+  !include MinnowBoardPkg/Flash_4_MB.fdf
+!else  # FLASH_4_MB
+  #
+  #  8 MB Flash
+  #
+  !include MinnowBoardPkg/Flash_8_MB.fdf
+!endif # FLASH_4_MB
+
+################################################################################
+#
+# Following are lists of FD Region layout which correspond to the locations of different
+# images within the flash device.
+#
+# Regions must be defined in ascending order and may not overlap.
+#
+# A Layout Region start with a eight digit hex offset (leading "0x" required) followed by
+# the pipe "|" character, followed by the size of the region, also in hex with the leading
+# "0x" characters. Like:
+# Offset|Size
+# PcdOffsetCName|PcdSizeCName
+# RegionType <FV, DATA, or FILE>
+#
+################################################################################
+#
+#
+#                  4 MB SPI Flash             Physical Memory
+# 0x00400000 +--------------------------+--------------------------+
+#            |       FVRECOVERY         |  Reset Vector            | 0xfffffff0
+#            |                          |  SEC code                |
+#            |                          |  PEI core                |
+#            |                          |  PEIM code               |
+#            |                          |  DXE IPL                 |
+# 0x003c0000 +--------------------------+--------------------------+ 0xfffc0000
+#            |    Vital Product Data    |  Ethernet MAC address    |
+#            |       (No Update)        |  UUID                    |
+#            |                          |  Firmware Version        |
+#            |                          |  Build Date              |
+# 0x003b7000 +--------------------------+--------------------------+ 0xfffb7000
+#            |   FV_CHIPSET_MICROCODE   |  EG20T microcode         |
+#            |       (No Update)        |                          |
+# 0x003b0000 +--------------------------+--------------------------+ 0xfffb0000
+#            |       NV_FTW_SPARE       |  ???                     |
+# 0x003a0000 +--------------------------+--------------------------+ 0xfff90000
+#            |      NV_FTW_WORKING      |  ???                     |
+# 0x0039e000 +--------------------------+--------------------------+ 0xfff9e000
+#            |    NV_VARIABLE_STORE     |  Variable storage        |
+#            |       (No Update)        |                          |
+# 0x00390000 +--------------------------+--------------------------+ 0xfff90000
+#            | FV_CPU_MICROCODE_UPDATES |  E6xx microcode updates  |
+#            |       (No Update)        |                          |
+# 0x00388000 +--------------------------+--------------------------+ 0xfff88000
+#            |       FVRECOVERY2        |  ???                     |
+# 0x00368000 +--------------------------+--------------------------+ 0xfff68000
+#            |       FVMAIN_COMPACT     |  DXE Drivers             |
+#            |                          |  SMM Drivers             |
+#            |                          |  UEFI Drivers            |
+#            |                          |  BDS                     |
+# 0x00190000 +--------------------------+--------------------------+ 0xffd90000
+#            |       (available)        |                          |
+# 0x00050000 +--------------------------+--------------------------+ 0xffc50000
+#            |        PAY_LOAD          |  Shell                   |
+#            |       (No Update)        |                          |
+# 0x00000000 +--------------------------+--------------------------+ 0xffc00000
+#
+#
+#               No Update: FirmwareUpdate application default
+#
+################################################################################
+
+!if $(FLASH_4_MB) == TRUE
+  #
+  #  4 MB Flash
+  #
+  0x00000000|0x00050000
+!else  # FLASH_4_MB
+    !if $(FLASH_8_FOR_4) == TRUE
+    #
+    #  8 MB Flash used for 4MB Flash
+    #  Keep the lower half erased!
+    #
+    0x00400000|0x00050000
+  !else  # FLASH_8_FOR_4
+    #
+    #  8 MB Flash
+    #
+    0x00000000|0x00050000
+  !endif # FLASH_8_FOR_4
+!endif # FLASH_4_MB
+gCrownBayTokenSpaceGuid.PcdFlashPayloadBase|gCrownBayTokenSpaceGuid.PcdFlashPayloadSize
+FV = PAY_LOAD
+
+
+!if $(FLASH_4_MB) == TRUE
+  #
+  #  4 MB Flash
+  #
+  0x00190000|0x001d8000
+!else  # FLASH_4_MB
+  #
+  #  8 MB Flash
+  #
+  0x00590000|0x001d8000
+!endif # FLASH_4_MB
+gCrownBayTokenSpaceGuid.PcdFlashFvMainBase|gCrownBayTokenSpaceGuid.PcdFlashFvMainSize
+FV = FVMAIN_COMPACT
+
+
+!if $(FLASH_4_MB) == TRUE
+  #
+  #  4 MB Flash
+  #
+  0x00368000|0x00020000
+!else  # FLASH_4_MB
+  #
+  #  8 MB Flash
+  #
+  0x00768000|0x00020000
+!endif # FLASH_4_MB
+gCrownBayTokenSpaceGuid.PcdFlashFvRecovery2Base|gCrownBayTokenSpaceGuid.PcdFlashFvRecovery2Size
+FV = FVRECOVERY2
+
+
+!if $(FLASH_4_MB) == TRUE
+  #
+  #  4 MB Flash
+  #
+  0x00388000|0x00008000
+!else  # FLASH_4_MB
+  #
+  #  8 MB Flash
+  #
+  0x00788000|0x00008000
+!endif # FLASH_4_MB
+gEfiCpuTokenSpaceGuid.PcdCpuMicrocodePatchAddress|gEfiCpuTokenSpaceGuid.PcdCpuMicrocodePatchRegionSize
+FILE = IntelE6xxRuBinPkg/Binaries/MicrocodeUpdate.inf
+# FV_CPU_MICROCODE_UPDATES
+
+
+!if $(FLASH_4_MB) == TRUE
+  #
+  #  4 MB Flash
+  #
+  0x00390000|0x0000a000
+!else  # FLASH_4_MB
+  #
+  #  8 MB Flash
+  #
+  0x00790000|0x0000a000
+!endif # FLASH_4_MB
+gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableBase|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableSize
+#NV_VARIABLE_STORE
+
+#
+# The following must be set to the physical address for
+# gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableBase
+# specified above
+#
+
+SET gIntelE6xxRuTokenSpaceGuid.PcdFlashNvStorageBase = 0xFFF90000
+SET gIntelE6xxRuTokenSpaceGuid.PcdFlashNvStorageSize = 0x00030000
+
+DATA = {
+  ## This is the EFI_FIRMWARE_VOLUME_HEADER
+  # ZeroVector []
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  # FileSystemGuid: gEfiSystemNvDataFvGuid         =
+  #  { 0xFFF12B8D, 0x7696, 0x4C8B, { 0xA9, 0x85, 0x27, 0x47, 0x07, 0x5B, 0x4F, 0x50 }}
+  0x8D, 0x2B, 0xF1, 0xFF, 0x96, 0x76, 0x8B, 0x4C,
+  0xA9, 0x85, 0x27, 0x47, 0x07, 0x5B, 0x4F, 0x50,
+  # FvLength: 0x30000
+  0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00,
+  #Signature "_FVH"       #Attributes
+  0x5f, 0x46, 0x56, 0x48, 0xff, 0xfe, 0x04, 0x00,
+  #HeaderLength #CheckSum #ExtHeaderOffset #Reserved #Revision
+  0x48, 0x00, 0x34, 0x09, 0x00, 0x00, 0x00, 0x02,
+
+  #
+  #  Must recalculate checksum above when the values below change!
+  #
+
+  #Blockmap[0]: 3 Blocks * 0x10000 Bytes / Block
+  0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00,
+  #Blockmap[1]: End
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  ## This is the VARIABLE_STORE_HEADER
+  !if $(SECURE_BOOT_ENABLE) == TRUE
+    #Signature: gEfiAuthenticatedVariableGuid =
+    #  { 0xaaf32c78, 0x947b, 0x439a, { 0xa1, 0x80, 0x2e, 0x14, 0x4e, 0xc3, 0x77, 0x92 }}
+    0x78, 0x2c, 0xf3, 0xaa, 0x7b, 0x94, 0x9a, 0x43,
+    0xa1, 0x80, 0x2e, 0x14, 0x4e, 0xc3, 0x77, 0x92,
+  !else
+    #Signature: gEfiVariableGuid =
+    #  { 0xddcf3616, 0x3275, 0x4164, { 0x98, 0xb6, 0xfe, 0x85, 0x70, 0x7f, 0xfe, 0x7d }}
+    0x16, 0x36, 0xcf, 0xdd, 0x75, 0x32, 0x64, 0x41,
+    0x98, 0xb6, 0xfe, 0x85, 0x70, 0x7f, 0xfe, 0x7d,
+  !endif
+  #Size: 0xA000 (gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableSize) - 0x48 (size of EFI_FIRMWARE_VOLUME_HEADER) = 0x9FB8
+  # This can speed up the Variable Dispatch a bit.
+  0xB8, 0x9F, 0x00, 0x00,
+  #FORMATTED: 0x5A #HEALTHY: 0xFE #Reserved: UINT16 #Reserved1: UINT32
+  0x5A, 0xFE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+}
+
+
+!if $(FLASH_4_MB) == TRUE
+  #
+  #  4 MB Flash
+  #
+  0x0039e000|0x00002000
+!else  # FLASH_4_MB
+  #
+  #  8 MB Flash
+  #
+  0x0079e000|0x00002000
+!endif # FLASH_4_MB
+gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingBase|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingSize
+#NV_FTW_WORKING
+DATA = {
+  # EFI_FAULT_TOLERANT_WORKING_BLOCK_HEADER->Signature = gEfiSystemNvDataFvGuid         =
+  #  { 0xFFF12B8D, 0x7696, 0x4C8B, { 0xA9, 0x85, 0x27, 0x47, 0x07, 0x5B, 0x4F, 0x50 }}
+  0x8D, 0x2B, 0xF1, 0xFF, 0x96, 0x76, 0x8B, 0x4C,
+  0xA9, 0x85, 0x27, 0x47, 0x07, 0x5B, 0x4F, 0x50,
+  # Crc:UINT32            #WorkingBlockValid:1, WorkingBlockInvalid:1, Reserved
+  0x77, 0x13, 0x9B, 0xD7, 0xFE, 0xFF, 0xFF, 0xFF,
+  # WriteQueueSize: UINT64
+  0xE0, 0x1F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+}
+
+
+!if $(FLASH_4_MB) == TRUE
+  #
+  #  4 MB Flash
+  #
+  0x003a0000|0x00010000
+!else  # FLASH_4_MB
+  #
+  #  8 MB Flash
+  #
+  0x007a0000|0x00010000
+!endif # FLASH_4_MB
+gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareBase|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareSize
+#NV_FTW_SPARE
+
+
+!if $(FLASH_4_MB) == TRUE
+  #
+  #  4 MB Flash
+  #
+  0x003b0000|0x00007000
+!else  # FLASH_4_MB
+  #
+  #  8 MB Flash
+  #
+  0x007b0000|0x00007000
+!endif # FLASH_4_MB
+gCrownBayTokenSpaceGuid.PcdFlashTCMicrocodeBase|gCrownBayTokenSpaceGuid.PcdFlashTCMicrocodeSize
+FILE = IntelE6xxRuPkg/ChipsetMicrocode/C0_22211.BIN
+#FV_CHIPSET_MICROCODE
+
+
+!if $(FLASH_4_MB) == TRUE
+  #
+  #  4 MB Flash
+  #
+  0x003b7000|0x00005000
+!else  # FLASH_4_MB
+    !if $(FLASH_8_FOR_4) == TRUE
+    #
+    #  8 MB Flash used for 4MB Flash
+    #  Keep the lower half erased!
+    #
+    0x007b0000|0x00005000
+  !else  # FLASH_8_FOR_4
+    #
+    #  8 MB Flash
+    #
+    0x007b7000|0x00005000
+  !endif # FLASH_8_FOR_4
+!endif # FLASH_4_MB
+gEfiMdeModulePkgTokenSpaceGuid.PcdVpdBaseAddress|gCrownBayTokenSpaceGuid.PcdVpdSize
+FILE = $(OUTPUT_DIRECTORY)/$(TARGET)_$(TOOL_CHAIN_TAG)/FV/8C3D856A-9BE6-468E-850A-24F7A8D38E08.bin
+#VPD Storage
+
+
+!if $(FLASH_4_MB) == TRUE
+  #
+  #  4 MB Flash
+  #
+  0x003c0000|0x00040000
+!else  # FLASH_4_MB
+  #
+  #  8 MB Flash
+  #
+  0x007c0000|0x00040000
+!endif # FLASH_4_MB
+gCrownBayTokenSpaceGuid.PcdFlashFvRecoveryBase|gCrownBayTokenSpaceGuid.PcdFlashFvRecoverySize
+#FvRecovery
+FV = FVRECOVERY
+
+################################################################################
+#
+# FV Section
+#
+# [FV] section is used to define what components or modules are placed within a flash
+# device file.  This section also defines order the components and modules are positioned
+# within the image.  The [FV] section consists of define statements, set statements and
+# module statements.
+#
+################################################################################
+
+#----------------------------------------------------------------------
+#  FVRECOVERY
+#----------------------------------------------------------------------
+
+[FV.FVRECOVERY]
+FvAlignment        = 16         #FV alignment and FV attributes setting.
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+FvNameGuid         = 18D6D9F4-2EEF-4913-AEE6-BE61C6DA6CC8
+
+################################################################################
+#
+# The INF statements point to EDK component and EDK II module INF files, which will be placed into this FV image.
+# Parsing tools will scan the INF file to determine the type of component or module.
+# The component or module type is used to reference the standard rules
+# defined elsewhere in the FDF file.
+#
+# The format for INF statements is:
+# INF $(PathAndInfFileName)
+#
+################################################################################
+
+##
+#  PEI Apriori file example, more PEIM module added later.
+##
+APRIORI PEI {
+  INF  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/SerialPortPei.inf
+  !if $(SYMBOLIC_DEBUG) == TRUE
+    INF  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/DebugAgentPei.inf
+  !endif  ##  SYMBOLIC_DEBUG
+
+  INF  MdeModulePkg/Universal/PCD/Pei/Pcd.inf
+  INF  MdeModulePkg/Universal/ReportStatusCodeRouter/Pei/ReportStatusCodeRouterPei.inf
+  INF  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/StatusCodeHandlerPei.inf
+}
+
+##
+#  PEI Phase modules
+##
+INF  RuleOverride = PLATFORM_BINARY_NORELOC  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/SerialPortPei.inf
+!if $(SYMBOLIC_DEBUG) == TRUE
+  #
+  # Put this module first so it does not land in uncached region
+  #
+  INF  RuleOverride = PLATFORM_BINARY_NORELOC  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/DebugAgentPei.inf
+!endif  ##  SYMBOLIC_DEBUG
+
+INF  RuleOverride = PLATFORM_BINARY   MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/SecCore.inf
+
+INF  MdeModulePkg/Core/Pei/PeiMain.inf
+
+
+!if $(DIAG_DEBUG_UART_OUTPUT) == TRUE
+  INF  RuleOverride = PLATFORM_BINARY_NORELOC  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/DiagUartOutputPeim.inf
+!endif  ##  DIAG_DEBUG_UART_OUTPUT
+
+!if $(DIAG_OUTPUT_RESET_LOOP) == TRUE
+  INF  RuleOverride = PLATFORM_BINARY_NORELOC  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/DiagOutputResetPei.inf
+!endif  ##  DIAG_OUTPUT_RESET_LOOP
+
+INF  RuleOverride = NORELOC  MdeModulePkg/Universal/PCD/Pei/Pcd.inf
+INF  RuleOverride = NORELOC  MdeModulePkg/Universal/ReportStatusCodeRouter/Pei/ReportStatusCodeRouterPei.inf
+INF  RuleOverride = PLATFORM_BINARY_NORELOC  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/StatusCodeHandlerPei.inf
+!if $(DIAG_STARTUP_NOISE) == TRUE
+  INF  RuleOverride = PLATFORM_BINARY_NORELOC  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/StartupNoisePeim.inf
+!endif  ##  DIAG_STARTUP_NOISE
+
+!if $(SECURE_BOOT_ENABLE) == TRUE
+  INF  RuleOverride = NORELOC  SecurityPkg/VariableAuthenticated/Pei/VariablePei.inf
+!else
+  INF  RuleOverride = NORELOC  MdeModulePkg/Universal/Variable/Pei/VariablePei.inf
+!endif
+
+INF  RuleOverride = PLATFORM_BINARY_NORELOC  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/CpuPei.inf
+INF  RuleOverride = NORELOC  MdeModulePkg/Universal/CapsulePei/CapsulePei.inf
+
+INF  RuleOverride = INTEL_E6XX_BINARY_NORELOC  IntelE6xxRuBinPkg/Binaries/$(TARGET)/MemoryInitPei.inf
+INF  RuleOverride = NORELOC  MdeModulePkg/Universal/PcatSingleSegmentPciCfg2Pei/PcatSingleSegmentPciCfg2Pei.inf
+INF  RuleOverride = PLATFORM_BINARY_NORELOC  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/PlatformPeim.inf
+
+INF  MdeModulePkg/Core/DxeIplPeim/DxeIpl.inf
+INF  UefiCpuPkg/CpuIoPei/CpuIoPei.inf
+
+!if $(S3_ENABLE) == TRUE
+  INF  RuleOverride = BINARY  IntelE6xxRuBinPkg/Binaries/$(TARGET)/SmmAccessPei.inf
+  INF  RuleOverride = BINARY  IntelE6xxRuBinPkg/Binaries/$(TARGET)/SmmControlPei.inf
+  INF  RuleOverride = PLATFORM_BINARY_NORELOC  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/PiSmmCommunicationPei.inf
+  INF  UefiCpuPkg/Universal/Acpi/S3Resume2Pei/S3Resume2Pei.inf
+!endif  ##  S3_ENABLE
+
+!if $(TPM_ENABLE) == TRUE
+  INF  SecurityPkg/Tcg/PhysicalPresencePei/PhysicalPresencePei.inf
+  INF  SecurityPkg/Tcg/TcgPei/TcgPei.inf
+!endif
+
+#----------------------------------------------------------------------
+#  FVRECOVERY2
+#----------------------------------------------------------------------
+
+[FV.FVRECOVERY2]
+FvAlignment        = 16         #FV alignment and FV attributes setting.
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+FvNameGuid         = 3B0B9618-BE2D-4327-8F1A-95DDBAAB244E
+
+#----------------------------------------------------------------------
+#  FVRECOVERY_COMPONENTS
+#----------------------------------------------------------------------
+
+FILE FV_IMAGE = 1E9D7604-EF45-46a0-BD8A-71AC78C17AC1 {
+       SECTION PEI_DEPEX_EXP = {gEfiPeiMemoryDiscoveredPpiGuid AND gEfiPeiBootInRecoveryModePpiGuid}
+       SECTION GUIDED EE4E5898-3914-4259-9D6E-DC7BD79403CF {
+          SECTION FV_IMAGE = FVRECOVERY_COMPONENTS
+       }
+     }
+
+[FV.FVRECOVERY_COMPONENTS]
+BlockSize          = 0x10000
+FvAlignment        = 16         #FV alignment and FV attributes setting.
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+
+INF  RuleOverride = INTEL_EG20T_BINARY_NORELOC  IntelEg20tRuBinPkg/Binaries/$(TARGET)/UsbPei.inf
+INF  MdeModulePkg/Bus/Pci/EhciPei/EhciPei.inf
+INF  RuleOverride = INTEL_EG20T_BINARY_NORELOC  IntelEg20tRuBinPkg/Binaries/$(TARGET)/OhciPei.inf
+INF  MdeModulePkg/Bus/Usb/UsbBusPei/UsbBusPei.inf
+INF  MdeModulePkg/Bus/Usb/UsbBotPei/UsbBotPei.inf
+INF  FatPkg/FatPei/FatPei.inf
+INF  MdeModulePkg/Universal/Disk/CdExpressPei/CdExpressPei.inf
+
+#----------------------------------------------------------------------
+#  FVMAIN
+#----------------------------------------------------------------------
+
+[FV.FVMAIN]
+BlockSize          = 0x10000
+FvAlignment        = 16
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+FvNameGuid         = 30D9ED01-38D2-418a-90D5-C561750BF80F
+#
+# Dxe priori file, to show debug message as early as possible.
+#
+APRIORI DXE {
+  INF  MdeModulePkg/Universal/PCD/Dxe/Pcd.inf
+  INF  MdeModulePkg/Universal/ReportStatusCodeRouter/RuntimeDxe/ReportStatusCodeRouterRuntimeDxe.inf
+  INF  MdeModulePkg/Universal/StatusCodeHandler/RuntimeDxe/StatusCodeHandlerRuntimeDxe.inf
+  INF  PcAtChipsetPkg/8259InterruptControllerDxe/8259.inf
+  INF  RuleOverride = BINARY  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/CpuArchDxe.inf
+}
+
+##
+#  DXE Phase modules
+##
+INF  RuleOverride = BINARY  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/DxeCore.inf
+INF  MdeModulePkg/Universal/PCD/Dxe/Pcd.inf
+!if $(SYMBOLIC_DEBUG) == TRUE
+  INF  RuleOverride = BINARY  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/DebugAgentDxe.inf
+!endif  ##  SYMBOLIC_DEBUG
+INF  UefiCpuPkg/CpuIo2Dxe/CpuIo2Dxe.inf
+INF  RuleOverride = BINARY  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/StatusCodeHandlerRuntimeDxe.inf
+INF  MdeModulePkg/Universal/ReportStatusCodeRouter/RuntimeDxe/ReportStatusCodeRouterRuntimeDxe.inf
+
+!if $(SMM_ENABLE) == TRUE
+  INF  MdeModulePkg/Universal/ReportStatusCodeRouter/Smm/ReportStatusCodeRouterSmm.inf
+  INF  MdeModulePkg/Universal/StatusCodeHandler/Smm/StatusCodeHandlerSmm.inf
+!endif
+
+INF  MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
+INF  RuleOverride = BINARY  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/CpuArchDxe.inf
+INF  RuleOverride = BINARY  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/CpuMpDxe.inf
+
+INF  MdeModulePkg/Universal/Metronome/Metronome.inf
+INF  MinnowBoardPkg/Bds/Bds.inf
+INF  MinnowBoardPkg/BlinkLed/BlinkLed.inf
+
+INF  MinnowBoardPkg/LoadFileOnFv2/LoadFileOnFv2.inf
+INF  MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
+INF  MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
+INF  MdeModulePkg/Universal/CapsuleRuntimeDxe/CapsuleRuntimeDxe.inf
+INF  MdeModulePkg/Universal/MonotonicCounterRuntimeDxe/MonotonicCounterRuntimeDxe.inf
+INF  RuleOverride = BINARY  IntelE6xxRuBinPkg/Binaries/$(TARGET)/TCResetSystemRuntimeDxe.inf
+INF  PcAtChipsetPkg/PcatRealTimeClockRuntimeDxe/PcatRealTimeClockRuntimeDxe.inf
+
+#
+# SPI flash
+#
+INF  IntelE6xxPkg/SpiFlashParts/GenericSpiFlash/GenericSpiFlash.inf
+
+#
+# Variable
+#
+INF  IntelE6xxPkg/SpiDeviceSyncDxe/SpiDeviceSyncDxe.inf
+!if $(SMM_VARIABLE)
+  # Smm solution for variable
+  INF RuleOverride = BINARY  IntelE6xxRuBinPkg/Binaries/$(TARGET)/SpiSmm.inf
+  INF IntelE6xxRuPkg/SpiDeviceDxe/SpiDeviceSmm.inf
+  INF IntelE6xxRuPkg/SpiDeviceDxe/SpiDeviceSmmDxe.inf
+  INF MinnowBoardIntelRuPkg/FvbRuntimeDxe/FvbSmm.inf
+  INF MinnowBoardIntelRuPkg/FvbRuntimeDxe/FvbSmmDxe.inf
+  INF MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteSmm.inf
+  !if $(SECURE_BOOT_ENABLE)
+    INF SecurityPkg/VariableAuthenticated/RuntimeDxe/VariableSmmRuntimeDxe.inf
+    INF SecurityPkg/VariableAuthenticated/RuntimeDxe/VariableSmm.inf
+    INF SecurityPkg/VariableAuthenticated/SecureBootConfigDxe/SecureBootConfigDxe.inf
+  !else
+    INF MdeModulePkg/Universal/Variable/RuntimeDxe/VariableSmmRuntimeDxe.inf
+    INF MdeModulePkg/Universal/Variable/RuntimeDxe/VariableSmm.inf
+  !endif
+!else
+  # Runtime solution for variable
+  INF  IntelE6xxRuPkg/SpiDeviceDxe/SpiDeviceDxe.inf
+  !if $(EMU_VARIABLE)
+    INF  MdeModulePkg/Universal/Variable/EmuRuntimeDxe/EmuVariableRuntimeDxe.inf
+  !elseif $(SECURE_BOOT_ENABLE)
+    INF  RuleOverride = BINARY  IntelE6xxRuBinPkg/Binaries/$(TARGET)/SpiRuntimeDxe.inf
+    INF  MinnowBoardIntelRuPkg/FvbRuntimeDxe/FvbRuntimeDxe.inf
+    INF  MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf
+    INF  SecurityPkg/VariableAuthenticated/RuntimeDxe/VariableRuntimeDxe.inf
+    INF  SecurityPkg/VariableAuthenticated/SecureBootConfigDxe/SecureBootConfigDxe.inf
+  !else
+    INF  RuleOverride = BINARY  IntelE6xxRuBinPkg/Binaries/$(TARGET)/SpiRuntimeDxe.inf
+    INF  MinnowBoardIntelRuPkg/FvbRuntimeDxe/FvbRuntimeDxe.inf
+    INF  MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf
+    INF  MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe.inf
+  !endif
+!endif
+
+#
+# HD Audio
+#
+INF  RuleOverride = BINARY  IntelE6xxRuBinPkg/Binaries/$(TARGET)/E6xxInitDxe.inf
+INF  IntelE6xxPkg/HdAudioSyncDxe/HdAudioSyncDxe.inf
+
+INF  MdeModulePkg/Universal/DevicePathDxe/DevicePathDxe.inf
+INF  RuleOverride = BINARY  IntelEg20tRuBinPkg/Binaries/$(TARGET)/Eg20tInitDxe.inf
+INF  RuleOverride = BINARY  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/SetupDxe.inf
+INF  MdeModulePkg/Universal/MemoryTest/NullMemoryTestDxe/NullMemoryTestDxe.inf
+
+#
+# ACPI
+#
+!if $(S3_ENABLE) == TRUE
+  INF  RuleOverride = BINARY  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/S3SaveStateDxe.inf
+  INF  RuleOverride = BINARY  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/BootScriptExecutorDxe.inf
+  INF  IntelFrameworkModulePkg/Universal/Acpi/AcpiS3SaveDxe/AcpiS3SaveDxe.inf
+!endif  ##  S3_ENABLE
+
+INF  MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
+INF  MinnowBoardIntelRuPkg/AcpiSupportOnAcpiTableAndAcpiSdtThunk/AcpiSupportOnAcpiTableAndAcpiSdtThunk.inf
+INF  RuleOverride = BINARY  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/AcpiPlatform.inf
+INF  RuleOverride = ACPITABLE MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/AcpiTablesDxe.inf
+INF  RuleOverride = ACPITABLE MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/PowerManagementAcpiTablesDxe.inf
+
+#
+# SMM
+#
+!if $(SMM_ENABLE)
+  INF  MdeModulePkg/Core/PiSmmCore/PiSmmIpl.inf
+  INF  MdeModulePkg/Core/PiSmmCore/PiSmmCore.inf
+  INF  RuleOverride = BINARY  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/PiSmmCpuDxeSmm.inf
+  INF  MdeModulePkg/Universal/LockBox/SmmLockBox/SmmLockBox.inf
+
+  INF  UefiCpuPkg/CpuIo2Smm/CpuIo2Smm.inf
+  INF  RuleOverride = BINARY  IntelE6xxRuBinPkg/Binaries/$(TARGET)/SmmControlDxe.inf
+  INF  RuleOverride = BINARY  IntelE6xxRuBinPkg/Binaries/$(TARGET)/TCSmmDispatcher.inf
+  INF  RuleOverride = BINARY  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/SmmPowerManagement.inf
+  INF  RuleOverride = BINARY  IntelE6xxRuBinPkg/Binaries/$(TARGET)/SmmAccessDxe.inf
+  INF  RuleOverride = BINARY  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/SmmPlatformHandler.inf
+  INF  RuleOverride = BINARY  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/PiSmmCommunicationSmm.inf
+!endif
+
+#
+# SMBIOS
+#
+INF  MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
+INF  MinnowBoardIntelRuPkg/SmbiosMiscDxe/SmbiosMiscDxe.inf
+
+#
+# PCI
+#
+INF  MinnowBoardPkg/IncompatiblePciDeviceSupportDxe/IncompatiblePciDeviceSupportDxe.inf
+INF  RuleOverride = BINARY  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/PciPlatformDxe.inf
+INF  MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
+
+#
+# USB
+#
+!if $(ENABLE_USB_HOST) == TRUE
+  INF  MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf
+  INF  MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
+  INF  MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassStorageDxe.inf
+  INF  MdeModulePkg/Bus/Usb/UsbMouseDxe/UsbMouseDxe.inf
+!endif  ##  ENABLE_USB_HOST
+
+#
+# IDE
+#
+INF  MdeModulePkg/Universal/Disk/DiskIoDxe/DiskIoDxe.inf
+INF  MdeModulePkg/Universal/Disk/PartitionDxe/PartitionDxe.inf
+INF  MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf
+INF  MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
+INF  MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru.inf
+INF  MdeModulePkg/Bus/Scsi/ScsiBusDxe/ScsiBusDxe.inf
+INF  MdeModulePkg/Bus/Scsi/ScsiDiskDxe/ScsiDiskDxe.inf
+INF  RuleOverride = BINARY  IntelEg20tRuBinPkg/Binaries/$(TARGET)/SataControllerDxe.inf
+
+#
+# ISA
+#
+!if $(SYMBOLIC_DEBUG) == FALSE
+  INF  RuleOverride = BINARY  IntelEg20tRuBinPkg/Binaries/$(TARGET)/IohSerialDxe.inf
+!endif  ##  SYMBOLIC_DEBUG
+
+#
+# Console
+#
+INF  MdeModulePkg/Universal/Console/ConPlatformDxe/ConPlatformDxe.inf
+INF  MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe.inf
+INF  MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf
+
+INF  MdeModulePkg/Universal/HiiDatabaseDxe/HiiDatabaseDxe.inf
+INF  MdeModulePkg/Universal/SetupBrowserDxe/SetupBrowserDxe.inf
+
+#
+# Fat
+#
+INF  FatPkg/EnhancedFatDxe/Fat.inf
+
+#
+# Legacy Modules
+#
+INF  PcAtChipsetPkg/8259InterruptControllerDxe/8259.inf
+
+#
+# User identification
+#
+!if $(UID_ENABLE)
+  INF  SecurityPkg/UserIdentification/UserIdentifyManagerDxe/UserIdentifyManagerDxe.inf
+  INF  SecurityPkg/UserIdentification/UserProfileManagerDxe/UserProfileManagerDxe.inf
+  INF  SecurityPkg/UserIdentification/PwdCredentialProviderDxe/PwdCredentialProviderDxe.inf
+  INF  SecurityPkg/UserIdentification/UsbCredentialProviderDxe/UsbCredentialProviderDxe.inf
+!endif
+
+#--------------------
+#  Ethernet Support
+#--------------------
+
+!if $(ENABLE_ETHERNET) == TRUE
+  !if $(ENABLE_USB_HOST) == TRUE
+
+    # External USB/Ethernet adapter such as SMC Networks SMC2209
+    !if $(ENABLE_ETHERNET_AX88772) == TRUE
+      INF  OptionRomPkg/Bus/Usb/UsbNetworking/Ax88772/Ax88772.inf
+    !endif  # ENABLE_AX88772
+
+    # External USB/Ethernet adapter
+    !if $(TIP_BUILD) == TRUE
+      !if $(ENABLE_ETHERNET_AX88772B) == TRUE
+        INF  OptionRomPkg/Bus/Usb/UsbNetworking/Ax88772b/Ax88772b.inf
+      !endif  # ENABLE_AX88772B
+    !endif  ##  TIP_BUILD
+  !endif  # ENABLE_USB_HOST
+
+  #
+  # EG20T Gigabit Ethernet adapter
+  #
+  !if $(ENABLE_ETHERNET_EG20T) == TRUE
+    INF  IntelEg20tPkg/EthernetDxe/Eg20tEthernetDxe.inf
+  !endif  # ENABLE_ETHERNET_EG20T
+!endif  # ENABLE_ETHERNET
+
+#--------------------
+#  Graphics Support
+#--------------------
+
+!if $(ENABLE_GRAPHICS) == TRUE
+  INF  MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsoleDxe.inf
+  INF  IntelE6xxRuBinPkg/Binaries/iegd.inf
+!endif  ##  ENABLE_GRAPHICS
+
+INF  RuleOverride = BINARY  MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/UiApp.inf
+FILE FREEFORM = PCD(gEfiIntelFrameworkModulePkgTokenSpaceGuid.PcdLogoFile) {
+    SECTION RAW = MdeModulePkg/Logo/Logo.bmp
+  }
+
+#--------------------
+#  HD Audio Support
+#--------------------
+
+INF  MinnowBoardPkg/HdAudio/MinnowBoard/HdAudioConnections.inf
+!if $(TEST_LURE) == TRUE
+  INF  MinnowBoardPkg/HdAudio/TestLure/HdAudioConnections.inf
+!endif  ##  TEST_LURE
+
+#--------------------
+#  I2C Support
+#--------------------
+
+!if $(UNDER_DEVELOPMENT) == TRUE
+!if $(ENABLE_I2C) == TRUE
+
+  INF  IntelEg20tPkg/I2cDxe/Eg20tI2cDxe.inf
+  INF  BusPkg/I2cHostDxe/I2cHostDxe.inf
+  INF  BusPkg/I2cBusDxe/I2cBusDxe.inf
+
+!endif  ## ENABLE_I2C
+!endif  ##  UNDER_DEVELOPMENT
+
+#--------------------
+#  Networking
+#--------------------
+
+!if $(ENABLE_NETWORKING) == TRUE
+
+  !if $(ENABLE_IP6_ONLY) == TRUE
+    #
+    # IP6_NETWORK_ENABLE macro is introduced to decide if the IPv6 network stack module
+    # is put into the generated FD image.
+    #
+    # The followings are UEFI IPv6 network stack modules.
+    !if $(ENABLE_SNP) == TRUE
+      INF  MdeModulePkg/Universal/Network/SnpDxe/SnpDxe.inf
+    !endif  ## ENABLE_SNP
+    INF  MdeModulePkg/Universal/Network/DpcDxe/DpcDxe.inf
+    INF  MdeModulePkg/Universal/Network/MnpDxe/MnpDxe.inf
+    INF  MdeModulePkg/Universal/Network/VlanConfigDxe/VlanConfigDxe.inf
+    INF  NetworkPkg/Ip6Dxe/Ip6Dxe.inf
+    INF  NetworkPkg/TcpDxe/TcpDxe.inf
+    INF  NetworkPkg/Udp6Dxe/Udp6Dxe.inf
+    INF  NetworkPkg/Dhcp6Dxe/Dhcp6Dxe.inf
+    INF  NetworkPkg/Mtftp6Dxe/Mtftp6Dxe.inf
+    INF  NetworkPkg/UefiPxeBcDxe/UefiPxeBcDxe.inf
+
+    INF  NetworkPkg/IScsiDxe/IScsiDxe.inf
+
+  !elseif $(DUAL_NETWORK_ENABLE) == TRUE
+    #
+    # DUAL_NETWORK_ENABLE macro is introduced to decide if the network stack module
+    # is put into the generated FD image.
+    #
+    # The followings are UEFI IPv4 plus IPv6 network stack modules.
+    !if $(ENABLE_SNP) == TRUE
+      INF  MdeModulePkg/Universal/Network/SnpDxe/SnpDxe.inf
+    !endif  ## ENABLE_SNP
+    INF  MdeModulePkg/Universal/Network/DpcDxe/DpcDxe.inf
+    INF  MdeModulePkg/Universal/Network/MnpDxe/MnpDxe.inf
+    INF  MdeModulePkg/Universal/Network/VlanConfigDxe/VlanConfigDxe.inf
+    INF  MdeModulePkg/Universal/Network/ArpDxe/ArpDxe.inf
+    INF  MdeModulePkg/Universal/Network/Dhcp4Dxe/Dhcp4Dxe.inf
+    INF  MdeModulePkg/Universal/Network/Ip4ConfigDxe/Ip4ConfigDxe.inf
+    INF  MdeModulePkg/Universal/Network/Ip4Dxe/Ip4Dxe.inf
+    INF  MdeModulePkg/Universal/Network/Mtftp4Dxe/Mtftp4Dxe.inf
+    INF  MdeModulePkg/Universal/Network/Udp4Dxe/Udp4Dxe.inf
+    INF  NetworkPkg/Ip6Dxe/Ip6Dxe.inf
+    INF  NetworkPkg/TcpDxe/TcpDxe.inf
+    INF  NetworkPkg/Udp6Dxe/Udp6Dxe.inf
+    INF  NetworkPkg/Dhcp6Dxe/Dhcp6Dxe.inf
+    INF  NetworkPkg/Mtftp6Dxe/Mtftp6Dxe.inf
+    INF  NetworkPkg/UefiPxeBcDxe/UefiPxeBcDxe.inf
+
+    INF  NetworkPkg/IScsiDxe/IScsiDxe.inf
+
+  !else   # DUAL_NETWORK_ENABLE
+    #
+    # By default include an IPV4 stack.
+    #
+    !if $(ENABLE_SNP) == TRUE
+      INF  MdeModulePkg/Universal/Network/SnpDxe/SnpDxe.inf
+    !endif  ## ENABLE_SNP
+    INF  MdeModulePkg/Universal/Network/DpcDxe/DpcDxe.inf
+    INF  MdeModulePkg/Universal/Network/MnpDxe/MnpDxe.inf
+    INF  MdeModulePkg/Universal/Network/VlanConfigDxe/VlanConfigDxe.inf
+    INF  MdeModulePkg/Universal/Network/ArpDxe/ArpDxe.inf
+    INF  MdeModulePkg/Universal/Network/Dhcp4Dxe/Dhcp4Dxe.inf
+    INF  MdeModulePkg/Universal/Network/Ip4ConfigDxe/Ip4ConfigDxe.inf
+    INF  MdeModulePkg/Universal/Network/Ip4Dxe/Ip4Dxe.inf
+    INF  MdeModulePkg/Universal/Network/Mtftp4Dxe/Mtftp4Dxe.inf
+    INF  MdeModulePkg/Universal/Network/Tcp4Dxe/Tcp4Dxe.inf
+    INF  MdeModulePkg/Universal/Network/Udp4Dxe/Udp4Dxe.inf
+    INF  MdeModulePkg/Universal/Network/UefiPxeBcDxe/UefiPxeBcDxe.inf
+    INF  MdeModulePkg/Universal/Network/IScsiDxe/IScsiDxe.inf
+  !endif   # IP6_NETWORK_ENABLE
+!endif   # ENABLE_NETWORKING
+
+#--------------------
+#  Platform Configuration
+#--------------------
+
+!if $(UNDER_DEVELOPMENT) == TRUE
+!if (( $(ENABLE_I2C) == TRUE ) || ( $(ENABLE_SPI) == TRUE ))
+    INF  MinnowBoardPkg/PlatformConfigurationDxe/PlatformConfigurationDxe.inf
+!endif
+!endif  ##  UNDER_DEVELOPMENT
+
+#--------------------
+#  SDIO
+#--------------------
+
+!if $(ENABLE_SD_MMC) == TRUE
+  INF  RuleOverride = BINARY  IntelEg20tRuBinPkg/Binaries/$(TARGET)/SDController.inf
+  INF  RuleOverride = BINARY  IntelEg20tRuBinPkg/Binaries/$(TARGET)/SDMediaDevice.inf
+!endif  ## ENABLE_SD_MMC
+
+#--------------------
+#  SPI Support
+#--------------------
+
+!if $(UNDER_DEVELOPMENT) == TRUE
+!if $(ENABLE_SPI) == TRUE
+  #INF  IntelEg20tPkg/SpiDxe/Eg20tSpiDxe.inf
+!endif  ## ENABLE_SPI
+!endif  ##  UNDER_DEVELOPMENT
+
+#--------------------
+#  USB Host Controller
+#--------------------
+
+!if $(ENABLE_USB_HOST) == TRUE
+  INF  RuleOverride = BINARY  IntelEg20tRuBinPkg/Binaries/$(TARGET)/OhciDxe.inf
+  INF  MdeModulePkg/Bus/Pci/EhciDxe/EhciDxe.inf
+!endif  ##  ENABLE_USB_HOST
+
+#----------------------------------------------------------------------
+#  Payload
+#----------------------------------------------------------------------
+
+[FV.PAY_LOAD]
+FvAlignment        = 16
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+FvNameGuid         = 07F426A2-5F6B-4ed5-9B35-6FF191BFB4DD
+
+#--------------------
+#
+#  Built Shell
+#
+#--------------------
+
+!if $(SHELL_BUILT) == TRUE
+  INF RuleOverride = Lzma ShellPkg/Application/Shell/Shell.inf
+!endif  ## SHELL_BUILT
+
+#--------------------
+#
+#  Prebuilt Shell
+#
+#--------------------
+
+!if $(SHELL_PREBUILT) == TRUE
+  FILE APPLICATION = C57AD6B7-0515-40A8-9D21-551652854E37 {
+    SECTION GUIDED EE4E5898-3914-4259-9D6E-DC7BD79403CF {
+      SECTION PE32 = $(EFI_BINARY_DIRECTORY)/Ia32/Shell.efi
+      SECTION UI   = "Shell"
+    }
+  }
+!endif  ## SHELL_PREBUILT
+
+#--------------------
+#
+#  SHELL (Full)
+#
+#--------------------
+
+!if $(SHELL_FULL) == TRUE
+  FILE APPLICATION = C8E74F9B-DACA-4509-B40C-A713E7BF30AA {
+       SECTION PE32 = ShellBinPkg/UefiShell/Ia32/Shell.efi
+       SECTION UI   = "Shell (Full)"
+  }
+!endif  ## SHELL_FULL
+
+#--------------------
+#
+#  SHELL (Min)
+#
+#--------------------
+
+!if $(SHELL_MIN) == TRUE
+  FILE APPLICATION = 7C04A583-9E3E-4f1c-AD65-E05268D0B4D1 {
+       SECTION PE32 = ShellBinPkg/MinUefiShell/Ia32/Shell.efi
+       SECTION UI   = "Shell (Min)"
+  }
+!endif  ## SHELL_MIN
+
+#----------------------------------------------------------------------
+#  FVMAIN_COMPACT
+#----------------------------------------------------------------------
+
+[FV.FVMAIN_COMPACT]
+FvAlignment        = 16
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+
+# TIANO COMPRESS GUID  A31280AD-481E-41B6-95E8-127F4C984779
+# LZMA COMPRESS  GUID  EE4E5898-3914-4259-9D6E-DC7BD79403CF
+#
+FILE FV_IMAGE = 9E21FD93-9C72-4c15-8C4B-E77F1DB2D792 {
+  SECTION GUIDED A31280AD-481E-41B6-95E8-127F4C984779 {
+     SECTION FV_IMAGE = FVMAIN
+  }
+}
+
+################################################################################
+#
+# Rules are use with the [FV] section's module INF type to define
+# how an FFS file is created for a given INF file. The following Rule are the default
+# rules for the different module type. User can add the customized rules to define the
+# content of the FFS file.
+#
+################################################################################
+[Rule.Common.DXE_CORE]
+  FILE DXE_CORE = $(NAMED_GUID) {
+    PE32      PE32                     $(INF_OUTPUT)/$(MODULE_NAME).efi
+    UI        STRING="$(MODULE_NAME)" Optional
+    VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.DXE_CORE.BINARY]
+  FILE DXE_CORE = $(NAMED_GUID) {
+    PE32      PE32                     |.efi
+    UI        STRING="$(MODULE_NAME)" Optional
+    VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.DXE_DRIVER]
+  FILE DRIVER = $(NAMED_GUID) {
+    DXE_DEPEX DXE_DEPEX Optional       $(INF_OUTPUT)/$(MODULE_NAME).depex
+    PE32      PE32                     $(INF_OUTPUT)/$(MODULE_NAME).efi
+    UI        STRING="$(MODULE_NAME)" Optional
+    VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.DXE_DRIVER.BINARY]
+  FILE DRIVER = $(NAMED_GUID)  {
+     DXE_DEPEX DXE_DEPEX Optional      |.depex
+     PE32      PE32                    |.efi
+     UI        STRING="$(MODULE_NAME)" Optional
+     VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.DXE_RUNTIME_DRIVER]
+  FILE DRIVER = $(NAMED_GUID) {
+    DXE_DEPEX DXE_DEPEX Optional       $(INF_OUTPUT)/$(MODULE_NAME).depex
+    PE32      PE32                     $(INF_OUTPUT)/$(MODULE_NAME).efi
+    UI        STRING="$(MODULE_NAME)" Optional
+    VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.DXE_RUNTIME_DRIVER.BINARY]
+  FILE DRIVER = $(NAMED_GUID)  {
+     DXE_DEPEX DXE_DEPEX Optional      |.depex
+     PE32      PE32                    |.efi
+     UI        STRING="$(MODULE_NAME)" Optional
+     VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.DXE_SMM_DRIVER]
+  FILE SMM = $(NAMED_GUID) {
+    SMM_DEPEX SMM_DEPEX Optional       $(INF_OUTPUT)/$(MODULE_NAME).depex
+    PE32      PE32                     $(INF_OUTPUT)/$(MODULE_NAME).efi
+    UI        STRING="$(MODULE_NAME)" Optional
+    VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.DXE_SMM_DRIVER.BINARY]
+  FILE DRIVER = $(NAMED_GUID)  {
+     SMM_DEPEX SMM_DEPEX Optional      |.depex
+     PE32      PE32                    |.efi
+     UI        STRING="$(MODULE_NAME)" Optional
+     VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.PEI_CORE]
+  FILE PEI_CORE = $(NAMED_GUID)            {
+    TE       TE               $(INF_OUTPUT)/$(MODULE_NAME).efi
+    UI       STRING="$(MODULE_NAME)" Optional
+    VERSION  STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.PEIM]
+  FILE PEIM = $(NAMED_GUID)               {
+     PEI_DEPEX PEI_DEPEX Optional        $(INF_OUTPUT)/$(MODULE_NAME).depex
+     TE        TE                        $(INF_OUTPUT)/$(MODULE_NAME).efi
+     UI        STRING="$(MODULE_NAME)" Optional
+     VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.PEIM.BINARY]
+  FILE PEIM = $(NAMED_GUID)  {
+     PEI_DEPEX PEI_DEPEX Optional      |.depex
+     PE32      PE32                    |.efi
+     UI        STRING="$(MODULE_NAME)" Optional
+     VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.PEIM.INTEL_E6XX_BINARY_NORELOC]
+  FILE PEIM = $(NAMED_GUID) RELOCS_STRIPPED  {
+     PEI_DEPEX PEI_DEPEX Optional      $(WORKSPACE)/IntelE6xxRuBinPkg/Binaries/$(TARGET)/$(MODULE_NAME).depex
+     TE        TE                      $(WORKSPACE)/IntelE6xxRuBinPkg/Binaries/$(TARGET)/$(MODULE_NAME).efi
+     UI        STRING="$(MODULE_NAME)" Optional
+     VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.PEIM.INTEL_EG20T_BINARY_NORELOC]
+  FILE PEIM = $(NAMED_GUID) RELOCS_STRIPPED  {
+     PEI_DEPEX PEI_DEPEX Optional      $(WORKSPACE)/IntelEg20tRuBinPkg/Binaries/$(TARGET)/$(MODULE_NAME).depex
+     TE        TE                      $(WORKSPACE)/IntelEg20tRuBinPkg/Binaries/$(TARGET)/$(MODULE_NAME).efi
+     UI        STRING="$(MODULE_NAME)" Optional
+     VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.PEIM.NORELOC]
+  FILE PEIM = $(NAMED_GUID) RELOCS_STRIPPED  {
+     PEI_DEPEX PEI_DEPEX Optional        $(INF_OUTPUT)/$(MODULE_NAME).depex
+     TE        TE                        $(INF_OUTPUT)/$(MODULE_NAME).efi
+     UI        STRING="$(MODULE_NAME)" Optional
+     VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.PEIM.PLATFORM_BINARY_NORELOC]
+  FILE PEIM = $(NAMED_GUID) RELOCS_STRIPPED  {
+     PEI_DEPEX PEI_DEPEX Optional      $(WORKSPACE)/MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/$(MODULE_NAME).depex
+     TE        TE                      $(WORKSPACE)/MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/$(MODULE_NAME).efi
+     UI        STRING="$(MODULE_NAME)" Optional
+     VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.SEC]
+  FILE SEC = $(NAMED_GUID) RELOCS_STRIPPED {
+    TE  TE    Align = 8       $(INF_OUTPUT)/$(MODULE_NAME).efi
+    RAW BIN   Align = 16      |.com
+  }
+
+[Rule.Common.SEC.PLATFORM_BINARY]
+  FILE SEC = $(NAMED_GUID) RELOCS_STRIPPED {
+    TE  TE    Align = 8       $(WORKSPACE)/MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/$(MODULE_NAME).efi
+    RAW BIN   Align = 16      $(WORKSPACE)/MinnowBoardIntelRuBinPkg/Binaries/$(TARGET)/ResetVec.com
+  }
+
+[Rule.Common.SMM_CORE]
+  FILE SMM_CORE = $(NAMED_GUID) {
+    PE32      PE32                     $(INF_OUTPUT)/$(MODULE_NAME).efi
+    UI        STRING="$(MODULE_NAME)" Optional
+    VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.SMM_CORE.BINARY]
+  FILE SMM_CORE = $(NAMED_GUID) {
+    PE32      PE32                     |.efi
+    UI        STRING="$(MODULE_NAME)" Optional
+    VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.UEFI_APPLICATION]
+  FILE APPLICATION = $(NAMED_GUID) {
+    PE32      PE32                     $(INF_OUTPUT)/$(MODULE_NAME).efi
+    UI        STRING="$(MODULE_NAME)" Optional
+    VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.UEFI_APPLICATION.BINARY]
+  FILE APPLICATION = $(NAMED_GUID) {
+    PE32      PE32                    |.efi
+    UI        STRING="$(MODULE_NAME)" Optional
+  }
+
+[Rule.Common.UEFI_APPLICATION.Lzma]
+  FILE APPLICATION = $(NAMED_GUID) {
+    GUIDED EE4E5898-3914-4259-9D6E-DC7BD79403CF {
+      PE32      PE32                     $(INF_OUTPUT)/$(MODULE_NAME).efi
+      UI        STRING="$(MODULE_NAME)" Optional
+      VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+    }
+  }
+
+[Rule.Common.UEFI_DRIVER]
+  FILE DRIVER = $(NAMED_GUID) {
+    DXE_DEPEX DXE_DEPEX Optional       $(INF_OUTPUT)/$(MODULE_NAME).depex
+    PE32      PE32                     $(INF_OUTPUT)/$(MODULE_NAME).efi
+    UI        STRING="$(MODULE_NAME)" Optional
+    VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.UEFI_DRIVER.BINARY]
+  FILE DRIVER = $(NAMED_GUID) {
+    DXE_DEPEX DXE_DEPEX Optional      |.depex
+    PE32      PE32                    |.efi
+    UI        STRING="$(MODULE_NAME)" Optional
+    VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.USER_DEFINED.ACPITABLE]
+  FILE FREEFORM = $(NAMED_GUID) {
+    RAW ACPI  Optional             |.acpi
+    RAW ASL                        |.aml
+  }

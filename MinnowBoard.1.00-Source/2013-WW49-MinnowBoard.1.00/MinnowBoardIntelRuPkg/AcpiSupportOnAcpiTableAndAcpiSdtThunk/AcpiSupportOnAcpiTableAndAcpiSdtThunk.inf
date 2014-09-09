@@ -1,0 +1,60 @@
+#
+# This file contains an 'Intel Peripheral Driver' and is
+# licensed for Intel CPUs and chipsets under the terms of your
+# license agreement with Intel or your vendor.  This file may
+# be modified by the user, subject to additional terms of the
+# license agreement
+#
+## @file
+#  ACPI Support Module
+#
+#  Provides a translation layer to allow older Framework ACPI code to run on
+#  UEFI.
+#
+#  Copyright (c) 2010 - 2013, Intel Corporation. All rights reserved.<BR>
+#
+#  This software and associated documentation (if any) is furnished
+#  under a license and may only be used or copied in accordance
+#  with the terms of the license. Except as permitted by such
+#  license, no part of this software or documentation may be
+#  reproduced, stored in a retrieval system, or transmitted in any
+#  form or by any means without the express written consent of
+#  Intel Corporation.
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = AcpiSupportOnAcpiTableAndAcpiSdtThunk
+  FILE_GUID                      = 29064E24-D1BB-417d-B79E-4C6A59053B39
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = AcpiSupportOnAcpiTableAndAcpiSdtThunkInitialize
+
+#
+# The following information is for reference only and not required by the build tools.
+#
+#  VALID_ARCHITECTURES           = IA32 X64 IPF EBC
+#
+
+[Sources]
+  AcpiSupportOnAcpiTableAndAcpiSdtThunk.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  IntelFrameworkPkg/IntelFrameworkPkg.dec
+
+[LibraryClasses]
+  UefiDriverEntryPoint
+  DebugLib
+  UefiBootServicesTableLib
+  MemoryAllocationLib
+
+[Protocols]
+  gEfiAcpiSupportProtocolGuid           ## PRODUCES
+  gEfiAcpiTableProtocolGuid             ## CONSUMES
+  gEfiAcpiSdtProtocolGuid               ## CONSUMES
+
+[Depex]
+  gEfiAcpiTableProtocolGuid AND gEfiAcpiSdtProtocolGuid
+

@@ -1,0 +1,190 @@
+================================================================================
+MinnowBoard UEFI Firmware Development Kit Build Instructions
+2013 Dec 5th
+================================================================================
+
+================================================================================
+DISCLAIMER
+================================================================================
+This release note as well as the software described in it is furnished under license
+and may only be used or copied in accordance with the terms of the license. The
+information in this manual is furnished for informational use only, is subject to
+change without notice, and should not be construed as a commitment by Intel Corporation.
+Intel Corporation assumes no responsibility or liability for any errors or inaccuracies
+that may appear in this document or any software that may be provided in association
+with this document.
+Except as permitted by such license, no part of this document may be reproduced,
+stored in a retrieval system, or transmitted in any form or by any means without
+the express written consent of Intel Corporation.
+
+================================================================================
+ADDITIONAL DISCLAIMER
+================================================================================
+This code is based upon the EDK II code base as found on the UEFI Open Source 
+Community Website (URL:www.tianocore.org).
+
+================================================================================
+                                     INDEX
+================================================================================
+A. INTRODUCTION
+B. FILE LIST
+C. HOW TO BUILD (WINDOWS SYSTEM)
+D. HOW TO BUILD (UNIX-LIKE SYSTEM)
+
+================================================================================
+A. INTRODUCTION
+================================================================================
+This document provides instructions on how to setup the build environment in a
+host machine to build the MinnowBoard UEFI Firmware Development Kit.
+
+================================================================================
+B. FILES LIST
+================================================================================
+1. "MinnowBoard.1.00-Source.zip" contains:
+   a. 2013-WW49-MinnowBoard.1.00-ReleaseNotes.txt
+      - Release Notes
+   b. 2013-WW49-MinnowBoard.1.00.zip
+      - Revision (release) 1.00 of the firmware source and binary modules for MinnowBoard
+   c. 2013-WW49-MinnowBoard.1.00-BuildInstructions.txt
+        - Detailed build instructions. Please refer to it to build the firmware image (this file) 
+   d. MINNOW.fd
+        - UEFI firmware image
+   e.  MINNOW_Debug.fd
+        - UEFI firmware debug image
+   f. FirmwareUpdate.efi
+        - UEFI firmware update tool
+   g. Documentation-2013-WW49-MinnowBoard.1.00.zip
+      - Firmware documents folder 
+   h. MB-UDK-EULA.pdf
+      - MinnowBoard UEFI Development Kit End User Liscense Agreement
+   
+================================================================================
+C. HOW TO BUILD (WINDOWS SYSTEM)
+================================================================================
+Windows System Configuration:
+  Microsoft Windows 7 Ultimate 64-bit*
+
+1.  Setup Build Environment
+
+    a.  Install Microsoft Visual Studio 2008* SP1 onto the build machine
+    b.  Download the iASL compiler version 20130725 ("iasl-win-20130725.zip") from 
+        "https://acpica.org/downloads/binary-tools" and extract files to "c:\ASL"
+    c.  Install WinDDK ver 3790.1830 to default directory "c:\winddk\3790.1830"
+
+        NOTE:
+        
+        The WinDDK.3790.1830 can be downloaded from:
+        "http://download.microsoft.com/download/9/0/f/90f019ac-8243-48d3-91cf-81fc4093ecfd/1830_usa_ddk.iso"
+
+        Extract the DDK to a temporary directory "C:\mytemp".
+        Run "C:\mytemp\x86\KitSetup.exe" as administrator
+
+        This installs WinDDK.3790.1830 in the default folder "C:\WINDDK\3790.1830"
+
+2.  Extract Common Source Code
+
+    a.  Create a working space build directory off of the root directory of your "C:" drive as follows:
+          "C:\uefi\Minnow_Src"
+          
+          NOTE: It is mandatory that the first level directory be named "uefi" and the second level directory
+          be named "Minnow_Src">
+    
+    b.  Extract the contents of the ZIP file "2013-WW49-MinnowBoard.1.00.zip" into the "C:\uefi\Minnow_Src" folder
+
+3.  Build Steps
+
+    a.  Open a command prompt window as an administrator (under "All Programs" "Accessories" right click on 
+        "Command Prompt" and select "Run as administrator"
+        
+        When the command prompt window opens, enter the build directory space by typing the command "cd C:\uefi\Minnow_Src" 
+        to enter the workspace directory, and then type command "edksetup" ; this will initialize the working environment.
+        
+    b.  Type the command below to build the release build of the firmware
+
+        "build -p MinnowBoardIntelRuPkg\Platform.dsc -b RELEASE -a IA32 -t VS2008x86 -D BUILD_NUMBER=12345678 -D BUILD_DATE=12/4/2013 -D INCLUDE_DP"
+
+        NOTES:
+        Once the release build completes, the firmware image will be created in the folder
+        "C:\uefi\Minnow_Src\Build\MinnowBoardIntelRuPkg\RELEASE_VS2008x86\FV\MINNOW.fd"
+
+    c.  To create a debug build, enter the following command
+
+        "build -p MinnowBoardIntelRuPkg\Platform.dsc -b DEBUG -a IA32 -t VS2008x86 -D BUILD_NUMBER=12345678 -D BUILD_DATE=12/4/2013 -D INCLUDE_DP -D LOGGING=TRUE -D SYMBOLIC_DEBUG=TRUE"
+
+        NOTES:
+        Once the debug build completes, the firmware image will be created in the folder
+        "C:\uefi\Minnow_Src\Build\MinnowBoardIntelRuPkg\DEBUG_VS2008x86\FV\MINNOW.fd"
+
+================================================================================
+D. HOW TO BUILD (UNIX-LIKE SYSTEM)
+================================================================================
+Unix-Like System Configuration:
+  DistributorID: Ubuntu*
+  Description:   Ubuntu 13 64-bit*
+  Release:       Ubuntu 13.04*
+
+1.  Setup Build Environment
+
+    a. Install necessary libraries and applications
+	
+       $ sudo apt-get install subversion gcc-4.4 uuid-dev g++ iasl
+
+    b. Set up GCC 4.4 to be the version used when the GCC command is invoked by 
+       using the update-alternatives command
+
+       $ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.4 10
+
+2.  Extract Common Source Code
+
+    a. Create a work space directory on the build machine: ~/src/Minnow_Src
+
+    b. Extract the content of the ZIP file "2013-WW49-MinnowBoard.1.00.zip" into the work space directory.
+
+3.  Build Steps
+
+    a.  Open a terminal and enter the workspace directory with the following command
+
+       $ cd ~/src/Minnow_Src
+
+    b. Create the Conf files and build the tools
+
+       $ . GCC_Tools.sh
+
+    c. Download the rest of CryptoPkg
+
+       $ . OpenSsl.sh
+
+    d. Build the MinnowTree type
+
+       $ . NDA_GCC44_Release.sh
+
+    NOTES:
+
+      1. Once the release build completes, the firmware image will be created in the folder 
+         Build/\MinnowBoardIntelRuPkg/RELEASE_GCC44/FV/MINNOW.fd
+
+      2. To create a debug build, enter the following command
+
+         $ . NDA_GCC44_Debug.sh
+
+      3. Once the debug build completes, the firmware image will be created in the folder 
+         Build/\MinnowBoardIntelRuPkg/DEBUG_GCC44/FV/MINNOW.fd
+
+      4. You may "tag" the build by setting the build number to a unique 32-bit 
+         value.
+
+      5. Use the following command to rebuild everything from scratch:
+
+         $ build clean
+
+      6. Please use either DEBUG macro or Print routine to generate the necessary
+         debug output.  The image sizes produced by the GCC compiler/linker cause
+         the RECOVERY firmware volume to overflow when built from source.  The
+         following options are set to FALSE to enable the build to complete:
+         * DIAG_STARTUP_NOISE
+         * S3_ENABLE
+         * SYMBOLIC_DEBUG
+
+* Other names and brands may be claimed as the property of others.
+
+[END OF BUILD INSTRUCTIONS]

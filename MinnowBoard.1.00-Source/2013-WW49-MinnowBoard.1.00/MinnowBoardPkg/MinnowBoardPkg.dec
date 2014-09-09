@@ -1,0 +1,226 @@
+## @file  MinnowBoardPkg.dec
+#
+# This package provides MinnowBoard platform support.
+#
+# Copyright (c) 2012-2013, Intel Corporation. All rights reserved.<BR>
+#
+# This program and the accompanying materials are licensed and made available under
+# the terms and conditions of the BSD License which accompanies this distribution.
+# The full text of the license may be found at
+# http://opensource.org/licenses/bsd-license.php
+#
+# THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+# WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+
+
+################################################################################
+#
+# Defines Section - statements that will be processed to create a Makefile.
+#
+################################################################################
+
+[Defines]
+  DEC_SPECIFICATION              = 0x00010005
+  PACKAGE_NAME                   = MinnowBoardPkg
+  PACKAGE_GUID                   = BBB411DC-7B75-44e1-9324-CABFB371D1AD
+  PACKAGE_VERSION                = 0.2
+
+[Includes]
+  Include
+
+[Guids]
+  ## Defines the token space for the platform module PCDs.
+  #
+  gMinnowBoardPkgTokenSpaceGuid  = { 0x22a5a59a, 0xb55b, 0x4c5d, { 0x82, 0x0a, 0x3d, 0xc7, 0x29, 0xf3, 0xd6, 0x82 } }
+
+#
+# Error message section
+#
+# [Error.gMinnowBoardPkgTokenSpaceGuid]
+#   0x80000003 | Invalid boot order value provided.
+#   0x80000006 | Invalid interrupt trigger mode value provided.
+#
+  
+[PcdsFeatureFlag]
+  ## Serial output indicates boot phases, LEDs active if non-zero blink rate
+  #
+  #     (Platform.dsc set in PcdE6xxGpioLevelRsm)
+  #       Both LEDs on by default
+  #
+  #  System Boot Started ...
+  #  Memory Setup Complete ...
+  #
+  #     (BDS entry before PCIe configuration)
+  #       LED 1 off 
+  #       LED 2 blinking
+  #
+  #  Graphics Console Setup Complete...
+  #  Connecting All Devices ...
+  #  Starting UEFI Application ...
+  #
+  gMinnowBoardPkgTokenSpaceGuid.PcdDiagBootPhasesSerial|FALSE|BOOLEAN|0x20005006
+
+  ## When enabled, adds additional connect processing within the BDS
+  #
+  gMinnowBoardPkgTokenSpaceGuid.PcdFeatureBdsConnectAll|FALSE|BOOLEAN|0x20005007
+
+[PcdsFixedAtBuild]
+ ## Defines for the BDS
+  # Defines the SimpleTextOut Colors, a number of UINT32
+  gMinnowBoardPkgTokenSpaceGuid.PcdBdsUiTextAttribute|0x0007|UINT32|0x00000001
+  # Defines the SimpleTextOut Colors, a number of UINT32
+  gMinnowBoardPkgTokenSpaceGuid.PcdBdsUiTextInverseAttribute|0x0070|UINT32|0x00000002
+  # Defines the start position to set the cursor to, a number of UINT32
+  gMinnowBoardPkgTokenSpaceGuid.PcdBdsUiTextStartColumn|4|UINT32|0x00000003
+  # Defines the max cloumn in BDS, a number of UINT32
+  gMinnowBoardPkgTokenSpaceGuid.PcdBdsUiTextMaxColumn|76|UINT32|0x00000004
+  # Defines the start position to set the cursor to, a number of UINT32
+  gMinnowBoardPkgTokenSpaceGuid.PcdBdsUiTextStartRow|2|UINT32|0x00000005
+
+  # Base Board (or Module) Information (Type 2), Section 3.3.3
+  # Board Manufacturer String
+  gMinnowBoardPkgTokenSpaceGuid.PcdSMBIOSBoardManufacturer|"Circuitco"|VOID*|0xA0000041
+  # Board Product Name| String
+  gMinnowBoardPkgTokenSpaceGuid.PcdSMBIOSBoardProductName|"MinnowBoard"|VOID*|0xA0000042
+  # Board Version String
+  gMinnowBoardPkgTokenSpaceGuid.PcdSMBIOSBoardVersion|"A1"|VOID*|0xA0000043
+  # Board Serial Number
+  gMinnowBoardPkgTokenSpaceGuid.PcdSMBIOSBoardSerialNumber|"Unknown"|VOID*|0xA0000044
+  # Board Serial Number
+  gMinnowBoardPkgTokenSpaceGuid.PcdSMBIOSBoardAssetTag|"Unknown"|VOID*|0xA0020044
+
+
+[PcdsPatchableInModule]
+  ## Provides the ability to override the default boot order and provide a
+  #  platform specific boot order.<BR><BR>
+  #  TRUE - Override default boot order with platform specific order.<BR>
+  #  FALSE - Use default boot order.<BR>
+  #
+  # @Prompt Boot Order Policy Enable
+  #
+  gMinnowBoardPkgTokenSpaceGuid.PcdBootOrderPolicyEnable|TRUE|BOOLEAN|0xA0000020
+
+  ## Provides the order that will be used by the BIOS to sequentially attempt to
+  #  boot to different devices.  If the device does not exist, the BIOS will
+  #  bypass the device and attempt to boot the next device in the specified
+  #  order.<BR><BR>
+  #  Valid values are 0 - 8(disable).<BR>
+  #
+  # @Prompt Boot Order For Payload
+  #
+  # @ValidRange 0x80000003 | 0 - 8
+  #
+  gMinnowBoardPkgTokenSpaceGuid.PcdBootOrderPayload|8|UINT16|0xA0000028
+
+  ## Provides the order that will be used by the BIOS to sequentially attempt to
+  #  boot to different devices.  If the device does not exist, the BIOS will
+  #  bypass the device and attempt to boot the next device in the specified
+  #  order.<BR><BR>
+  #  Valid values are 0 - 8(disable).<BR>
+  #
+  # @Prompt Boot Order For Hard Disk
+  #
+  # @ValidRange 0x80000003 | 0 - 8
+  #
+  gMinnowBoardPkgTokenSpaceGuid.PcdBootOrderHD|8|UINT16|0xA0000024
+
+  ## Provides the order that will be used by the BIOS to sequentially attempt to
+  #  boot to different devices.  If the device does not exist, the BIOS will
+  #  bypass the device and attempt to boot the next device in the specified
+  #  order.<BR><BR>
+  #  Valid values are 0 - 8(disable).<BR>
+  #
+  # @Prompt Boot Order For CD/DVD-ROM
+  #
+  # @ValidRange 0x80000003 | 0 - 8
+  #
+  gMinnowBoardPkgTokenSpaceGuid.PcdBootOrderDvdCd|8|UINT16|0xA0000023
+
+  ## Provides the order that will be used by the BIOS to sequentially attempt to
+  #  boot to different devices.  If the device does not exist, the BIOS will
+  #  bypass the device and attempt to boot the next device in the specified
+  #  order.<BR><BR>
+  #  Valid values are 0 - 8(disable).<BR>
+  #
+  # @Prompt Boot Order For USB Disk
+  #
+  # @ValidRange 0x80000003 | 0 - 8
+  #
+  gMinnowBoardPkgTokenSpaceGuid.PcdBootOrderUsb|8|UINT16|0xA0000022
+
+  ## Provides the order that will be used by the BIOS to sequentially attempt to
+  #  boot to different devices.  If the device does not exist, the BIOS will
+  #  bypass the device and attempt to boot the next device in the specified
+  #  order.<BR><BR>
+  #  Valid values are 0 - 8(disable).<BR>
+  #
+  # @Prompt Boot Order For Scsi
+  #
+  # @ValidRange 0x80000003 | 0 - 8
+  #
+  # gMinnowBoardPkgTokenSpaceGuid.PcdBootOrderScsi|8|UINT16|0xA0000025
+
+  ## Provides the order that will be used by the BIOS to sequentially attempt to
+  #  boot to different devices.  If the device does not exist, the BIOS will
+  #  bypass the device and attempt to boot the next device in the specified
+  #  order.<BR><BR>
+  #  Valid values are 0 - 8(disable).<BR>
+  #
+  # @Prompt Boot Order For Network
+  #
+  # @ValidRange 0x80000003 | 0 - 8
+  #
+  gMinnowBoardPkgTokenSpaceGuid.PcdBootOrderNetwork|8|UINT16|0xA0000026
+
+  ## Provides the order that will be used by the BIOS to sequentially attempt to
+  #  boot to different devices.  If the device does not exist, the BIOS will
+  #  bypass the device and attempt to boot the next device in the specified
+  #  order.<BR><BR>
+  #  Valid values are 0 - 8(disable).<BR>
+  #
+  # @Prompt Boot Order For Floppy
+  #
+  # @ValidRange 0x80000003 | 0 - 8
+  #
+  # gMinnowBoardPkgTokenSpaceGuid.PcdBootOrderFloppy|8|UINT16|0xA0000021
+
+  ## Provides the ability to configure the terminal type to be used.<BR><BR>
+  #  0 - PcAnsi<BR>
+  #  1 - VT100<BR>
+  #  2 - VT100Plus<BR>
+  #  3 - VTUTF8<BR>
+  #
+  # @Prompt Terminal Configuration
+  #
+  # @ValidRange 0x80000006 | 0x00 - 0x03
+  #
+  gMinnowBoardPkgTokenSpaceGuid.PcdTerminalType|0|UINT8|0x20000020
+
+
+[PcdsFixedAtBuild, PcdsDynamicEx]
+  ## LEDs indicates boot phases
+  #
+  #    LED1 (D11)    LED2 (D12)    Boot Phase
+  #        ON            ON        Reset to DDR2 memory initialization
+  #        ON            OFF       DDR2 memory initialization to BDS
+  #        OFF        Blinking     BDS running
+  #     Blinking         OFF       Application started
+  #
+  #   Blink rate specified in milliseconds
+  #
+  #        0 : Off
+  #
+  gMinnowBoardPkgTokenSpaceGuid.PcdDiagBootPhasesLedBlinkRate|0|UINT32|0x20005005
+
+
+[PcdsDynamicEx]
+  ## Provides the ability to enable the Fast Boot feature of the BIOS.  This
+  #  enables the system to boot faster but may only enumerate the hardware
+  #  that is required to boot the system.<BR>
+  #
+  # @Prompt Fast Boot Support
+  #
+  gMinnowBoardPkgTokenSpaceGuid.PcdEnableFastBoot|FALSE|BOOLEAN|0xA000004
+

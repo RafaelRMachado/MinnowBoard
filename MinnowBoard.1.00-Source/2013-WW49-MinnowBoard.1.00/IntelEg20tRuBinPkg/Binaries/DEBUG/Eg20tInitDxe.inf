@@ -1,0 +1,137 @@
+#
+# This file contains an 'Intel Peripheral Driver' and is
+# licensed for Intel CPUs and chipsets under the terms of your
+# license agreement with Intel or your vendor.  This file may
+# be modified by the user, subject to additional terms of the
+# license agreement
+#
+## @file
+# EG20T Initialization Support
+#
+# Initializes EG20T device.
+#
+# Copyright (c) 2013, Intel Corporation. All rights reserved.<BR>
+#
+#  This software and associated documentation (if any) is furnished
+#  under a license and may only be used or copied in accordance
+#  with the terms of the license. Except as permitted by such
+#  license, no part of this software or documentation may be
+#  reproduced, stored in a retrieval system, or transmitted in any
+#  form or by any means without the express written consent of
+#  Intel Corporation.
+#
+##
+
+[Defines]
+  INF_VERSION                = 0x00010005
+  BASE_NAME                  = Eg20tInitDxe
+  FILE_GUID                  = 39D2E4EB-F0C8-4fd0-B74D-694B28B8A961
+  MODULE_TYPE                = DXE_DRIVER
+  VERSION_STRING             = 1.0
+
+[Packages.IA32]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  IntelEg20tRuPkg/IntelEg20tRuPkg.dec
+
+[Binaries.IA32]
+  PE32|Eg20tInitDxe.efi
+  DXE_DEPEX|Eg20tInitDxe.depex
+
+[PatchPcd.IA32]
+  ## CONSUMES
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialLineControl|0x03|0x1D32
+
+  ## CONSUMES
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialFifoControl|0x27|0x1D33
+
+  ## CONSUMES
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialBaudRate|0x0001c200|0x1D3C
+
+
+[Protocols.IA32]
+  ## CONSUMES
+  gEfiEg20tPlatformProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiDevicePathProtocolGuid
+
+  ## CONSUMES
+  gEfiStatusCodeRuntimeProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gPcdProtocolGuid
+
+  ## CONSUMES
+  gEfiPcdProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiLoadedImageProtocolGuid
+
+
+[Ppis.IA32]
+
+[Guids.IA32]
+  ## PRODUCES
+  gEfiEg20tInitGuid
+
+  gIntelEg20tRuTokenSpaceGuid
+
+  ## SOMETIMES_CONSUMES ## UNDEFINED
+  gEfiStatusCodeSpecificDataGuid
+
+  ## SOMETIMES_CONSUMES ## UNDEFINED
+  ## SOMETIMES_CONSUMES
+  gEfiStatusCodeDataTypeDebugGuid
+
+
+[PcdEx.IA32]
+  ## CONSUMES
+  gIntelEg20tRuTokenSpaceGuid.Eg20tGigabitEthernetMac
+
+  ## CONSUMES
+  gIntelEg20tRuTokenSpaceGuid.Eg20tPciSubsystemVendorId
+
+  ## CONSUMES
+  gIntelEg20tRuTokenSpaceGuid.Eg20tPciSubsystemDeviceId
+
+
+[LibraryClasses.IA32]
+## @LIB_INSTANCES
+#  MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib.inf
+#  MdePkg/Library/BaseDebugPrintErrorLevelLib/BaseDebugPrintErrorLevelLib.inf
+#  MdeModulePkg/Library/DxeReportStatusCodeLib/DxeReportStatusCodeLib.inf
+#  MdePkg/Library/DxePcdLib/DxePcdLib.inf
+#  MdePkg/Library/BaseLib/BaseLib.inf
+#  IntelFrameworkModulePkg/Library/PeiDxeDebugLibReportStatusCode/PeiDxeDebugLibReportStatusCode.inf
+#  MdePkg/Library/BaseMemoryLibRepStr/BaseMemoryLibRepStr.inf
+#  MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
+#  MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib.inf
+#  MdePkg/Library/BaseIoLibIntrinsic/BaseIoLibIntrinsic.inf
+#  MdePkg/Library/BasePciExpressLib/BasePciExpressLib.inf
+#  MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint.inf
+#  MdePkg/Library/BasePciLibPciExpress/BasePciLibPciExpress.inf
+
+[Depex.IA32]
+#  (# # Do not run this driver until the PCI Root Bridges have been initialized # Timer Architectural Protocol is required to support use of gBS->Stall() # gEfiPciRootBridgeIoProtocolGuid AND gEfiTimerArchProtocolGuid AND gEfiEg20tPlatformProtocolGuid) AND (gEfiPcdProtocolGuid) AND (gEfiPcdProtocolGuid) AND (gEfiPcdProtocolGuid) AND (gEfiPcdProtocolGuid) AND (gEfiBdsArchProtocolGuid AND gEfiCpuArchProtocolGuid AND gEfiMetronomeArchProtocolGuid AND gEfiMonotonicCounterArchProtocolGuid AND gEfiRealTimeClockArchProtocolGuid AND gEfiResetArchProtocolGuid AND gEfiRuntimeArchProtocolGuid AND gEfiSecurityArchProtocolGuid AND gEfiTimerArchProtocolGuid AND gEfiVariableWriteArchProtocolGuid AND gEfiVariableArchProtocolGuid AND gEfiWatchdogTimerArchProtocolGuid)
+
+[BuildOptions.IA32]
+## @AsBuilt
+##   MSFT:DEBUG_VS2008x86_IA32_SYMRENAME_FLAGS = Symbol renaming not needed for
+##   MSFT:DEBUG_VS2008x86_IA32_ASLDLINK_FLAGS = /NODEFAULTLIB /ENTRY:ReferenceAcpiTable /SUBSYSTEM:CONSOLE
+##   MSFT:DEBUG_VS2008x86_IA32_VFR_FLAGS = -l -n
+##   MSFT:DEBUG_VS2008x86_IA32_PP_FLAGS = /nologo /E /TC /FIAutoGen.h
+##   MSFT:DEBUG_VS2008x86_IA32_GENFW_FLAGS = 
+##   MSFT:DEBUG_VS2008x86_IA32_OPTROM_FLAGS = -e
+##   MSFT:DEBUG_VS2008x86_IA32_SLINK_FLAGS = /NOLOGO /LTCG
+##   MSFT:DEBUG_VS2008x86_IA32_ASM_FLAGS = /nologo /c /WX /W3 /Cx /coff /Zd /Zi
+##   MSFT:DEBUG_VS2008x86_IA32_ASL_FLAGS = 
+##   MSFT:DEBUG_VS2008x86_IA32_CC_FLAGS = /nologo /c /WX /GS- /W4 /Gs32768 /D UNICODE /O1ib2 /GL /FIAutoGen.h /EHs-c- /GR- /GF /Gy /Zi /Gm /wd4200
+##   MSFT:DEBUG_VS2008x86_IA32_VFRPP_FLAGS = /nologo /E /TC /DVFRCOMPILE /FI$(MODULE_NAME)StrDefs.h
+##   MSFT:DEBUG_VS2008x86_IA32_ASLCC_FLAGS = /nologo /c /FIAutoGen.h /TC /Dmain=ReferenceAcpiTable
+##   MSFT:DEBUG_VS2008x86_IA32_APP_FLAGS = /nologo /E /TC
+##   MSFT:DEBUG_VS2008x86_IA32_DLINK_FLAGS = /NOLOGO /NODEFAULTLIB /IGNORE:4001 /OPT:REF /OPT:ICF=10 /MAP /ALIGN:32 /SECTION:.xdata,D /SECTION:.pdata,D /MACHINE:X86 /LTCG /DLL /ENTRY:$(IMAGE_ENTRY_POINT) /SUBSYSTEM:EFI_BOOT_SERVICE_DRIVER /SAFESEH:NO /BASE:0 /DRIVER /DEBUG
+##   MSFT:DEBUG_VS2008x86_IA32_ASLPP_FLAGS = /nologo /E /C /FIAutoGen.h
+##   MSFT:DEBUG_VS2008x86_IA32_OBJCOPY_FLAGS = objcopy not needed for
+##   MSFT:DEBUG_VS2008x86_IA32_MAKE_FLAGS = /nologo
+##   MSFT:DEBUG_VS2008x86_IA32_ASMLINK_FLAGS = /nologo /tiny

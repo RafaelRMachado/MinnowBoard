@@ -1,0 +1,39 @@
+## @file
+#  Synchronize with the SPI flash part availability
+#
+#  Copyright (c) 2013, Intel Corporation. All rights reserved.<BR>
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution.  The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = SpiDeviceSyncDxe
+  FILE_GUID                      = 928E846E-3C2C-4951-B0EF-DCC11FA0FF8B
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = SpiDeviceSync
+
+[Sources]
+  SpiDeviceSyncDxe.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  IntelE6xxPkg/IntelE6xxPkg.dec
+
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+
+[Guids]
+  gSpiFlashPartSyncGuid         ## PRODUCES
+
+[Depex]
+  TRUE
+

@@ -1,0 +1,649 @@
+#
+# This file contains 'Framework Code' and is licensed as such
+# under the terms of your license agreement with Intel or your
+# vendor.  This file may not be modified, except as allowed by
+# additional terms of your license agreement.
+#
+## @file
+# Intel(R) Atom(TM) Processor E6xx Series Reference Package
+#
+# Provides a reference implementation for Intel(R) Atom(TM) Processor
+# E6xx Series devices.
+#
+# Copyright (c) 2010 - 2013, Intel Corporation. All rights reserved.<BR>
+#
+#    This software and associated documentation (if any) is furnished
+#    under a license and may only be used or copied in accordance
+#    with the terms of the license. Except as permitted by such
+#    license, no part of this software or documentation may be
+#    reproduced, stored in a retrieval system, or transmitted in any
+#    form or by any means without the express written consent of
+#    Intel Corporation.
+#
+##
+
+
+################################################################################
+#
+# Defines Section - statements that will be processed to create a Makefile.
+#
+################################################################################
+
+[Defines]
+  DEC_SPECIFICATION              = 0x00010005
+  PACKAGE_NAME                   = IntelE6xxRuPkg
+  PACKAGE_GUID                   = 3D03670A-0129-4480-AFAC-A0B3478B32B1
+  PACKAGE_VERSION                = 0.2
+
+[Includes]
+  Include
+
+[Guids]
+  ## Defines the token space for the Intel(R) Atom(TM) Processor E6xx Series PCDs.
+  #
+  gIntelE6xxRuTokenSpaceGuid     = {0x672e8df3, 0x1850, 0x4a03, {0xad, 0x88, 0x7c, 0x6a, 0xbf, 0x7d, 0x62, 0xe4}}
+
+  ## Identifies a HOB used to store information about a reserved region found in SMRAM.
+  #
+  ## Include/Guid/SmramMemoryReserve2.h
+  gEfiSmmPeiSmramMemoryReserve2Guid = {0xea27683a, 0xa9bb, 0xa9bb, {0xa3, 0x2d, 0x90, 0xb2, 0xd6, 0x0c, 0x03, 0xc2}}
+
+  ## Unknown
+  #
+  gEfiPciGInfoHobGuid               = {0xACB72A8B, 0xF584, 0x47CC, {0xB3, 0xA5, 0xD4, 0xB8, 0x6D, 0x4C, 0x04, 0x04}}
+
+[Ppis]
+  ## Provides an interface to the memory reference code.
+  #
+  ## Include/Ppi/TCMemoryInit.h
+  gTCMemoryInitPpiGuid              = {0xa55d6970, 0x1306, 0x440c, {0x8c, 0x72, 0x8f, 0x51, 0xfa, 0xfb, 0x29, 0x26}}
+
+[Protocols]
+  ## Provides a method to communicate platform specific information to the Reference code.
+  #
+  ## Include/Protocol/PlatformPolicy.h
+  gEfiPlatformPolicyProtocolGuid    = {0x2977064F, 0xAB96, 0x4FA9, {0x85, 0x45, 0xF9, 0xC4, 0x02, 0x51, 0xE0, 0x7F}}
+
+  ## Provides the ability to register for chipset specific SMI events.
+  #
+  ## Include/Protocol/SmmIchnDispatch2.h
+  gEfiSmmIchnDispatch2ProtocolGuid  = {0xadf3a128, 0x416d, 0x4060, {0x8d, 0xdf, 0x30, 0xa1, 0xd7, 0xaa, 0xb6, 0x99}}
+
+  ## Provides a communication interface to the SPI flash controller from SMM.
+  #
+  ## Include/Protocol/SmmSpi.h
+  gEfiSmmSpiProtocolGuid            = {0x12f214f8, 0x407a, 0x41fa, {0x86, 0x37, 0x53, 0xa2, 0x3d, 0x70, 0x7b, 0x82}}
+
+  ## Provides a device specific abstraction layer for access to the SPI flash
+  #  device while in SMM.
+  #
+  ## Include/Protocol/SmmSpiDevice.h
+  gSmmSpiDeviceProtocolGuid      = {0xd963c5cd, 0x8cac, 0x498a, {0xbf, 0x78, 0xd1, 0x56, 0x49,  0x1, 0x85, 0x38}}
+
+  ## Provides a device specific abstraction layer for access to the SPI flash
+  #  device.
+  #
+  ## Include/Protocol/SpiDevice.h
+  gSpiDeviceProtocolGuid         = {0x37DCF59A, 0x944A, 0x11DF, {0x97, 0xD4, 0xE3, 0xAA, 0xC9, 0x24, 0x56, 0x53}}
+
+  ## Provides a communication interface to the SPI flash controller.
+  #
+  ## Include/Protocol/Spi.h
+  gEfiSpiProtocolGuid               = {0x8035CD68, 0x9363, 0x11DF, {0x88, 0x50, 0xAB, 0x1C, 0x04, 0xCE, 0xFC, 0xE0}}
+
+#
+# Error message section
+#
+# [Error.gIntelE6xxRuTokenSpaceGuid]
+#   0x80000001 | Value outside of valid range.
+#   0x80000002 | Reserved bits set in value.
+#   0x80000003 | Invalid Azalia configuration used.
+#   0x80000011 | Invalid base address provided.
+#   0x80000012 | Invalid size provided.
+#
+
+################################################################################
+#
+# PCD Declarations section - list of all PCDs Declared by this Package
+#                            Only this package should be providing the
+#                            declaration, other packages should not.
+#
+################################################################################
+
+[PcdsFeatureFlag]
+  ## When enabled, allows the platform to configure the SMBUS controller to function at a fixed I/O address.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxSmbusIoPortBaseAddressFixed|FALSE|BOOLEAN|0x10000006
+
+  ## Determines if the ACPI Timer should be used to determine the actual period of the 8254 timer interrupt.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdUseAcpiTimerInSmartTimer|TRUE|BOOLEAN|0x10000007
+
+[PcdsFixedAtBuild]
+  ## Defines the base address used by the High Precision Event Timer (HPET).
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdHpetBaseAddress|0xFED00000|UINT64|0x1000000D
+
+  ## Defines the size of the MMIO region consumed by the High Precision Event Timer (HPET).
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdHpetSpaceSize|0x400|UINT64|0x1000000E
+
+  ## Defines the base address of the I/O APIC.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdIoApicBaseAddress|0xFEC00000|UINT64|0x10000009
+
+  ## Defines the size of the MMIO space used by the I/O APIC.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdIoApicSpaceSize|0x1000|UINT64|0x1000000A
+
+  ## Defines the size of the PCI Express configuration space.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdPciExpressSpaceSize|0x10000000|UINT64|0x1000000C
+
+  ## Determines the I/O port used to generate a software SMI.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdSmmActivationPort|0xb2|UINT16|0x10000039
+
+  ## Defines the ACPI register set base address.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxAcpiIoPortBaseAddress|0x1000|UINT16|0x10000002
+
+  ## Unknown
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxAPMIoPortBaseAddress|0x1180|UINT16|0x10000036
+
+  ## Determines the interrupt pin that is used by the PCI to LPC bridge.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxD31IP|0x00000000|UINT32|0x1000001E
+
+  ## Determines the interrupt pin that is used by the Intel(R) HD Audio device.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxD27IP|0x00000001|UINT32|0x1000001F
+
+  ## Determines the interrupt pin that is used by PCI Express port 3.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxD26IP|0x00000001|UINT32|0x10000020
+
+  ## Determines the interrupt pin that is used by PCI Express port 2.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxD25IP|0x00000001|UINT32|0x10000021
+
+  ##  Determines the interrupt pin that is used by PCI Express port 1.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxD24IP|0x00000001|UINT32|0x10000022
+
+  ## Determines the interrupt pin that is used by PCI Express port 0.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxD23IP|0x00000001|UINT32|0x10000023
+
+  ## Determines the interrupt pin that is used by the SDVO display unit.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxD03IP|0x00000001|UINT32|0x10000024
+
+  ## Determines the interrupt pin that is used by the integrated display device.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxD02IP|0x00000001|UINT32|0x10000025
+
+  ## Determines the interrupt routing for the PCI to LPC bridge.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxD31IR|0x3210|UINT16|0x10000026
+
+  ## Determines the interrupt routing for the Intel(R) HD Audio device.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxD27IR|0x3217|UINT16|0x10000027
+
+  ## Determines the interrupt routing for PCI Express port 3.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxD26IR|0x3216|UINT16|0x10000028
+
+  ## Determines the interrupt routing for PCI Express port 2.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxD25IR|0x3215|UINT16|0x10000029
+
+  ## Determines the interrupt routing for PCI Express port 1.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxD24IR|0x3214|UINT16|0x1000002A
+
+  ## Determines the interrupt routing for PCI Express port 0.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxD23IR|0x3213|UINT16|0x1000002B
+
+  ## Determines the interrupt routing for the SDVO display unit.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxD03IR|0x3210|UINT16|0x1000002C
+
+  ## Determines the interrupt routing for the integrated display device.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxD02IR|0x3210|UINT16|0x1000002D
+
+  ## Defines the base address used for the General-Purpose Event (GPE) registers.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxGpeIoPortBaseAddress|0x10C0|UINT16|0x10000004
+
+  ## Unknown
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxOSPMIoPortBaseAddress|0x1100|UINT16|0x10000034
+
+  ## Unknown Function
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxPMIoPortBaseAddress|0x1010|UINT16|0x10000037
+
+  ## Describes the I/O port used for MWAIT support.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxPMIoPortLVL2|0x1014|UINT16|0x1000003C
+
+  ## Unknown
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxPMIoPortLVL4|0x1016|UINT16|0x1000003D
+
+  ## Unknown
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxPMIoPortLVL6|0x1018|UINT16|0x1000003E
+
+  ## Unknown
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxPSMIIoPortBaseAddress|0x1140|UINT16|0x10000035
+
+  ## Defines the MMIO base address of the Root Complex register block.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxRcbaMmioBaseAddress|0xFED1C000|UINT64|0x10000001
+
+  ## Defines the size of the Root Complex register block.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxRcbaMmioSpaceSize|0x4000|UINT64|0x1000000B
+
+  ## Defines the base address of the SMBUS register block.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxSmbusIoPortBaseAddress|0x1040|UINT16|0x10000005
+
+  ## Defines the MMIO base address used by the TPM.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdTpmBaseAddress|0xFED40000|UINT64|0x1000000F
+
+  ## Defines the size of the MMIO range consumed by the TPM.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdTpmSpaceSize|0xC000|UINT64|0x10000010
+
+  ## Defines the IO base address used by the watchdog timer (WDT).
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdWdtBaseAddress|0x000011C0|UINT32|0x10000011
+
+[PcdsPatchableInModule]
+  ## Provides the memory mapped base address of the BIOS Flash Device.<BR><BR>
+  #  Valid values are 0xFF000000 - 0xFFFFFFFF.
+  #
+  # @Prompt BIOS Flash Device Base Address
+  #
+  # @Expression 0x80000011 | gIntelE6xxRuTokenSpaceGuid.PcdFlashAreaBase > 0xFF000000
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdFlashAreaBase|0xFFE00000|UINT32|0x20000001
+
+  ## Provides the size of the BIOS Flash Device.<BR><BR>
+  #  Valid values are 0x00000000 - 0x01000000.
+  #
+  # @Prompt BIOS Flash Device Size
+  #
+  # @Expression 0x80000012 | gIntelE6xxRuTokenSpaceGuid.PcdFlashAreaSize <= 0x1000000
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdFlashAreaSize|0x200000|UINT32|0x20000002
+
+  ## Provides the memory mapped base address of the BIOS Image Area.  This area
+  #  must be within the memory mapped region defined by the BIOS Flash Device
+  #  Base Address and the BIOS Flash Device Size.<BR><BR>
+  #  The address must be within the BIOS Flash Device address space.<BR>
+  #
+  # @Prompt BIOS Image Area Base Address
+  #
+  # @Expression 0x80000011 | gIntelE6xxRuTokenSpaceGuid.PcdBiosImageBase >= gIntelE6xxRuTokenSpaceGuid.PcdFlashAreaBase
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdBiosImageBase|0xFFF00000|UINT32|0x2000001C
+
+  ## Provides the size of the BIOS Image Area.<BR><BR>
+  #  Valid size values must not exceed the BIOS Flash Device address space.<BR>
+  #
+  # @Prompt BIOS Image Area Size
+  #
+  # @Expression 0x80000012 | gIntelE6xxRuTokenSpaceGuid.PcdBiosImageSize <= gIntelE6xxRuTokenSpaceGuid.PcdFlashAreaSize
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdBiosImageSize|0x00100000|UINT32|0x2000001D
+
+  ## Provides the memory mapped base address of the Non-Volatile Storage
+  #  Area.  This area must be within the memory mapped BIOS Image Area defined
+  #  by the BIOS Image Area Base Address and the BIOS Image Area Size.<BR><BR>
+  #  The address must be within the BIOS Image area.<BR>
+  #
+  # @Prompt Non-Volatile Storage Base Address
+  #
+  # @Expression 0x80000011 | gIntelE6xxRuTokenSpaceGuid.PcdFlashNvStorageBase >= gIntelE6xxRuTokenSpaceGuid.PcdBiosImageBase
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdFlashNvStorageBase|0xFFFA0000|UINT32|0x20000003
+
+  ## Provides the size of the Non-Volatile Storage Area.<BR><BR>
+  #  Valid size values must not overlap other regions within the BIOS Image Area.<BR>
+  #
+  # @Prompt Non-Volatile Storage Size
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdFlashNvStorageSize|0x00030000|UINT32|0x20000004
+
+  ## The simple DRAM Geometry Descriptor used to determine the default programming for 
+  #  all memory configurations. <BR><BR>
+  #
+  # Bit0:  DRAM type. 0 = RESERVED; 1 = DDR2.<BR>
+  # Bit1:  DRAM width. 0 = x8; 1 = x16.<BR>
+  # Bit2-Bit3: DRAM density. 00b = 2Gb; 01b = 1Gb; 10b = 512Mb; 11b = 256Mb.<BR>
+  # Bit4:  DRAM speed. 0 = RESERVED; 1 = 800MT/s.<BR>
+  # Bit5-Bit7: DRAM timings. 000b = 4-4-4, 001b = 5-5-5, 002b = 6-6-6.<BR>
+  # Bit8:  DRAM ranks. 0 = Single Rank; 1 = Dual Rank.<BR>
+  # Bit9-Bit31:  Reserved.<BR>
+  #
+  # @Prompt Defines the override for the memory configuration.
+  #
+  # @ValidRange 0x80000001 | 0x0 - 0x1FF.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxMemoryConfiguration|0|UINT32|0x10000040
+
+[PcdsFixedAtBuild, PcdsPatchableInModule, PcdsDynamic, PcdsDynamicEx]
+  ## Defines the base of the I/O address space used during PCI enumeration.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxPciHostBridgeIoBase|0x2000|UINT16|0x10000012
+
+  ## Defines the size of the I/O address space used during PCI enumeration.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxPciHostBridgeIoSize|0xE000|UINT16|0x10000013
+
+  ## Unknown
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxPcieMemory32NonPrefetchableSize|0x0A00000|UINT32|0x10000014
+
+  ## Unknown
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxPcieMemory32PrefetchableSize|0x0A00000|UINT32|0x10000015
+
+  ## Unknown
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxPcieMemory64PrefetchableSize|0|UINT64|0x10000016
+
+  ## Unknown
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxPcieIoSize|0x1000|UINT16|0x10000017
+
+  ## Unknown
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxPcieBusSize|0|UINT8|0x10000018
+
+  ## Determines if a pin will be used as a GPIO or as its alternate function.  When set, enables 
+  # the pin as a GPIO. When cleared, the pin, if muxed, returns to its normal use. This field has 
+  # no effect on unmuxed GPIOs. <BR><BR>
+  # 
+  # Bit0:  GPIO0 enable.<BR>
+  # Bit1:  GPIO1 enable.<BR>
+  # Bit2:  GPIO2 enable.<BR>
+  # Bit3:  GPIO3 enable.<BR>
+  # Bit4:  GPIO4 enable.<BR>
+  # Bit5 - Bit31: Reserved. Must be 0.<BR>
+  #
+  # @Prompt Configure GPIO PIN as GPIO function.
+  #
+  # @ValidRange 0x80000001 | 0x0 - 0x1FF.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxGpioUseSelect|0x000001F|UINT32|0x1000002E
+
+  ## Determines if a pin will be uses as an input or an output. When set, the GPIO signal (if enabled) 
+  # is programmed as an input. When cleared, the GPIO signal is programmed as an output. If the pin is 
+  # muxed, and not enabled, writes to these bits have no effect. <BR><BR>
+  #
+  # Bit0:  GPIO0 PIN input/output.<BR>
+  # Bit1:  GPIO1 PIN input/output.<BR>
+  # Bit2:  GPIO2 PIN input/output.<BR>
+  # Bit3:  GPIO3 PIN input/output.<BR>
+  # Bit4:  GPIO4 PIN input/output.<BR>
+  # Bit5 - Bit31: Reserved.  Must be 0.<BR>
+  #
+  # @Prompt  GPIO PIN input/output configuration.
+  #
+  # @ValidRange 0x80000001 | 0x0 - 0x1F.
+  #  
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxGpioIoSelect|0x0000001F|UINT32|0x1000002F
+
+  ## Determines the output state (level) of a GPO. 1 = high, 0 =low. The state could be used for 
+  # memory initialization. If GPIO is dsabled or used as an input, the value of this bit has 
+  # no meaning.  <BR><BR>
+  #
+  # Bit0:  GPIO0 level.<BR>
+  # Bit1:  GPIO1 level.<BR>
+  # Bit2:  GPIO2 level.<BR>
+  # Bit3:  GPIO3 level.<BR>
+  # Bit4:  GPIO4 level.<BR>
+  # Bit5 - Bit31: Reserved. Must be 0.<BR>
+  #
+  # @Prompt  Determines the output state (level) of a GPO.
+  #
+  # @ValidRange 0x80000001 | 0x0 - 0x1F.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxGpioLevel|0x00000000|UINT32|0x10000030
+
+  ## Determines if a pin will be used as a GPIO or as its alternate function.  When set, enables 
+  # the pin as a GPIO. When cleared, the pin, if muxed, returns to its normal use. This field has 
+  # no effect on unmuxed GPIOs. These GPIO pins are powered from the resume power well.<BR><BR>
+  # 
+  # Bit0:  GPIOSUS0 enable.<BR>
+  # Bit1:  GPIOSUS1 enable.<BR>
+  # Bit2:  GPIOSUS2 enable.<BR>
+  # Bit3:  GPIOSUS3 enable.<BR>
+  # Bit4:  GPIOSUS4 enable.<BR>
+  # Bit5:  GPIOSUS5 enable.<BR>
+  # Bit6:  GPIOSUS6 enable.<BR>
+  # Bit7:  GPIOSUS7 enable.<BR>
+  # Bit8:  GPIOSUS8 enable.<BR>
+  # Bit9 - Bit31: Reserved. Must be 0.<BR>
+  #
+  # @Prompt Configure GPIOSUS PIN as GPIO function.
+  #
+  # @ValidRange 0x80000001 | 0x0 - 0x1FF.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxGpioUseSelectRsm|0x000001F8|UINT32|0x10000031
+
+  ## Determines if a pin will be uses as an input or an output. When set, the GPIO signal (if enabled) 
+  # is programmed as an input. When cleared, the GPIO signal is programmed as an output. If the pin is 
+  # muxed, and not enabled, writes to these bits have no effect. <BR><BR>
+  #
+  # Bit0:  GPIOSUS0 PIN input/output.<BR>
+  # Bit1:  GPIOSUS1 PIN input/output.<BR>
+  # Bit2:  GPIOSUS2 PIN input/output.<BR>
+  # Bit3:  GPIOSUS3 PIN input/output.<BR>
+  # Bit4:  GPIOSUS4 PIN input/output.<BR>
+  # Bit5:  GPIOSUS5 PIN input/output.<BR>
+  # Bit6:  GPIOSUS6 PIN input/output.<BR>
+  # Bit7:  GPIOSUS7 PIN input/output.<BR>
+  # Bit8:  GPIOSUS8 PIN input/output.<BR>
+  # Bit9 - Bit31: Reserved. Must be 0.<BR>
+  #
+  # @Prompt GPIOSUS PIN input/output configuration.
+  #
+  # @ValidRange 0x80000001 | 0x0 - 0x1FF.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxGpioIoSelectRsm|0x000001E0|UINT32|0x10000032
+
+  ## Determines the output state (level) of a GPO. 1 = high, 0 =low. The state could be used for
+  # memory initialization. If GPIO is dsabled or used as an input, the value of this bit has 
+  # no meaning.<BR><BR> 
+  #
+  # Bit0:  GPIOSUS0 PIN level.<BR>
+  # Bit1:  GPIOSUS1 PIN level.<BR>
+  # Bit2:  GPIOSUS2 PIN level.<BR>
+  # Bit3:  GPIOSUS3 PIN level.<BR>
+  # Bit4:  GPIOSUS4 PIN level.<BR>
+  # Bit5:  GPIOSUS5 PIN level.<BR>
+  # Bit6:  GPIOSUS6 PIN level.<BR>
+  # Bit7:  GPIOSUS7 PIN level.<BR>
+  # Bit8:  GPIOSUS8 PIN level.<BR>
+  # Bit9 - Bit31: Reserved. Must be 0.<BR>
+  #
+  # @Prompt GPIOSUS PIN default output state.
+  #
+  # @ValidRange 0x80000001 | 0x0 - 0x1FF.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxGpioLevelRsm|0x00000008|UINT32|0x10000033
+
+  ## Determines the I/O port used to store the software SMI data.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdSmmDataPort|0xb3|UINT16|0x1000003A
+
+  ## Determines the data value written to the SMM Activation Port when generating a software SMI.
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdSmmActivationData|0x55|UINT8|0x1000003B
+
+  ## Defines the size of the SMRAM region to allocate from system memory for use by SMM.<BR><BR>
+  #
+  #  0x00100000: 1MB.<BR>
+  #  0x00200000: 2MB.<BR>
+  #  0x00400000: 4MB.<BR>
+  #  0x00800000: 8MB.<BR>
+  #  0x01000000: 16MB.<BR>
+  #
+  # @Prompt SMRAM size
+  #
+  # @ValidList 0x80000001 | 0x00100000, 0x00200000, 0x00400000, 0x00800000, 0x01000000
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdSmramAllocSize|0x00100000|UINT64|0x1000003F
+  
+  ## Determines if specific features should be enabled such as support for wake events and virtual channel support.
+  # Bit 0: Pme enable
+  # Bit 1: Vci enable
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxAzaliaConfig|0x02|UINT16|0x1000001C
+
+  ## Determines which devices should be enabled within the chip.  A bit value of
+  #  zero will disable the device.  A bit value of 1 will enable the device.  In
+  #  the case of the Azalia audio device, a value of 2 may also be used to
+  #  configure the device for Auto mode.  All reserved bits must be set to 0.<BR><BR>
+  #  Bit0 - PCI Express Root Port 1<BR>
+  #  Bit1 - PCI Express Root Port 2<BR>
+  #  Bit2 - PCI Express Root Port 3<BR>
+  #  Bit3 - PCI Express Root Port 4<BR>
+  #  Bit5:4 - Azalia Audio<BR>
+  #  Bit6 - Smbus<BR>
+  #  Bit31:7 - Reserved<BR>
+  #
+  # @Prompt Internal Device Enables
+  #
+  # @Expression 0x80000002 | gIntelE6xxRuTokenSpaceGuid.PcdE6xxDeviceEnables & 0xFFFFFF80 == 0x00000000
+  # @Expression 0x80000003 | gIntelE6xxRuTokenSpaceGuid.PcdE6xxDeviceEnables & 0x00000030 != 0x00000030
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxDeviceEnables|0x6F|UINT32|0x1000001B
+
+  ## Selects the Pre-Allocated Graphics Memory size used by the Internal Graphics
+  #  Device. This has no effect if internal graphics is disabled.<BR><BR>
+  #  1: 4M<BR>
+  #  2: 8M<BR>
+  #  3: 16M<BR>
+  #  4: 32M<BR>
+  #  5: 48M<BR>
+  #  6: 64M<BR>
+  #
+  # @Prompt Pre-Allocated Graphics Memory Size
+  #
+  # @ValidRange 0x80000001 | 1 - 6
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdIgdPreAllocSize|0x02|UINT8|0x10000038
+
+  ## Provides the configuration for PCI Express Root Port 1 available on the
+  #  E6xx series processor.  A bit value of 0 will disable the feature.  A bit value
+  #  of 1 will enable the feature.<BR><BR>
+  #  Bit0 - Unsupported Request Reporting<BR>
+  #  Bit1 - Fatal Error Reporting<BR>
+  #  Bit2 - Non-Fatal Error Reporting<BR>
+  #  Bit3 - Correctable Error Reporting<BR>
+  #  Bit4 - System Error on Fatal Error<BR>
+  #  Bit5 - System Error on Non-Fatal Error<BR>
+  #  Bit6 - System Error on Correctable Error<BR>
+  #  Bit8 - Slot Implemented<BR>
+  #  Bit10 - ASPM Support<BR>
+  #  Bit11 - ASPM Automatic Cascading Configuration<BR>
+  #  Bit12 - ASPM L0s on Root Port<BR>
+  #  BIT13 - ASPM L0s on Downstream Device<BR>
+  #  Bit14 - ASPM L1 Automatic Cascading Configuration<BR>
+  #  Bit15 - Power Management Event Interrupt<BR>
+  #  Bit28:16 - Physical Slot Number<BR>
+  #  Bit30 - Power Management Event SCI<BR>
+  #  Bit31 - Hot Plug Event SCI<BR>
+  #
+  # @Prompt PCI Express Root Port 1 Configuration
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxPcieRootPort1Configuration|0x00010000|UINT32|0x10000130
+
+  ## Provides the configuration for PCI Express Root Port 2 available on the
+  #  E6xx series processor.  A bit value of 0 will disable the feature.  A bit value
+  #  of 1 will enable the feature.<BR><BR>
+  #  Bit0 - Unsupported Request Reporting<BR>
+  #  Bit1 - Fatal Error Reporting<BR>
+  #  Bit2 - Non-Fatal Error Reporting<BR>
+  #  Bit3 - Correctable Error Reporting<BR>
+  #  Bit4 - System Error on Fatal Error<BR>
+  #  Bit5 - System Error on Non-Fatal Error<BR>
+  #  Bit6 - System Error on Correctable Error<BR>
+  #  Bit8 - Slot Implemented<BR>
+  #  Bit10 - ASPM Support<BR>
+  #  Bit11 - ASPM Automatic Cascading Configuration<BR>
+  #  Bit12 - ASPM L0s on Root Port<BR>
+  #  BIT13 - ASPM L0s on Downstream Device<BR>
+  #  Bit14 - ASPM L1 Automatic Cascading Configuration<BR>
+  #  Bit15 - Power Management Event Interrupt<BR>
+  #  Bit28:16 - Physical Slot Number<BR>
+  #  Bit30 - Power Management Event SCI<BR>
+  #  Bit31 - Hot Plug Event SCI<BR>
+  #
+  # @Prompt PCI Express Root Port 2 Configuration
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxPcieRootPort2Configuration|0x00020100|UINT32|0x10000131
+
+  ## Provides the configuration for PCI Express Root Port 3 available on the
+  #  E6xx series processor.  A bit value of 0 will disable the feature.  A bit value
+  #  of 1 will enable the feature.<BR><BR>
+  #  Bit0 - Unsupported Request Reporting<BR>
+  #  Bit1 - Fatal Error Reporting<BR>
+  #  Bit2 - Non-Fatal Error Reporting<BR>
+  #  Bit3 - Correctable Error Reporting<BR>
+  #  Bit4 - System Error on Fatal Error<BR>
+  #  Bit5 - System Error on Non-Fatal Error<BR>
+  #  Bit6 - System Error on Correctable Error<BR>
+  #  Bit8 - Slot Implemented<BR>
+  #  Bit10 - ASPM Support<BR>
+  #  Bit11 - ASPM Automatic Cascading Configuration<BR>
+  #  Bit12 - ASPM L0s on Root Port<BR>
+  #  BIT13 - ASPM L0s on Downstream Device<BR>
+  #  Bit14 - ASPM L1 Automatic Cascading Configuration<BR>
+  #  Bit15 - Power Management Event Interrupt<BR>
+  #  Bit28:16 - Physical Slot Number<BR>
+  #  Bit30 - Power Management Event SCI<BR>
+  #  Bit31 - Hot Plug Event SCI<BR>
+  #
+  # @Prompt PCI Express Root Port 3 Configuration
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxPcieRootPort3Configuration|0x00030100|UINT32|0x10000132
+
+  ## Provides the configuration for PCI Express Root Port 4 available on the
+  #  E6xx series processor.  A bit value of 0 will disable the feature.  A bit value
+  #  of 1 will enable the feature.<BR><BR>
+  #  Bit0 - Unsupported Request Reporting<BR>
+  #  Bit1 - Fatal Error Reporting<BR>
+  #  Bit2 - Non-Fatal Error Reporting<BR>
+  #  Bit3 - Correctable Error Reporting<BR>
+  #  Bit4 - System Error on Fatal Error<BR>
+  #  Bit5 - System Error on Non-Fatal Error<BR>
+  #  Bit6 - System Error on Correctable Error<BR>
+  #  Bit8 - Slot Implemented<BR>
+  #  Bit10 - ASPM Support<BR>
+  #  Bit11 - ASPM Automatic Cascading Configuration<BR>
+  #  Bit12 - ASPM L0s on Root Port<BR>
+  #  BIT13 - ASPM L0s on Downstream Device<BR>
+  #  Bit14 - ASPM L1 Automatic Cascading Configuration<BR>
+  #  Bit15 - Power Management Event Interrupt<BR>
+  #  Bit28:16 - Physical Slot Number<BR>
+  #  Bit30 - Power Management Event SCI<BR>
+  #  Bit31 - Hot Plug Event SCI<BR>
+  #
+  # @Prompt PCI Express Root Port 4 Configuration
+  #
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxPcieRootPort4Configuration|0x00040100|UINT32|0x10000133
+

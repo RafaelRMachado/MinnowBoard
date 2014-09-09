@@ -1,0 +1,372 @@
+## @file
+#  This is core module in DXE phase.
+#
+#  It provides an implementation of DXE Core that is compliant with DXE CIS.
+#
+#  Copyright (c) 2006 - 2013, Intel Corporation. All rights reserved.<BR>
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution.  The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+
+[Defines]
+  INF_VERSION                = 0x00010005
+  BASE_NAME                  = DxeCore
+  FILE_GUID                  = D6A2CB7F-6A18-4e2f-B43B-9920A733700A
+  MODULE_TYPE                = DXE_CORE
+  VERSION_STRING             = 1.0
+
+[Packages.IA32]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  CommonExModulePkg/CommonExModulePkg.dec
+  IntelFrameworkModulePkg/IntelFrameworkModulePkg.dec
+
+[Binaries.IA32]
+  PE32|DxeCore.efi
+
+[PatchPcd.IA32]
+  ## CONSUMES
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialLineControl|0x03|0x851
+
+  ## CONSUMES
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialFifoControl|0x27|0x852
+
+  ## CONSUMES
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoPciDeviceNumber|0x1f|0x853
+
+  ## CONSUMES
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialBaudRate|0x0001c200|0x1050
+
+  ## CONSUMES
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoPciEnableRegisterOffset|0x004b|0x1054
+
+  ## CONSUMES
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoBarEnableMask|0x80|0x1056
+
+  ## CONSUMES
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoPciBarRegisterOffset|0x0048|0x1058
+
+  ## CONSUMES
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoPortBaseAddress|0x1000|0x105C
+
+  ## SOMETIMES_CONSUMES
+  gEfiMdeModulePkgTokenSpaceGuid.PcdLoadFixAddressBootTimeCodePageNumber|0x00000000|0xE984
+
+  ## SOMETIMES_CONSUMES
+  gEfiMdeModulePkgTokenSpaceGuid.PcdLoadFixAddressRuntimeCodePageNumber|0x00000000|0xE988
+
+  ## CONSUMES
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoPciBusNumber|0x00|0xE98C
+
+  ## CONSUMES
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoPciFunctionNumber|0x00|0xE98D
+
+
+[Protocols.IA32]
+  ## PRODUCES
+  ## SOMETIMES_CONSUMES
+  gEfiDecompressProtocolGuid
+
+  ## SOMETIMES_PRODUCES   # Produces when PcdFrameworkCompatibilitySupport is set
+  gEfiLoadPeImageProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  ## SOMETIMES_CONSUMES
+  gEfiSimpleFileSystemProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  ## SOMETIMES_CONSUMES
+  gEfiLoadFileProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  ## SOMETIMES_CONSUMES
+  gEfiLoadFile2ProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiBusSpecificDriverOverrideProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiDriverFamilyOverrideProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiPlatformDriverOverrideProtocolGuid
+
+  ## SOMETIMES_PRODUCES
+  ## SOMETIMES_CONSUMES
+  gEfiDriverBindingProtocolGuid
+
+  ## PRODUCES
+  ## CONSUMES
+  ## NOTIFY
+  gEfiFirmwareVolumeBlockProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  ## PRODUCES
+  ## CONSUMES
+  ## NOTIFY
+  gEfiFirmwareVolume2ProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  ## PRODUCES
+  ## CONSUMES
+  gEfiDevicePathProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  ## PRODUCES
+  gEfiLoadedImageProtocolGuid
+
+  ## PRODUCES
+  gEfiLoadedImageDevicePathProtocolGuid
+
+  ## SOMETIMES_PRODUCES
+  gEfiHiiPackageListProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiEbcProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiSmmBase2ProtocolGuid
+
+  # Arch Protocols
+  ## CONSUMES
+  gEfiBdsArchProtocolGuid
+
+  ## CONSUMES
+  gEfiCpuArchProtocolGuid
+
+  ## CONSUMES
+  gEfiMetronomeArchProtocolGuid
+
+  ## CONSUMES
+  gEfiMonotonicCounterArchProtocolGuid
+
+  ## CONSUMES
+  gEfiRealTimeClockArchProtocolGuid
+
+  ## CONSUMES
+  gEfiResetArchProtocolGuid
+
+  ## CONSUMES
+  gEfiRuntimeArchProtocolGuid
+
+  ## CONSUMES
+  gEfiSecurityArchProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiSecurity2ArchProtocolGuid
+
+  ## CONSUMES
+  gEfiTimerArchProtocolGuid
+
+  ## CONSUMES
+  gEfiVariableWriteArchProtocolGuid
+
+  ## CONSUMES
+  gEfiVariableArchProtocolGuid
+
+  ## CONSUMES
+  gEfiCapsuleArchProtocolGuid
+
+  ## CONSUMES
+  gEfiWatchdogTimerArchProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiSimpleTextOutProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiGraphicsOutputProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiHiiFontProtocolGuid
+
+  ## SOMETIMES_CONSUMES # Consumes if gEfiGraphicsOutputProtocolGuid uninstalled
+  gEfiUgaDrawProtocolGuid
+
+  ## SOMETIMES_PRODUCES # User chooses to produce it
+  gEfiComponentNameProtocolGuid
+
+  ## SOMETIMES_PRODUCES # User chooses to produce it
+  gEfiComponentName2ProtocolGuid
+
+  ## SOMETIMES_PRODUCES # User chooses to produce it
+  gEfiDriverConfigurationProtocolGuid
+
+  ## SOMETIMES_PRODUCES # User chooses to produce it
+  gEfiDriverConfiguration2ProtocolGuid
+
+  ## SOMETIMES_PRODUCES # User chooses to produce it
+  gEfiDriverDiagnosticsProtocolGuid
+
+  ## SOMETIMES_PRODUCES # User chooses to produce it
+  gEfiDriverDiagnostics2ProtocolGuid
+
+  ## CONSUMES
+  gEfiStatusCodeRuntimeProtocolGuid
+
+  ## SOMETIMES_CONSUMES # Set platform override AUTH status if exist
+  gEfiSecurityPolicyProtocolGuid
+
+
+[Ppis.IA32]
+
+[Guids.IA32]
+  ## PRODUCES             ## Event
+  gEfiEventMemoryMapChangeGuid
+
+  ## CONSUMES             ## UNDEFINED
+  gEfiEventVirtualAddressChangeGuid
+
+  ## CONSUMES   ## UNDEFINED
+  ## PRODUCES   ## Event
+  gEfiEventExitBootServicesGuid
+
+  ## CONSUMES             ## HOB
+  gEfiHobMemoryAllocModuleGuid
+
+  ## CONSUMES             ## FV # Used to compare with FV's file system guid and get the FV's file system format
+  gEfiFirmwareFileSystem2Guid
+
+  ## CONSUMES             ## FV # Used to compare with FV's file system guid and get the FV's file system format
+  gEfiFirmwareFileSystem3Guid
+
+  ## SOMETIMES_CONSUMES   ## File
+  gAprioriGuid
+
+  ## PRODUCES             ## SystemTable
+  gEfiDebugImageInfoTableGuid
+
+  ## PRODUCES             ## SystemTable
+  gEfiHobListGuid
+
+  ## PRODUCES             ## SystemTable
+  gEfiDxeServicesTableGuid
+
+  ## PRODUCES               ## SystemTable
+  ## SOMETIMES_CONSUMES     ## HOB
+  gEfiMemoryTypeInformationGuid
+
+  ## PRODUCES             ## Event
+  gEfiEventDxeDispatchGuid
+
+  ## SOMETIMES_PRODUCES   ## SystemTable
+  gLoadFixedAddressConfigurationTableGuid
+
+  ## PRODUCES   ## Event
+  ## CONSUMES   ## Event
+  gIdleLoopEventGuid
+
+  ## SOMETIMES_PRODUCES   ## Event
+  gEventExitBootServicesFailedGuid
+
+  ## SOMETIMES_CONSUMES  ## Event
+  gEfiEventReadyToBootGuid
+
+  ## SOMETIMES_CONSUMES  ## Event
+  gEfiEventLegacyBootGuid
+
+  ## SOMETIMES_CONSUMES  ## Variable
+  gEfiGlobalVariableGuid
+
+  ## PRODUCES  ## UNDEFINED # specifies tiano custom decompress algorithm.
+  gTianoCustomDecompressGuid
+
+  ## SOMETIMES_CONSUMES   ## HOB
+  ## PRODUCES             ## UNDEFINED # Install protocol
+  gPerformanceProtocolGuid
+
+  ## SOMETIMES_CONSUMES   ## HOB
+  ## PRODUCES             ## UNDEFINED # Install protocol
+  gPerformanceExProtocolGuid
+
+  ## SOMETIMES_CONSUMES ## UNDEFINED
+  gEfiStatusCodeSpecificDataGuid
+
+  ## SOMETIMES_CONSUMES ## UNDEFINED
+  gEfiStatusCodeDataTypeDebugGuid
+
+  ## SOMETIMES_CONSUMES ## UNDEFINED
+  gEfiFileInfoGuid
+
+  ## PRODUCES  ## UNDEFINED # specifies LZMA custom decompress algorithm.
+  gLzmaCustomDecompressGuid
+
+  ## PRODUCES ## UNDEFINED
+  gEfiCrc32GuidedSectionExtractionGuid
+
+
+[PcdEx.IA32]
+
+[LibraryClasses.IA32]
+## @LIB_INSTANCES
+#  MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
+#  MdePkg/Library/BaseLib/BaseLib.inf
+#  MdePkg/Library/BaseMemoryLibSse2/BaseMemoryLibSse2.inf
+#  MdePkg/Library/BaseIoLibIntrinsic/BaseIoLibIntrinsic.inf
+#  MdePkg/Library/BasePciExpressLib/BasePciExpressLib.inf
+#  CommonExModulePkg/Library/PlatformHookLib/PlatformHookLib.inf
+#  MdePkg/Library/BasePciLibPciExpress/BasePciLibPciExpress.inf
+#  MdePkg/Library/BaseDebugPrintErrorLevelLib/BaseDebugPrintErrorLevelLib.inf
+#  MdePkg/Library/BasePrintLib/BasePrintLib.inf
+#  CommonExModulePkg/Library/BaseSerialPortLib16550/BaseSerialPortLib16550.inf
+#  MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
+#  MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib.inf
+#  MdeModulePkg/Library/DxeCoreMemoryAllocationLib/DxeCoreMemoryAllocationLib.inf
+#  MdePkg/Library/DxeCoreEntryPoint/DxeCoreEntryPoint.inf
+#  MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib.inf
+#  MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib.inf
+#  MdePkg/Library/DxeExtractGuidedSectionLib/DxeExtractGuidedSectionLib.inf
+#  CommonExModulePkg/Library/AcpiTimerLib/DxeAcpiTimerLib.inf
+#  MdePkg/Library/DxeCoreHobLib/DxeCoreHobLib.inf
+#  MdePkg/Library/BasePeCoffExtraActionLibNull/BasePeCoffExtraActionLibNull.inf
+#  MdePkg/Library/UefiLib/UefiLib.inf
+#  MdePkg/Library/BaseCacheMaintenanceLib/BaseCacheMaintenanceLib.inf
+#  IntelFrameworkModulePkg/Library/BaseUefiTianoCustomDecompressLib/BaseUefiTianoCustomDecompressLib.inf
+#  MdeModulePkg/Library/DxeCorePerformanceLib/DxeCorePerformanceLib.inf
+#  MdePkg/Library/BasePeCoffLib/BasePeCoffLib.inf
+#  MdePkg/Library/BasePeCoffGetEntryPointLib/BasePeCoffGetEntryPointLib.inf
+#  MdeModulePkg/Library/DxeReportStatusCodeLib/DxeReportStatusCodeLib.inf
+#  MdePkg/Library/DxeServicesLib/DxeServicesLib.inf
+#  MdeModulePkg/Library/DebugAgentLibNull/DebugAgentLibNull.inf
+#  IntelFrameworkModulePkg/Library/LzmaCustomDecompressLib/LzmaCustomDecompressLib.inf
+#  MdeModulePkg/Library/DxeCrc32GuidedSectionExtractLib/DxeCrc32GuidedSectionExtractLib.inf
+
+[Depex.IA32]
+#  gPeiSerialPortPpiGuid
+
+# [Hob]
+# RESOURCE_DESCRIPTOR   ## CONSUMES
+# MEMORY_ALLOCATION     ## CONSUMES
+# FIRMWARE_VOLUME       ## CONSUMES
+# UNDEFINED             ## CONSUMES # CPU
+#
+# [Event]
+# EVENT_TYPE_RELATIVE_TIMER ## PRODUCES  # DxeCore signals timer event.
+# EVENT_TYPE_PERIODIC_TIMER ## PRODUCES  # DxeCore signals timer event.
+#
+
+[BuildOptions.IA32]
+## @AsBuilt
+##   MSFT:RELEASE_VS2008x86_IA32_SYMRENAME_FLAGS = Symbol renaming not needed for
+##   MSFT:RELEASE_VS2008x86_IA32_ASLDLINK_FLAGS = /NODEFAULTLIB /ENTRY:ReferenceAcpiTable /SUBSYSTEM:CONSOLE
+##   MSFT:RELEASE_VS2008x86_IA32_VFR_FLAGS = -l -n
+##   MSFT:RELEASE_VS2008x86_IA32_PP_FLAGS = /nologo /E /TC /FIAutoGen.h
+##   MSFT:RELEASE_VS2008x86_IA32_GENFW_FLAGS = 
+##   MSFT:RELEASE_VS2008x86_IA32_OPTROM_FLAGS = -e
+##   MSFT:RELEASE_VS2008x86_IA32_SLINK_FLAGS = /NOLOGO /LTCG
+##   MSFT:RELEASE_VS2008x86_IA32_ASM_FLAGS = /nologo /c /WX /W3 /Cx /coff /Zd
+##   MSFT:RELEASE_VS2008x86_IA32_ASL_FLAGS = 
+##   MSFT:RELEASE_VS2008x86_IA32_CC_FLAGS = /nologo /c /WX /GS- /W4 /Gs32768 /D UNICODE /O1ib2 /GL /FIAutoGen.h /EHs-c- /GR- /GF /wd4200 /D MDEPKG_NDEBUG
+##   MSFT:RELEASE_VS2008x86_IA32_VFRPP_FLAGS = /nologo /E /TC /DVFRCOMPILE /FI$(MODULE_NAME)StrDefs.h
+##   MSFT:RELEASE_VS2008x86_IA32_ASLCC_FLAGS = /nologo /c /FIAutoGen.h /TC /Dmain=ReferenceAcpiTable
+##   MSFT:RELEASE_VS2008x86_IA32_MAKE_FLAGS = /nologo
+##   MSFT:RELEASE_VS2008x86_IA32_DLINK_FLAGS = /NOLOGO /NODEFAULTLIB /IGNORE:4001 /IGNORE:4254 /OPT:REF /OPT:ICF=10 /MAP /ALIGN:32 /SECTION:.xdata,D /SECTION:.pdata,D /MACHINE:X86 /LTCG /DLL /ENTRY:$(IMAGE_ENTRY_POINT) /SUBSYSTEM:EFI_BOOT_SERVICE_DRIVER /SAFESEH:NO /BASE:0 /DRIVER /MERGE:.data=.text /MERGE:.rdata=.text
+##   MSFT:RELEASE_VS2008x86_IA32_ASLPP_FLAGS = /nologo /E /C /FIAutoGen.h
+##   MSFT:RELEASE_VS2008x86_IA32_OBJCOPY_FLAGS = objcopy not needed for
+##   MSFT:RELEASE_VS2008x86_IA32_APP_FLAGS = /nologo /E /TC
+##   MSFT:RELEASE_VS2008x86_IA32_ASMLINK_FLAGS = /nologo /tiny

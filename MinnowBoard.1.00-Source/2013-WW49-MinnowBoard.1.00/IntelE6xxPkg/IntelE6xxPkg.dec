@@ -1,0 +1,63 @@
+## @file  E6xxPkg.dec
+#
+# This package provides Intel E6xx chip support.
+#
+# Copyright (c) 2012-2013, Intel Corporation. All rights reserved.<BR>
+#
+# This program and the accompanying materials are licensed and made available under
+# the terms and conditions of the BSD License which accompanies this distribution.
+# The full text of the license may be found at
+# http://opensource.org/licenses/bsd-license.php
+#
+# THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+# WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+
+
+################################################################################
+#
+# Defines Section - statements that will be processed to create a Makefile.
+#
+################################################################################
+
+[Defines]
+  DEC_SPECIFICATION              = 0x00010005
+  PACKAGE_NAME                   = IntelE6xxPkg
+  PACKAGE_GUID                   = 806AD27C-A65D-4a79-B16D-E4FA77456C3F
+  PACKAGE_VERSION                = 0.2
+
+[Includes]
+  Include
+
+[Guids]
+  ## Defines the token space for the platform module PCDs.
+  #
+  gIntelE6xxPkgTokenSpaceGuid   = {0x94ff57c4, 0xdd2c, 0x4f4a, {0x9e, 0x77, 0xc0, 0xb5, 0x44, 0x62, 0x1e, 0xb3}}
+
+  ## Sync GUID indicating that all HD audio codecs descriptions are available
+  #
+  ## Include/Protocol/PlatformHdAudioConnection.h
+  gHdAudioSyncGuid              = {0x8c8b1c25, 0x2381, 0x49bc, {0x99, 0x10, 0x36, 0xad, 0x09, 0x9d, 0x14, 0x98}}
+
+  ## Sync GUID indicating that all SPI flash parts are available
+  #
+  ## Include/Protocol/SpiFlashPart.h
+  gSpiFlashPartSyncGuid         = {0x928e846e, 0x3c2c, 0x4951, {0xb0, 0xef, 0xdc, 0xc1, 0x1f, 0xa0, 0xff, 0x8b}}
+
+[Protocols]
+  ## Platform HD audio connection protocol GUID
+  #
+  ## Include/Protocol/PlatformHdAudioConnection.h
+  gPlatformHdAudioConnectionProtocolGuid  = {0x4c43e9a8, 0xe51d, 0x4a04, {0xa1, 0x20, 0x1a, 0x2b, 0x97, 0x7d, 0x72, 0x0a}}
+
+  ## SPI flash part protocol GUID
+  #
+  ## Include/Protocol/SpiFlashPart.h
+  gSpiFlashPartProtocolGuid     = {0x662ff00f, 0xa1c7, 0x42aa, {0xa6, 0xe4, 0xf4, 0x0d, 0xf5, 0x10, 0xfd, 0x23}}
+
+[PcdsFixedAtBuild]
+  ## Defines the GPIO register block base address.
+  #
+  gIntelE6xxPkgTokenSpaceGuid.PcdE6xxGpioIoPortBaseAddress|0x1080|UINT16|0x10000003
+

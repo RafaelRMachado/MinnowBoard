@@ -1,0 +1,385 @@
+#
+# This file contains an 'Intel Peripheral Driver' and is
+# licensed for Intel CPUs and chipsets under the terms of your
+# license agreement with Intel or your vendor.  This file may
+# be modified by the user, subject to additional terms of the
+# license agreement
+#
+## @file
+# CPU MP DXE Driver.
+#
+# This DXE Driver does processor initialization, configures multi-processor environment,
+# logs data to SMBIOS table for processor subclass and cache subclass, and installs
+# MP Services Protocol.
+#
+# Copyright (c) 2006 - 2012, Intel Corporation. All rights reserved.<BR>
+#
+#  This software and associated documentation (if any) is furnished
+#  under a license and may only be used or copied in accordance
+#  with the terms of the license. Except as permitted by such
+#  license, no part of this software or documentation may be
+#  reproduced, stored in a retrieval system, or transmitted in any
+#  form or by any means without the express written consent of
+#  Intel Corporation.
+#
+#
+##
+
+[Defines]
+  INF_VERSION                = 0x00010005
+  BASE_NAME                  = CpuMpDxe
+  FILE_GUID                  = 40BEAB40-CECE-4909-B133-20A413AE19E9
+  MODULE_TYPE                = DXE_DRIVER
+  VERSION_STRING             = 1.0
+
+[Packages.IA32]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  IntelFrameworkPkg/IntelFrameworkPkg.dec
+  IA32FamilyCpuPkg/IA32FamilyCpuPkg.dec
+  CommonExModulePkg/CommonExModulePkg.dec
+
+[Binaries.IA32]
+  PE32|CpuMpDxe.efi
+  DXE_DEPEX|CpuMpDxe.depex
+
+[PatchPcd.IA32]
+  ## CONSUMES
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoPciDeviceNumber|0x1f|0x5F4
+
+  ## CONSUMES
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoBarEnableMask|0x80|0x5F5
+
+  ## CONSUMES
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoPciEnableRegisterOffset|0x004b|0x5F8
+
+  ## CONSUMES
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoPciBarRegisterOffset|0x0048|0x5FC
+
+  ## CONSUMES
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoPortBaseAddress|0x1000|0x600
+
+  ## CONSUMES
+  gAcpiTimerTokenSpaceGuid.PcdAcpiPm1TmrOffset|0x0008|0x604
+
+  ## CONSUMES
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoPciBusNumber|0x00|0x7FE0
+
+  ## CONSUMES
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoPciFunctionNumber|0x00|0x7FE1
+
+
+[Protocols.IA32]
+  ## CONSUMES
+  gEfiSmbiosProtocolGuid
+
+  ## PRODUCES
+  gEfiMpServiceProtocolGuid
+
+  ## CONSUMES
+  gEfiCpuArchProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiGenericMemTestProtocolGuid
+
+  ## NOTIFY
+  ## SOMETIMES_CONSUMES
+  gEfiLegacyBiosProtocolGuid
+
+  ## NOTIFY
+  gEfiSmmConfigurationProtocolGuid
+
+  ## CONSUMES
+  gEfiTimerArchProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiTcgProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gPcdProtocolGuid
+
+  ## CONSUMES
+  gEfiPcdProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  ## SOMETIMES_CONSUMES
+  gEfiDevicePathProtocolGuid
+
+  ## SOMETIMES_PRODUCES
+  gEfiDriverBindingProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiSimpleTextOutProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiGraphicsOutputProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  ## SOMETIMES_CONSUMES
+  gEfiHiiFontProtocolGuid
+
+  ## SOMETIMES_CONSUMES # Consumes if gEfiGraphicsOutputProtocolGuid uninstalled
+  gEfiUgaDrawProtocolGuid
+
+  ## SOMETIMES_PRODUCES # User chooses to produce it
+  gEfiComponentNameProtocolGuid
+
+  ## SOMETIMES_PRODUCES # User chooses to produce it
+  gEfiComponentName2ProtocolGuid
+
+  ## SOMETIMES_PRODUCES # User chooses to produce it
+  gEfiDriverConfigurationProtocolGuid
+
+  ## SOMETIMES_PRODUCES # User chooses to produce it
+  gEfiDriverConfiguration2ProtocolGuid
+
+  ## SOMETIMES_PRODUCES # User chooses to produce it
+  gEfiDriverDiagnosticsProtocolGuid
+
+  ## SOMETIMES_PRODUCES # User chooses to produce it
+  gEfiDriverDiagnostics2ProtocolGuid
+
+  ## CONSUMES
+  gEfiHiiStringProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiHiiImageProtocolGuid
+
+  ## CONSUMES
+  gEfiHiiDatabaseProtocolGuid
+
+  ## CONSUMES
+  gEfiHiiConfigRoutingProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiSmmCommunicationProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiLoadedImageProtocolGuid
+
+  ## CONSUMES
+  gEfiStatusCodeRuntimeProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiFormBrowser2ProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiSmmBase2ProtocolGuid
+
+  ## NOTIFY
+  gEfiDxeSmmReadyToLockProtocolGuid
+
+  ## NOTIFY
+  gEfiSmmReadyToLockProtocolGuid
+
+
+[Ppis.IA32]
+
+[Guids.IA32]
+  ## CONSUMES  ## HOB
+  gEfiHtBistHobGuid
+
+  ## CONSUMES  ## Event
+  gEfiEventExitBootServicesGuid
+
+  ## CONSUMES  ## Event
+  gIdleLoopEventGuid
+
+  ## CONSUMES  ## TokenSpaceGuid
+  gEfiCpuTokenSpaceGuid
+
+  ## SOMETIMES_CONSUMES  ## Event
+  gEfiEventReadyToBootGuid
+
+  ## SOMETIMES_CONSUMES  ## Event
+  gEfiEventLegacyBootGuid
+
+  ## SOMETIMES_CONSUMES  ## Variable
+  gEfiGlobalVariableGuid
+
+  ## SOMETIMES_CONSUMES ## GUID # Used to do smm communication
+  gEfiSmmLockBoxCommunicationGuid
+
+  ## CONSUMES  ## SystemTable
+  gEfiDxeServicesTableGuid
+
+  ## SOMETIMES_CONSUMES ## UNDEFINED
+  gEfiStatusCodeSpecificDataGuid
+
+  ## SOMETIMES_CONSUMES ## UNDEFINED
+  gEfiStatusCodeDataTypeDebugGuid
+
+  ## CONSUMES  ## SystemTable
+  gEfiHobListGuid
+
+  gEfiMdeModulePkgTokenSpaceGuid
+
+
+[PcdEx.IA32]
+  ## CONSUMES
+  gEfiCpuTokenSpaceGuid.PcdPlatformType
+
+  ## CONSUMES
+  gEfiCpuTokenSpaceGuid.PcdPlatformDynamicVidSupport
+
+  ## CONSUMES
+  gEfiCpuTokenSpaceGuid.PcdPlatformHighPowerLoadLineSupport
+
+  ## CONSUMES
+  gEfiCpuTokenSpaceGuid.PcdPlatformCpuFrequencyLists
+
+  ## CONSUMES
+  gEfiCpuTokenSpaceGuid.PcdPlatformCpuMaxFsbFrequency
+
+  ## CONSUMES
+  gEfiCpuTokenSpaceGuid.PcdPlatformCpuMaxCoreFrequency
+
+  ## CONSUMES
+  gEfiCpuTokenSpaceGuid.PcdCpuApStackSize
+
+  ## CONSUMES
+  gEfiCpuTokenSpaceGuid.PcdCpuApInitTimeOutInMicroSeconds
+
+  ## CONSUMES
+  ## PRODUCES
+  gEfiCpuTokenSpaceGuid.PcdCpuProcessorFeatureSetting
+
+  ## CONSUMES
+  ## PRODUCES
+  gEfiCpuTokenSpaceGuid.PcdCpuProcessorFeatureCapability
+
+  ## CONSUMES
+  gEfiCpuTokenSpaceGuid.PcdCpuProcessorFeatureUserConfiguration
+
+  ## CONSUMES
+  ## PRODUCES
+  gEfiCpuTokenSpaceGuid.PcdCpuProcessorFeatureSettingEx1
+
+  ## CONSUMES
+  ## PRODUCES
+  gEfiCpuTokenSpaceGuid.PcdCpuProcessorFeatureCapabilityEx1
+
+  ## CONSUMES
+  gEfiCpuTokenSpaceGuid.PcdCpuProcessorFeatureUserConfigurationEx1
+
+  ## PRODUCES
+  ## CONSUMES
+  gEfiCpuTokenSpaceGuid.PcdCpuConfigContextBuffer
+
+  ## PRODUCES
+  ## SOMETIME_PRODUCES
+  ## SOMETIME_CONSUMES
+  gEfiCpuTokenSpaceGuid.PcdCpuCallbackSignal
+
+  ## CONSUMES
+  gEfiCpuTokenSpaceGuid.PcdIsPowerOnReset
+
+  ## CONSUMES
+  gEfiCpuTokenSpaceGuid.PcdCpuPageTableAddress
+
+  ## CONSUMES
+  ## SOMETIMES_PRODUCES
+  gEfiCpuTokenSpaceGuid.PcdCpuMtrrTableAddress
+
+  ## PRODUCES
+  gEfiCpuTokenSpaceGuid.PcdCpuS3DataAddress
+
+  ## SOMETIMES_CONSUMES
+  gEfiCpuTokenSpaceGuid.PcdCpuHwCoordination
+
+  ## SOMETIMES_CONSUMES
+  gEfiCpuTokenSpaceGuid.PcdCpuEnergyPolicy
+
+  ## SOMETIMES_CONSUMES
+  gEfiCpuTokenSpaceGuid.PcdCpuClockModulationDutyCycle
+
+  ## SOMETIMES_CONSUMES
+  gEfiCpuTokenSpaceGuid.PcdCpuAcpiLvl2Addr
+
+  ## SOMETIMES_CONSUMES
+  gEfiCpuTokenSpaceGuid.PcdCpuPackageCStateLimit
+
+  ## SOMETIMES_CONSUMES
+  gEfiCpuTokenSpaceGuid.PcdCpuDcuMode
+
+  ## SOMETIMES_CONSUMES
+  gEfiCpuTokenSpaceGuid.PcdCpuTccActivationOffset
+
+  ## CONSUMES
+  ## UNDEFINED # Token
+  gEfiCpuTokenSpaceGuid.PcdCpuSocketId
+
+  ## CONSUMES
+  ## UNDEFINED # Token
+  gEfiCpuTokenSpaceGuid.PcdPlatformCpuAssetTags
+
+  ## CONSUMES
+  ## UNDEFINED # Token
+  gEfiCpuTokenSpaceGuid.PcdPlatformCpuSocketCount
+
+  ## CONSUMES
+  ## UNDEFINED # Token
+  gEfiCpuTokenSpaceGuid.PcdPlatformCpuSocketNames
+
+  ## CONSUMES
+  ## SOMETIMES_PRODUCES
+  gEfiMdeModulePkgTokenSpaceGuid.PcdS3BootScriptTablePrivateDataPtr
+
+
+[LibraryClasses.IA32]
+## @LIB_INSTANCES
+#  UefiCpuPkg/Library/BaseUefiCpuLib/BaseUefiCpuLib.inf
+#  MdePkg/Library/BaseLib/BaseLib.inf
+#  MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
+#  MdePkg/Library/BaseMemoryLibRepStr/BaseMemoryLibRepStr.inf
+#  MdePkg/Library/DxePcdLib/DxePcdLib.inf
+#  MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib.inf
+#  MdePkg/Library/BaseIoLibIntrinsic/BaseIoLibIntrinsic.inf
+#  MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
+#  MdePkg/Library/BasePciExpressLib/BasePciExpressLib.inf
+#  MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib.inf
+#  MdePkg/Library/BasePrintLib/BasePrintLib.inf
+#  MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib.inf
+#  MdePkg/Library/BasePciLibPciExpress/BasePciLibPciExpress.inf
+#  MdePkg/Library/UefiLib/UefiLib.inf
+#  MdeModulePkg/Library/UefiHiiServicesLib/UefiHiiServicesLib.inf
+#  CommonExModulePkg/Library/AcpiTimerLib/DxeAcpiTimerLib.inf
+#  MdePkg/Library/BaseCpuLib/BaseCpuLib.inf
+#  MdeModulePkg/Library/SmmLockBoxLib/SmmLockBoxDxeLib.inf
+#  IntelE6xxNdaPkg/Library/SmbusLib/SmbusLib.inf
+#  MdePkg/Library/DxeServicesTableLib/DxeServicesTableLib.inf
+#  IA32FamilyCpuPkg/Library/CpuConfigLib/CpuConfigLib.inf
+#  MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint.inf
+#  MdeModulePkg/Library/DxeReportStatusCodeLib/DxeReportStatusCodeLib.inf
+#  MdeModulePkg/Library/UefiHiiLib/UefiHiiLib.inf
+#  MdePkg/Library/DxeHobLib/DxeHobLib.inf
+#  MdePkg/Library/BaseSynchronizationLib/BaseSynchronizationLib.inf
+#  IA32FamilyCpuPkg/Library/CpuOnlyResetLibNull/CpuOnlyResetLibNull.inf
+#  UefiCpuPkg/Library/MtrrLib/MtrrLib.inf
+#  MdeModulePkg/Library/PiDxeS3BootScriptLib/DxeS3BootScriptLib.inf
+#  MdeModulePkg/Library/DebugAgentLibNull/DebugAgentLibNull.inf
+#  UefiCpuPkg/Library/BaseXApicLib/BaseXApicLib.inf
+
+[Depex.IA32]
+#  (gEfiSmbiosProtocolGuid AND gEfiTimerArchProtocolGuid AND gEfiGenericMemTestProtocolGuid) AND (gEfiPcdProtocolGuid) AND (gEfiPcdProtocolGuid) AND (gEfiPcdProtocolGuid) AND (gEfiPcdProtocolGuid) AND (gEfiHiiStringProtocolGuid        AND gEfiHiiDatabaseProtocolGuid      AND gEfiHiiConfigRoutingProtocolGuid) AND (gEfiHiiStringProtocolGuid        AND gEfiHiiDatabaseProtocolGuid      AND gEfiHiiConfigRoutingProtocolGuid) AND (gEfiHiiStringProtocolGuid        AND gEfiHiiDatabaseProtocolGuid      AND gEfiHiiConfigRoutingProtocolGuid) AND (gEfiHiiStringProtocolGuid        AND gEfiHiiDatabaseProtocolGuid      AND gEfiHiiConfigRoutingProtocolGuid) AND (gEfiBdsArchProtocolGuid AND gEfiCpuArchProtocolGuid AND gEfiMetronomeArchProtocolGuid AND gEfiMonotonicCounterArchProtocolGuid AND gEfiRealTimeClockArchProtocolGuid AND gEfiResetArchProtocolGuid AND gEfiRuntimeArchProtocolGuid AND gEfiSecurityArchProtocolGuid AND gEfiTimerArchProtocolGuid AND gEfiVariableWriteArchProtocolGuid AND gEfiVariableArchProtocolGuid AND gEfiWatchdogTimerArchProtocolGuid)
+
+[BuildOptions.IA32]
+## @AsBuilt
+##   MSFT:RELEASE_VS2008x86_IA32_SYMRENAME_FLAGS = Symbol renaming not needed for
+##   MSFT:RELEASE_VS2008x86_IA32_ASLDLINK_FLAGS = /NODEFAULTLIB /ENTRY:ReferenceAcpiTable /SUBSYSTEM:CONSOLE
+##   MSFT:RELEASE_VS2008x86_IA32_VFR_FLAGS = -l -n
+##   MSFT:RELEASE_VS2008x86_IA32_PP_FLAGS = /nologo /E /TC /FIAutoGen.h
+##   MSFT:RELEASE_VS2008x86_IA32_GENFW_FLAGS = 
+##   MSFT:RELEASE_VS2008x86_IA32_OPTROM_FLAGS = -e
+##   MSFT:RELEASE_VS2008x86_IA32_SLINK_FLAGS = /NOLOGO /LTCG
+##   MSFT:RELEASE_VS2008x86_IA32_ASM_FLAGS = /nologo /c /WX /W3 /Cx /coff /Zd
+##   MSFT:RELEASE_VS2008x86_IA32_ASL_FLAGS = 
+##   MSFT:RELEASE_VS2008x86_IA32_CC_FLAGS = /nologo /c /WX /GS- /W4 /Gs32768 /D UNICODE /O1ib2 /GL /FIAutoGen.h /EHs-c- /GR- /GF /wd4200 /D MDEPKG_NDEBUG
+##   MSFT:RELEASE_VS2008x86_IA32_VFRPP_FLAGS = /nologo /E /TC /DVFRCOMPILE /FI$(MODULE_NAME)StrDefs.h
+##   MSFT:RELEASE_VS2008x86_IA32_ASLCC_FLAGS = /nologo /c /FIAutoGen.h /TC /Dmain=ReferenceAcpiTable
+##   MSFT:RELEASE_VS2008x86_IA32_MAKE_FLAGS = /nologo
+##   MSFT:RELEASE_VS2008x86_IA32_DLINK_FLAGS = /NOLOGO /NODEFAULTLIB /IGNORE:4001 /IGNORE:4254 /OPT:REF /OPT:ICF=10 /MAP /ALIGN:32 /SECTION:.xdata,D /SECTION:.pdata,D /MACHINE:X86 /LTCG /DLL /ENTRY:$(IMAGE_ENTRY_POINT) /SUBSYSTEM:EFI_BOOT_SERVICE_DRIVER /SAFESEH:NO /BASE:0 /DRIVER /MERGE:.data=.text /MERGE:.rdata=.text
+##   MSFT:RELEASE_VS2008x86_IA32_ASLPP_FLAGS = /nologo /E /C /FIAutoGen.h
+##   MSFT:RELEASE_VS2008x86_IA32_OBJCOPY_FLAGS = objcopy not needed for
+##   MSFT:RELEASE_VS2008x86_IA32_APP_FLAGS = /nologo /E /TC
+##   MSFT:RELEASE_VS2008x86_IA32_ASMLINK_FLAGS = /nologo /tiny

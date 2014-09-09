@@ -1,0 +1,64 @@
+## @file
+#  Load File Module
+#
+#  Allows the system to load a file from a FV2 based firmware volume.  This
+#  version of the module only supports loading of files for the purpose of
+#  booting from the file.
+#
+#  Copyright (c) 2011 - 2013, Intel Corporation. All rights reserved.<BR>
+#
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution.  The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = LoadFileOnFv2
+  FILE_GUID                      = BD712601-082F-4c59-8677-2C8A3C297948
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = LoadFileOnFv2Intialize
+
+#
+# The following information is for reference only and not required by the build tools.
+#
+#  VALID_ARCHITECTURES           = IA32 X64 IPF EBC
+#
+
+[Sources]
+  LoadFileOnFv2.c
+
+[Packages]
+  IntelFrameworkModulePkg/IntelFrameworkModulePkg.dec
+  MdePkg/MdePkg.dec
+
+[LibraryClasses]
+  DebugLib
+  UefiLib
+  BaseMemoryLib
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+  MemoryAllocationLib
+  DevicePathLib
+
+[Guids] 
+  ## SOMETIMES_CONSUMES ## UNDEFINED # Notify gLzmaCustomDecompressGuid SectionExtraction.
+  gLzmaCustomDecompressGuid
+
+[Protocols]
+  ## NOTIFY
+  ## CONSUMES
+  gEfiFirmwareVolume2ProtocolGuid
+  gEfiFirmwareVolumeBlockProtocolGuid
+  gEfiLoadFileProtocolGuid    ## PRODUCES
+  gEfiDevicePathProtocolGuid  ## SOMETIMES_PRODUCES
+
+[Depex]
+  TRUE
+

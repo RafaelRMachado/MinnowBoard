@@ -1,0 +1,162 @@
+## @file
+#  Initialized Debug Agent in PEI phase.
+#
+#  This PEIM will invoke Debug Agent Library to initialize the debug agent in
+#  whole PEI phase.
+#
+# Copyright (c) 2012, Intel Corporation. All rights reserved.<BR>
+# This program and the accompanying materials
+# are licensed and made available under the terms and conditions of the BSD License
+# which accompanies this distribution.  The full text of the license may be found at
+# http://opensource.org/licenses/bsd-license.php
+#
+# THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+# WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+
+[Defines]
+  INF_VERSION                = 0x00010005
+  BASE_NAME                  = DebugAgentPei
+  FILE_GUID                  = D9D114EF-F40B-4d48-AAA0-A3DC99C9F5BD
+  MODULE_TYPE                = PEIM
+  VERSION_STRING             = 1.0
+
+[Packages.IA32]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  CommonExModulePkg/CommonExModulePkg.dec
+  SourceLevelDebugPkg/SourceLevelDebugPkg.dec
+
+[Binaries.IA32]
+  PE32|DebugAgentPei.efi
+  PEI_DEPEX|DebugAgentPei.depex
+
+[PatchPcd.IA32]
+  ## CONSUMES
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoPciDeviceNumber|0x1f|0x6365
+
+  ## CONSUMES
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoBarEnableMask|0x80|0x6366
+
+  ## CONSUMES
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialLineControl|0x03|0x6367
+
+  ## CONSUMES
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialFifoControl|0x27|0x63C6
+
+  ## CONSUMES
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoPciEnableRegisterOffset|0x004b|0x6460
+
+  ## CONSUMES
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoPciBarRegisterOffset|0x0048|0x6464
+
+  ## CONSUMES
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoPortBaseAddress|0x1000|0x6468
+
+  ## CONSUMES
+  gAcpiTimerTokenSpaceGuid.PcdAcpiPm1TmrOffset|0x0008|0x646C
+
+  ## CONSUMES
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialBaudRate|0x0001c200|0x6470
+
+  ## CONSUMES
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoPciBusNumber|0x00|0x6500
+
+  ## CONSUMES
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoPciFunctionNumber|0x00|0x6501
+
+  ## SOMETIMES_CONSUMES
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialDetectCable|0x00|0x6502
+
+
+[Protocols.IA32]
+
+[Ppis.IA32]
+  ## SOMETIMES_PRODUCES
+  gEfiPeiFirmwareVolumeInfoPpiGuid
+
+  ## NOTIFY
+  gEfiPeiMemoryDiscoveredPpiGuid
+
+
+[Guids.IA32]
+  ## SOMETIMES_CONSUMES   ## UNDEFINED
+  gEfiStatusCodeSpecificDataGuid
+
+  ## SOMETIMES_CONSUMES   ## UNDEFINED
+  ## SOMETIMES_CONSUMES
+  gEfiStatusCodeDataTypeDebugGuid
+
+  ## SOMETIMES_PRODUCES ## UNDEFINED # FV File System Guid.
+  gEfiFirmwareFileSystem2Guid
+
+  ## SOMETIMES_PRODUCES ## HOB # MemoryAllocation StackHob
+  gEfiHobMemoryAllocStackGuid
+
+  ## SOMETIMES_PRODUCES ## HOB # MemoryAllocation BspStoreHob
+  gEfiHobMemoryAllocBspStoreGuid
+
+  ## SOMETIMES_PRODUCES ## HOB # MemoryAllocation ModuleHob
+  gEfiHobMemoryAllocModuleGuid
+
+  ## PRODUCES ## HOB
+  ## CONSUMES ## HOB
+  gEfiDebugAgentGuid
+
+
+[PcdEx.IA32]
+
+[LibraryClasses.IA32]
+## @LIB_INSTANCES
+#  MdeModulePkg/Library/OemHookStatusCodeLibNull/OemHookStatusCodeLibNull.inf
+#  MdePkg/Library/BaseDebugPrintErrorLevelLib/BaseDebugPrintErrorLevelLib.inf
+#  MdeModulePkg/Library/PeiReportStatusCodeLib/PeiReportStatusCodeLib.inf
+#  MdePkg/Library/PeiServicesTablePointerLibIdt/PeiServicesTablePointerLibIdt.inf
+#  MdePkg/Library/PeiMemoryAllocationLib/PeiMemoryAllocationLib.inf
+#  MdePkg/Library/PeiServicesLib/PeiServicesLib.inf
+#  IntelFrameworkModulePkg/Library/PeiDxeDebugLibReportStatusCode/PeiDxeDebugLibReportStatusCode.inf
+#  MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
+#  MdePkg/Library/BaseMemoryLibRepStr/BaseMemoryLibRepStr.inf
+#  MdePkg/Library/BaseLib/BaseLib.inf
+#  MdePkg/Library/BaseIoLibIntrinsic/BaseIoLibIntrinsic.inf
+#  MdePkg/Library/BasePciExpressLib/BasePciExpressLib.inf
+#  MdePkg/Library/BasePciLibPciExpress/BasePciLibPciExpress.inf
+#  CommonExModulePkg/Library/PlatformHookLib/PlatformHookLib.inf
+#  CommonExModulePkg/Library/AcpiTimerLib/BaseAcpiTimerLib.inf
+#  CommonExModulePkg/Library/BaseSerialPortLib16550/BaseSerialPortLib16550.inf
+#  MdePkg/Library/BaseCpuLib/BaseCpuLib.inf
+#  SourceLevelDebugPkg/Library/PeCoffExtraActionLibDebug/PeCoffExtraActionLibDebug.inf
+#  MdePkg/Library/BasePeCoffGetEntryPointLib/BasePeCoffGetEntryPointLib.inf
+#  MdePkg/Library/BasePrintLib/BasePrintLib.inf
+#  UefiCpuPkg/Library/BaseXApicLib/BaseXApicLib.inf
+#  MdePkg/Library/BaseSynchronizationLib/BaseSynchronizationLib.inf
+#  SourceLevelDebugPkg/Library/DebugCommunicationLibSerialPort/DebugCommunicationLibSerialPort.inf
+#  MdePkg/Library/PeiHobLib/PeiHobLib.inf
+#  IntelE6xxNdaPkg/Library/ResetSystemLib/ResetSystemLib.inf
+#  MdePkg/Library/PeimEntryPoint/PeimEntryPoint.inf
+#  SourceLevelDebugPkg/Library/DebugAgent/SecPeiDebugAgentLib.inf
+
+[Depex.IA32]
+#  (TRUE) AND (gPeiSerialPortPpiGuid)
+
+[BuildOptions.IA32]
+## @AsBuilt
+##   MSFT:DEBUG_VS2008x86_IA32_SYMRENAME_FLAGS = Symbol renaming not needed for
+##   MSFT:DEBUG_VS2008x86_IA32_ASLDLINK_FLAGS = /NODEFAULTLIB /ENTRY:ReferenceAcpiTable /SUBSYSTEM:CONSOLE
+##   MSFT:DEBUG_VS2008x86_IA32_VFR_FLAGS = -l -n
+##   MSFT:DEBUG_VS2008x86_IA32_PP_FLAGS = /nologo /E /TC /FIAutoGen.h
+##   MSFT:DEBUG_VS2008x86_IA32_GENFW_FLAGS = 
+##   MSFT:DEBUG_VS2008x86_IA32_OPTROM_FLAGS = -e
+##   MSFT:DEBUG_VS2008x86_IA32_SLINK_FLAGS = /NOLOGO /LTCG
+##   MSFT:DEBUG_VS2008x86_IA32_ASM_FLAGS = /nologo /c /WX /W3 /Cx /coff /Zd /Zi
+##   MSFT:DEBUG_VS2008x86_IA32_ASL_FLAGS = 
+##   MSFT:DEBUG_VS2008x86_IA32_CC_FLAGS = /nologo /c /WX /GS- /W4 /Gs32768 /D UNICODE /O1ib2 /GL /FIAutoGen.h /EHs-c- /GR- /GF /Gy /Zi /Gm /wd4200
+##   MSFT:DEBUG_VS2008x86_IA32_VFRPP_FLAGS = /nologo /E /TC /DVFRCOMPILE /FI$(MODULE_NAME)StrDefs.h
+##   MSFT:DEBUG_VS2008x86_IA32_ASLCC_FLAGS = /nologo /c /FIAutoGen.h /TC /Dmain=ReferenceAcpiTable
+##   MSFT:DEBUG_VS2008x86_IA32_APP_FLAGS = /nologo /E /TC
+##   MSFT:DEBUG_VS2008x86_IA32_DLINK_FLAGS = /NOLOGO /NODEFAULTLIB /IGNORE:4001 /OPT:REF /OPT:ICF=10 /MAP /ALIGN:32 /SECTION:.xdata,D /SECTION:.pdata,D /MACHINE:X86 /LTCG /DLL /ENTRY:$(IMAGE_ENTRY_POINT) /SUBSYSTEM:EFI_BOOT_SERVICE_DRIVER /SAFESEH:NO /BASE:0 /DRIVER /DEBUG
+##   MSFT:DEBUG_VS2008x86_IA32_ASLPP_FLAGS = /nologo /E /C /FIAutoGen.h
+##   MSFT:DEBUG_VS2008x86_IA32_OBJCOPY_FLAGS = objcopy not needed for
+##   MSFT:DEBUG_VS2008x86_IA32_MAKE_FLAGS = /nologo
+##   MSFT:DEBUG_VS2008x86_IA32_ASMLINK_FLAGS = /nologo /tiny

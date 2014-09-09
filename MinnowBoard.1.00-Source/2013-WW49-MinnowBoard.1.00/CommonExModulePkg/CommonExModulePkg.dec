@@ -1,0 +1,88 @@
+## @file  CommonExModulePkg.dec
+# This package provides generic modules and definitions.
+#
+# Copyright (c) 2013, Intel Corporation. All rights reserved.<BR>
+# This program and the accompanying materials are licensed and made available under 
+# the terms and conditions of the BSD License that accompanies this distribution.  
+# The full text of the license may be found at
+# http://opensource.org/licenses/bsd-license.php.                                                                          
+# 
+# THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
+# WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.  
+#
+##
+
+[Defines]
+  DEC_SPECIFICATION = 0x00010005
+  PACKAGE_NAME      = CommonExModulePkg
+  PACKAGE_GUID      = 63e056cf-41f0-11e3-bd2b-00059a3c7a00
+  PACKAGE_VERSION   = 0.9
+
+[Includes]
+  Include
+
+[LibraryClasses]
+
+[Protocols]
+
+[Ppis]
+  ## Provides the ability to determine when the serial port has been initialized.
+  #
+  ## Include/Ppi/SerialPortPei.h
+  gPeiSerialPortPpiGuid          = {0x490e9d85, 0x8aef, 0x4193, {0x8e, 0x56, 0xf7, 0x34, 0xa9, 0xff, 0xac, 0x8b}}
+
+[Guids]
+  ## Defines the token space for ACPI Timer
+  #
+  gAcpiTimerTokenSpaceGuid = {0x90fa24e2, 0xa169, 0x43ab, { 0x85, 0x2f, 0x9, 0xc8, 0xb5, 0x2b, 0x84, 0xa0 }}
+
+  ## Defines the token space for 16550 UARTs on PCI busses
+  #
+  gUart16550PciTokenSpaceGuid  = { 0x355ed05f, 0x1657, 0x487d, { 0xbd, 0xd2, 0x8d, 0xc6, 0xd7, 0xdd, 0x98, 0x2e }}
+
+[PcdsFixedAtBuild, PcdsPatchableInModule]
+  ## Defines the ACPI register set base address.
+  #
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoPortBaseAddress         |0x0000|UINT16|0x00001000
+
+  ## Defines the PCI Bus Nuumber of the PCI device that contains the BAR and Enable for ACPI hardware registers
+  #
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoPciBusNumber            |  0x00| UINT8|0x00001001
+
+  ## Defines the PCI Device Nuumber of the PCI device that contains the BAR and Enable for ACPI hardware registers
+  #
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoPciDeviceNumber         |  0x00| UINT8|0x00001002
+
+  ## Defines the PCI Function Nuumber of the PCI device that contains the BAR and Enable for ACPI hardware registers
+  #
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoPciFunctionNumber       |  0x00| UINT8|0x00001003
+  
+  ## Defines the PCI Register Offset of the PCI device that contains the Enable for ACPI hardware registers
+  #
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoPciEnableRegisterOffset |0x0000|UINT16|0x00001004
+  
+  ## Defines the bit mask that must be set to enable the APIC hardware register BAR
+  #
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoBarEnableMask           |  0x00| UINT8|0x00001005
+  
+  ## Defines the PCI Register Offset of the PCI device that contains the BAR for ACPI hardware registers
+  #
+  gAcpiTimerTokenSpaceGuid.PcdAcpiIoPciBarRegisterOffset    |0x0000|UINT16|0x00001006
+
+  ## Defines the offset to the 32-bit Timer Value register that resides within the ACPI BAR 
+  #
+  gAcpiTimerTokenSpaceGuid.PcdAcpiPm1TmrOffset              |0x0008|UINT16|0x00001007
+
+  ## Serial Port Clock Rate
+  # @Prompt Serial Port Clock Rate
+  gUart16550PciTokenSpaceGuid.PcdSerialClockRate|1843200|UINT32|0x00010066
+  
+  ## Pci Serial Device Info. It is an array of Device and Function information. 
+  # It is terminated by 0xFF. For LPC Serial Device, its value is 0xFF.
+  # @Prompt Pci Serial Device Info
+  gUart16550PciTokenSpaceGuid.PcdSerialPciDeviceInfo|{0xFF}|VOID*|0x00010067
+
+  ## Serial Port Extended Transmit FIFO Size.  The default is 64 bytes. 
+  # @Prompt Pci Port Extended Transmit FIFO Size in Bytes
+  gUart16550PciTokenSpaceGuid.PcdSerialExtendedTxFifoSize|64|UINT32|0x00010068
+  

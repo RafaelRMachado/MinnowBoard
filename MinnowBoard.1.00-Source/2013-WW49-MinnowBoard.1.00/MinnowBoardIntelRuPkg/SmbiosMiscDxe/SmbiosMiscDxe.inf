@@ -1,0 +1,328 @@
+#
+# This file contains an 'Intel Peripheral Driver' and is
+# licensed for Intel CPUs and chipsets under the terms of your
+# license agreement with Intel or your vendor.  This file may
+# be modified by the user, subject to additional terms of the
+# license agreement
+#
+## @file
+# Miscellaneous SMBIOS Strucure Module
+#
+# Provides SMBIOS information for some miscellaneous SMBIOS structures.  These
+# structures include type 0, 1, 3, 8, 9, 10, 11, 12, 13 and 32.  Specific information
+# for each of these structures can be located at DMTF.org.
+#
+# Copyright (c) 2006 - 2013, Intel Corporation. All rights reserved.<BR>
+#
+#  This software and associated documentation (if any) is furnished
+#  under a license and may only be used or copied in accordance
+#  with the terms of the license. Except as permitted by such
+#  license, no part of this software or documentation may be
+#  reproduced, stored in a retrieval system, or transmitted in any
+#  form or by any means without the express written consent of
+#  Intel Corporation.
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = SmbiosMisc
+  FILE_GUID                      = EF0C99B6-B1D3-4025-9405-BF6A560FE0E0
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = SmbiosMiscEntryPoint
+
+#
+# The following information is for reference only and not required by the build tools.
+#
+#  VALID_ARCHITECTURES           = IA32 X64 IPF EBC
+#
+
+[Sources]
+  MiscOemStringFunction.c
+  MiscOemStringData.c
+  SmbiosMiscEntryPoint.c
+  SmbiosMiscDataTable.c
+  MiscBoardData.c
+  MiscBoardFunction.c
+  MiscSystemManufacturerData.c
+  MiscSystemManufacturerFunction.c
+  MiscOnboardDeviceFunction.c
+  MiscOnboardDeviceData.c
+  MiscSystemSlotDesignationFunction.c
+  MiscSystemSlotDesignationData.c
+  MiscNumberOfInstallableLanguagesFunction.c
+  MiscNumberOfInstallableLanguagesData.c
+  MiscSystemManufacturerFunction.c
+  MiscSystemManufacturerData.c
+  MiscChassisManufacturerFunction.c
+  MiscChassisManufacturerData.c
+  MiscBootInformationFunction.c
+  MiscBootInformationData.c
+  MiscBiosVendorFunction.c
+  MiscBiosVendorData.c
+  MiscSystemOptionStringFunction.c
+  MiscSystemOptionStringData.c
+  MiscPortInternalConnectorDesignatorFunction.c
+  MiscPortInternalConnectorDesignatorData.c
+  SmbiosMisc.h
+  MiscDevicePath.h
+  SmbiosMiscStrings.uni
+#  MiscOemString.uni
+#  MiscSystemSlotOnboardDevices.uni
+#  MiscSystemSlotDesignation.uni
+#  MiscBoard.uni
+#  MiscSystemOptionString.uni
+#  MiscSystemManufacturer.uni
+#  MiscPortInternalConnectorDesignator.uni
+#  MiscOnboardDevice.uni
+#  MiscChassisManufacturer.uni
+#  MiscBiosVendor.uni
+  CommonHeader.h
+
+
+[Packages]
+  IntelE6xxRuPkg/IntelE6xxRuPkg.dec
+  IntelFrameworkPkg/IntelFrameworkPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  MinnowBoardIntelRuPkg/MinnowBoardIntelRuPkg.dec
+  MinnowBoardPkg/MinnowBoardPkg.dec
+
+[LibraryClasses]
+  PcdLib
+  HiiLib
+  MemoryAllocationLib
+  DevicePathLib
+  BaseMemoryLib
+  BaseLib
+  DebugLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
+
+[Protocols]
+  gEfiSmbiosProtocolGuid    ## CONSUMES
+
+[Pcd]
+  gIntelE6xxRuTokenSpaceGuid.PcdFlashAreaSize                           ## CONSUMES
+
+  gEfiMdePkgTokenSpaceGuid.PcdUefiVariableDefaultPlatformLang           ## CONSUMES
+
+  gMinnowBoardPkgTokenSpaceGuid.PcdSMBIOSBoardManufacturer              ## CONSUMES
+  gMinnowBoardPkgTokenSpaceGuid.PcdSMBIOSBoardProductName               ## CONSUMES
+  gMinnowBoardPkgTokenSpaceGuid.PcdSMBIOSBoardVersion                   ## CONSUMES
+  gMinnowBoardPkgTokenSpaceGuid.PcdSMBIOSBoardSerialNumber              ## CONSUMES
+  gMinnowBoardPkgTokenSpaceGuid.PcdSMBIOSBoardAssetTag                  ## CONSUMES
+
+  gCrownBayTokenSpaceGuid.PcdSMBIOSBiosVendor                           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSBiosVersion                          ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSBiosReleaseDate                      ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSBiosStartAddress                     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSBiosChar                             ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSBiosCharEx1                          ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSBiosCharEx2                          ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemManufacturer                   ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemProductName                    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemVersion                        ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSerialNumber                   ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemUuid                           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSKUNumber                      ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemFamily                         ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisManufacturer                  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisVersion                       ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisSerialNumber                  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisAssetTag                      ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisType                          ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisBootupState                   ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisPowerSupplyState              ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisSecurityState                 ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisOemDefined                    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisHeight                        ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisNumberPowerCords              ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisElementCount                  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisElementRecordLength           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSConnectorNumber                      ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort1InternalConnectorDesignator     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort1ExternalConnectorDesignator     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort1InternalConnectorType           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort1ExternalConnectorType           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort1Type                            ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort2InternalConnectorDesignator     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort2ExternalConnectorDesignator     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort2InternalConnectorType           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort2ExternalConnectorType           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort2Type                            ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort3InternalConnectorDesignator     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort3ExternalConnectorDesignator     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort3InternalConnectorType           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort3ExternalConnectorType           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort3Type                            ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort4InternalConnectorDesignator     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort4ExternalConnectorDesignator     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort4InternalConnectorType           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort4ExternalConnectorType           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort4Type                            ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort5InternalConnectorDesignator     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort5ExternalConnectorDesignator     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort5InternalConnectorType           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort5ExternalConnectorType           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort5Type                            ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort6InternalConnectorDesignator     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort6ExternalConnectorDesignator     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort6InternalConnectorType           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort6ExternalConnectorType           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort6Type                            ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort7InternalConnectorDesignator     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort7ExternalConnectorDesignator     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort7InternalConnectorType           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort7ExternalConnectorType           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort7Type                            ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort8InternalConnectorDesignator     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort8ExternalConnectorDesignator     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort8InternalConnectorType           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort8ExternalConnectorType           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort8Type                            ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort9InternalConnectorDesignator     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort9ExternalConnectorDesignator     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort9InternalConnectorType           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort9ExternalConnectorType           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort9Type                            ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort10InternalConnectorDesignator    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort10ExternalConnectorDesignator    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort10InternalConnectorType          ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort10ExternalConnectorType          ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort10Type                           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort11InternalConnectorDesignator    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort11ExternalConnectorDesignator    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort11InternalConnectorType          ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort11ExternalConnectorType          ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort11Type                           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort12InternalConnectorDesignator    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort12ExternalConnectorDesignator    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort12InternalConnectorType          ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort12ExternalConnectorType          ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort12Type                           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort13InternalConnectorDesignator    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort13ExternalConnectorDesignator    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort13InternalConnectorType          ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort13ExternalConnectorType          ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort13Type                           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort14InternalConnectorDesignator    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort14ExternalConnectorDesignator    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort14InternalConnectorType          ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort14ExternalConnectorType          ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort14Type                           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort15InternalConnectorDesignator    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort15ExternalConnectorDesignator    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort15InternalConnectorType          ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort15ExternalConnectorType          ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort15Type                           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort16InternalConnectorDesignator    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort16ExternalConnectorDesignator    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort16InternalConnectorType          ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort16ExternalConnectorType          ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort16Type                           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlotNumber                     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot1Designation               ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot1Type                      ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot1DataBusWidth              ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot1Usage                     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot1Length                    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot1Id                        ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot1Characteristics           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot2Designation               ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot2Type                      ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot2DataBusWidth              ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot2Usage                     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot2Length                    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot2Id                        ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot2Characteristics           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot3Designation               ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot3Type                      ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot3DataBusWidth              ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot3Usage                     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot3Length                    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot3Id                        ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot3Characteristics           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot4Designation               ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot4Type                      ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot4DataBusWidth              ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot4Usage                     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot4Length                    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot4Id                        ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot4Characteristics           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot5Designation               ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot5Type                      ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot5DataBusWidth              ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot5Usage                     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot5Length                    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot5Id                        ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot5Characteristics           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot6Designation               ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot6Type                      ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot6DataBusWidth              ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot6Usage                     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot6Length                    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot6Id                        ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot6Characteristics           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot7Designation               ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot7Type                      ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot7DataBusWidth              ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot7Usage                     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot7Length                    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot7Id                        ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot7Characteristics           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot8Designation               ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot8Type                      ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot8DataBusWidth              ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot8Usage                     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot8Length                    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot8Id                        ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot8Characteristics           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot9Designation               ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot9Type                      ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot9DataBusWidth              ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot9Usage                     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot9Length                    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot9Id                        ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot9Characteristics           ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot10Designation              ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot10Type                     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot10DataBusWidth             ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot10Usage                    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot10Length                   ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot10Id                       ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot10Characteristics          ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot11Designation              ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot11Type                     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot11DataBusWidth             ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot11Usage                    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot11Length                   ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot11Id                       ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot11Characteristics          ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot12Designation              ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot12Type                     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot12DataBusWidth             ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot12Usage                    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot12Length                   ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot12Id                       ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot12Characteristics          ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot13Designation              ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot13Type                     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot13DataBusWidth             ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot13Usage                    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot13Length                   ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot13Id                       ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot13Characteristics          ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot14Designation              ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot14Type                     ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot14DataBusWidth             ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot14Usage                    ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot14Length                   ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot14Id                       ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot14Characteristics          ## CONSUMES
+
+[Depex]
+  gEfiSmbiosProtocolGuid
+

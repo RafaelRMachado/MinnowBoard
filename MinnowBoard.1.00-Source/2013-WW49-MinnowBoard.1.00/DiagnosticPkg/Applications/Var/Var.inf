@@ -1,0 +1,43 @@
+## @file
+#  Build file for variable test program
+#
+#  Copyright (c) 2011-2013, Intel Corporation. All rights reserved.<BR>
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution.  The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = Var
+  FILE_GUID                      = 5DD0C858-1178-403a-9839-3EE2A8C49EFF
+  MODULE_TYPE                    = UEFI_APPLICATION
+  ENTRY_POINT                    = ShellCEntryLib
+
+[Sources.common]
+  Var.c
+  Var.uni
+
+[Packages]
+  BusPkg/BusPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  ShellPkg/ShellPkg.dec
+
+[LibraryClasses]
+  AsciiDump
+  DebugLib
+  HiiLib
+  ShellCEntryLib
+  ShellLib
+  UefiApplicationEntryPoint
+  UefiLib
+  UefiRuntimeServicesTableLib
+
+[Protocols]
+  gEfiShellParametersProtocolGuid   ## CONSUMES

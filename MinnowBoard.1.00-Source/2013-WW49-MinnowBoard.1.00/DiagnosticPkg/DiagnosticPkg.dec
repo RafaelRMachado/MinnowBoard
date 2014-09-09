@@ -1,0 +1,37 @@
+## @file  Diagnostic.dec
+#
+# This Package provides the platform independent diagnostic support.
+#
+# Copyright (c) 2012-2013, Intel Corporation. All rights reserved.<BR>
+#
+# This program and the accompanying materials are licensed and made available under
+# the terms and conditions of the BSD License which accompanies this distribution.
+# The full text of the license may be found at
+# http://opensource.org/licenses/bsd-license.php
+#
+# THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+# WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+
+
+################################################################################
+#
+# Defines Section - statements that will be processed to create a Makefile.
+#
+################################################################################
+
+[Defines]
+  DEC_SPECIFICATION              = 0x00010005
+  PACKAGE_NAME                   = DiagnosticPkg
+  PACKAGE_GUID                   = 021D427E-9CA1-4265-B81E-3F52C3BB49DF
+  PACKAGE_VERSION                = 0.2
+
+[Includes]
+  Include
+
+[Guids]
+  ## Defines the token space for the DiagnosticPkg PCDs.
+  #
+  gDiagnosticPkgTokenSpaceGuid   = { 0x5c1bcbb8, 0x5e77, 0x4519, { 0x8e, 0x9e, 0xee, 0x15, 0xa6, 0xb6, 0x3e, 0x4a } }
+

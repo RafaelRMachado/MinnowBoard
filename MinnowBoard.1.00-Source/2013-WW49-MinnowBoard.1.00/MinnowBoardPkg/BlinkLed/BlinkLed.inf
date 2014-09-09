@@ -1,0 +1,42 @@
+## @file
+#  Blink LED
+#
+#  Copyright (c) 2013, Intel Corporation. All rights reserved.<BR>
+#
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution.  The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = BlinkLed
+  FILE_GUID                      = 07918A9D-3A6F-494c-B63D-257C138EEC38
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = BlinkLedIntialize
+
+[Sources]
+  BlinkLed.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MinnowBoardPkg/MinnowBoardPkg.dec
+
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+  BaseLib
+  PcdLib
+  LedLib
+  
+[Pcd]
+  gMinnowBoardPkgTokenSpaceGuid.PcdDiagBootPhasesLedBlinkRate           ## CONSUMES
+
+[Depex]
+  gEfiTimerArchProtocolGuid

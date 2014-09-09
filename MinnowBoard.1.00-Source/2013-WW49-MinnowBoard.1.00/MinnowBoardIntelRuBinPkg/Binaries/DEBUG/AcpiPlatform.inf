@@ -1,0 +1,779 @@
+#
+# This file contains an 'Intel Peripheral Driver' and is
+# licensed for Intel CPUs and chipsets under the terms of your
+# license agreement with Intel or your vendor.  This file may
+# be modified by the user, subject to additional terms of the
+# license agreement
+#
+## @file
+# ACPI Platform Support Module
+#
+# Provides the ability for the platform to update the ACPI tables based on the
+# platforms configuration at boot.
+#
+# Copyright (c) 2010-2013, Intel Corporation. All rights reserved.<BR>
+#
+#  This software and associated documentation (if any) is furnished
+#  under a license and may only be used or copied in accordance
+#  with the terms of the license. Except as permitted by such
+#  license, no part of this software or documentation may be
+#  reproduced, stored in a retrieval system, or transmitted in any
+#  form or by any means without the express written consent of
+#  Intel Corporation.
+#
+##
+
+[Defines]
+  INF_VERSION                = 0x00010005
+  BASE_NAME                  = AcpiPlatform
+  FILE_GUID                  = 368B3649-F204-4cd0-89A8-091077C070FA
+  MODULE_TYPE                = DXE_DRIVER
+  VERSION_STRING             = 1.0
+
+[Packages.IA32]
+  IntelE6xxRuPkg/IntelE6xxRuPkg.dec
+  IntelFrameworkPkg/IntelFrameworkPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  MinnowBoardIntelRuPkg/MinnowBoardIntelRuPkg.dec
+
+[Binaries.IA32]
+  PE32|AcpiPlatform.efi
+  DXE_DEPEX|AcpiPlatform.depex
+
+[PatchPcd.IA32]
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable0Enable|0x01|0x44BA
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable1Enable|0x01|0x44BB
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable0GlobalIrq|0x00000002|0x44BC
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable1SourceIrq|0x09|0x44C0
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable1Polarity|0x01|0x44C1
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable1TrigerMode|0x03|0x44C2
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdIoApicSettingIoApicId|0x02|0x44C3
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable1GlobalIrq|0x00000009|0x44C4
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdLocalApicSettingNmiEnabelApicIdMask|0x03|0x44C8
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdLocalApicSettingPolarity|0x01|0x44C9
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdLocalApicSettingTrigerMode|0x01|0x44CA
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdLocalApicSettingLocalApicLint|0x01|0x44CB
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDeviceInfoNumber|0x0d|0x44CC
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice1GpePin|0xff|0x44CD
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice1SxNum|0xff|0x44CE
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice2GpePin|0xff|0x44CF
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice1INTA|0xffff|0x44D0
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice2SxNum|0xff|0x44D2
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice3GpePin|0xff|0x44D3
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice1INTB|0xffff|0x44D4
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice3SxNum|0xff|0x44D6
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice4GpePin|0x06|0x44D7
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice1INTC|0xffff|0x44D8
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice4SxNum|0x03|0x44DA
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice5GpePin|0x07|0x44DB
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice1INTD|0xffff|0x44DC
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice5SxNum|0x03|0x44DE
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice6GpePin|0x08|0x44DF
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice2DeviceAddress|0x00000200|0x44E0
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice2INTA|0x1001|0x44E4
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice6SxNum|0x03|0x44E6
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice7GpePin|0x09|0x44E7
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice2INTB|0xffff|0x44E8
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice7SxNum|0x03|0x44EA
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice8GpePin|0x19|0x44EB
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice2INTC|0xffff|0x44EC
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice8SxNum|0x03|0x44EE
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice9GpePin|0xff|0x44EF
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice2INTD|0xffff|0x44F0
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice9SxNum|0xff|0x44F2
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice10GpePin|0xff|0x44F3
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice3DeviceAddress|0x00000300|0x44F4
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice3INTA|0x1001|0x44F8
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice10SxNum|0xff|0x44FA
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice11GpePin|0xff|0x44FB
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice3INTB|0xffff|0x44FC
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice11SxNum|0xff|0x44FE
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice12GpePin|0xff|0x44FF
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice3INTC|0xffff|0x4500
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice12SxNum|0xff|0x4502
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice13GpePin|0xff|0x4503
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice3INTD|0xffff|0x4504
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice13SxNum|0xff|0x4506
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice4DeviceAddress|0x00001700|0x4508
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice4INTA|0x1304|0x450C
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice4INTB|0xffff|0x4510
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice4INTC|0xffff|0x4514
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice4INTD|0xffff|0x4518
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice5DeviceAddress|0x00001800|0x451C
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice5INTA|0x1405|0x4520
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice5INTB|0xffff|0x4524
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice5INTC|0xffff|0x4528
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice5INTD|0xffff|0x452C
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice6DeviceAddress|0x00001900|0x4530
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice6INTA|0x1506|0x4534
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice6INTB|0xffff|0x4538
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice6INTC|0xffff|0x453C
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice6INTD|0xffff|0x4540
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice7DeviceAddress|0x00001a00|0x4544
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice7INTA|0x1607|0x4548
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice7INTB|0xffff|0x454C
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice7INTC|0xffff|0x4550
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice7INTD|0xffff|0x4554
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice8DeviceAddress|0x00001b00|0x4558
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice8INTA|0x1708|0x455C
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice8INTB|0xffff|0x4560
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice8INTC|0xffff|0x4564
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice8INTD|0xffff|0x4568
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice9DeviceAddress|0x00001f00|0x456C
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice9INTA|0x1001|0x4570
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice9INTB|0xffff|0x4574
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice9INTC|0xffff|0x4578
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice9INTD|0xffff|0x457C
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice10BridgeAddress|0x00001700|0x4580
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice10DeviceAddress|0x00010000|0x4584
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice10INTA|0x1001|0x4588
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice10INTB|0x1102|0x458C
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice10INTC|0x1203|0x4590
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice10INTD|0x1304|0x4594
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice11BridgeAddress|0x00001800|0x4598
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice11DeviceAddress|0x00030000|0x459C
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice11INTA|0x1102|0x45A0
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice11INTB|0x1203|0x45A4
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice11INTC|0x1304|0x45A8
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice11INTD|0x1001|0x45AC
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice12BridgeAddress|0x00001900|0x45B0
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice12DeviceAddress|0x00050000|0x45B4
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice12INTA|0x1203|0x45B8
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice12INTB|0x1304|0x45BC
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice12INTC|0x1001|0x45C0
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice12INTD|0x1102|0x45C4
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice13BridgeAddress|0x00001a00|0x45C8
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice13DeviceAddress|0x00070000|0x45CC
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice13INTA|0x1304|0x45D0
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice13INTB|0x1001|0x45D4
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice13INTC|0x1102|0x45D8
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice13INTD|0x1203|0x45DC
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable0SourceIrq|0x00|0x45E4
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable0Polarity|0x00|0x45E5
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable0TrigerMode|0x00|0x45E6
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable2Enable|0x00|0x45E7
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable2SourceIrq|0x00|0x45E8
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable2Polarity|0x00|0x45E9
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable2TrigerMode|0x00|0x45EA
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable3Enable|0x00|0x45EB
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable2GlobalIrq|0x00000000|0x45EC
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable3SourceIrq|0x00|0x45F0
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable3Polarity|0x00|0x45F1
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable3TrigerMode|0x00|0x45F2
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable4Enable|0x00|0x45F3
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable3GlobalIrq|0x00000000|0x45F4
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable4SourceIrq|0x00|0x45F8
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable4Polarity|0x00|0x45F9
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable4TrigerMode|0x00|0x45FA
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable5Enable|0x00|0x45FB
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable4GlobalIrq|0x00000000|0x45FC
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable5SourceIrq|0x00|0x4600
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable5Polarity|0x00|0x4601
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable5TrigerMode|0x00|0x4602
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable6Enable|0x00|0x4603
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable5GlobalIrq|0x00000000|0x4604
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable6SourceIrq|0x00|0x4608
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable6Polarity|0x00|0x4609
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable6TrigerMode|0x00|0x460A
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable7Enable|0x00|0x460B
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable6GlobalIrq|0x00000000|0x460C
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable7SourceIrq|0x00|0x4610
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable7Polarity|0x00|0x4611
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable7TrigerMode|0x00|0x4612
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable8Enable|0x00|0x4613
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable7GlobalIrq|0x00000000|0x4614
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable8SourceIrq|0x00|0x4618
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable8Polarity|0x00|0x4619
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable8TrigerMode|0x00|0x461A
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable9Enable|0x00|0x461B
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable8GlobalIrq|0x00000000|0x461C
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable9SourceIrq|0x00|0x4620
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable9Polarity|0x00|0x4621
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable9TrigerMode|0x00|0x4622
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable10Enable|0x00|0x4623
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable9GlobalIrq|0x00000000|0x4624
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable10SourceIrq|0x00|0x4628
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable10Polarity|0x00|0x4629
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable10TrigerMode|0x00|0x462A
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable11Enable|0x00|0x462B
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable10GlobalIrq|0x00000000|0x462C
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable11SourceIrq|0x00|0x4630
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable11Polarity|0x00|0x4631
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable11TrigerMode|0x00|0x4632
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable12Enable|0x00|0x4633
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable11GlobalIrq|0x00000000|0x4634
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable12SourceIrq|0x00|0x4638
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable12Polarity|0x00|0x4639
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable12TrigerMode|0x00|0x463A
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable13Enable|0x00|0x463B
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable12GlobalIrq|0x00000000|0x463C
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable13SourceIrq|0x00|0x4640
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable13Polarity|0x00|0x4641
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable13TrigerMode|0x00|0x4642
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable14Enable|0x00|0x4643
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable13GlobalIrq|0x00000000|0x4644
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable14SourceIrq|0x00|0x4648
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable14Polarity|0x00|0x4649
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable14TrigerMode|0x00|0x464A
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable15Enable|0x00|0x464B
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable14GlobalIrq|0x00000000|0x464C
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable15SourceIrq|0x00|0x4650
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable15Polarity|0x00|0x4651
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable15TrigerMode|0x00|0x4652
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdIoApicSettingNmiEnable|0x00|0x4653
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable15GlobalIrq|0x00000000|0x4654
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdIoApicSettingNmiSource|0x00|0x4658
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdIoApicSettingPolarity|0x00|0x4659
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdIoApicSettingTrigerMode|0x00|0x465A
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdLocalApicSettingAddressOverrideEnable|0x00|0x465B
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice1BridgeAddress|0x00000000|0x465C
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdLocalApicAddressOverride|0x0000000000000000|0x4660
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice1DeviceAddress|0x00000000|0x4668
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice2BridgeAddress|0x00000000|0x466C
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice3BridgeAddress|0x00000000|0x4670
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice4BridgeAddress|0x00000000|0x4674
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice5BridgeAddress|0x00000000|0x4678
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice6BridgeAddress|0x00000000|0x467C
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice7BridgeAddress|0x00000000|0x4680
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice8BridgeAddress|0x00000000|0x4684
+
+  ## CONSUMES
+  gCrownBayTokenSpaceGuid.PcdPciDevice9BridgeAddress|0x00000000|0x4688
+
+
+[Protocols.IA32]
+  ## PRODUCES
+  gEfiGlobalNvsAreaProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiMpServiceProtocolGuid
+
+  ## CONSUMES
+  gEfiAcpiSupportProtocolGuid
+
+  ## CONSUMES
+  gEfiAcpiSdtProtocolGuid
+
+  ## CONSUMES
+  gEfiStatusCodeRuntimeProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiDevicePathProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gPcdProtocolGuid
+
+  ## CONSUMES
+  gEfiPcdProtocolGuid
+
+  ## SOMETIMES_PRODUCES
+  gEfiDriverBindingProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiSimpleTextOutProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiGraphicsOutputProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiHiiFontProtocolGuid
+
+  ## SOMETIMES_CONSUMES # Consumes if gEfiGraphicsOutputProtocolGuid uninstalled
+  gEfiUgaDrawProtocolGuid
+
+  ## SOMETIMES_PRODUCES # User chooses to produce it
+  gEfiComponentNameProtocolGuid
+
+  ## SOMETIMES_PRODUCES # User chooses to produce it
+  gEfiComponentName2ProtocolGuid
+
+  ## SOMETIMES_PRODUCES # User chooses to produce it
+  gEfiDriverConfigurationProtocolGuid
+
+  ## SOMETIMES_PRODUCES # User chooses to produce it
+  gEfiDriverConfiguration2ProtocolGuid
+
+  ## SOMETIMES_PRODUCES # User chooses to produce it
+  gEfiDriverDiagnosticsProtocolGuid
+
+  ## SOMETIMES_PRODUCES # User chooses to produce it
+  gEfiDriverDiagnostics2ProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiFirmwareVolume2ProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  ## SOMETIMES_CONSUMES
+  gEfiLoadedImageProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiLoadFileProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiLoadFile2ProtocolGuid
+
+  ## SOMETIMES_CONSUMES
+  gEfiSimpleFileSystemProtocolGuid
+
+
+[Ppis.IA32]
+
+[Guids.IA32]
+  gIntelE6xxRuTokenSpaceGuid
+
+  ## SOMETIMES_CONSUMES ## UNDEFINED
+  gEfiStatusCodeSpecificDataGuid
+
+  ## SOMETIMES_CONSUMES ## UNDEFINED
+  ## SOMETIMES_CONSUMES
+  gEfiStatusCodeDataTypeDebugGuid
+
+  ## SOMETIMES_CONSUMES  ## Event
+  gEfiEventReadyToBootGuid
+
+  ## SOMETIMES_CONSUMES  ## Event
+  gEfiEventLegacyBootGuid
+
+  ## SOMETIMES_CONSUMES  ## Variable
+  gEfiGlobalVariableGuid
+
+  ## SOMETIMES_CONSUMES ## UNDEFINED
+  gEfiFileInfoGuid
+
+
+[PcdEx.IA32]
+  ## CONSUMES
+  gIntelE6xxRuTokenSpaceGuid.PcdE6xxDeviceEnables
+
+
+[LibraryClasses.IA32]
+## @LIB_INSTANCES
+#  MdePkg/Library/BaseDebugPrintErrorLevelLib/BaseDebugPrintErrorLevelLib.inf
+#  MdeModulePkg/Library/DxeReportStatusCodeLib/DxeReportStatusCodeLib.inf
+#  MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
+#  MdePkg/Library/BaseLib/BaseLib.inf
+#  MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib.inf
+#  IntelFrameworkModulePkg/Library/PeiDxeDebugLibReportStatusCode/PeiDxeDebugLibReportStatusCode.inf
+#  MdePkg/Library/BaseMemoryLibRepStr/BaseMemoryLibRepStr.inf
+#  MdePkg/Library/DxePcdLib/DxePcdLib.inf
+#  MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib.inf
+#  MdePkg/Library/BasePrintLib/BasePrintLib.inf
+#  MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib.inf
+#  MdePkg/Library/UefiLib/UefiLib.inf
+#  MdePkg/Library/DxeServicesLib/DxeServicesLib.inf
+#  MdePkg/Library/BaseIoLibIntrinsic/BaseIoLibIntrinsic.inf
+#  MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint.inf
+
+[Depex.IA32]
+#  (gEfiAcpiSupportProtocolGuid AND gEfiMpServiceProtocolGuid) AND (gEfiPcdProtocolGuid) AND (gEfiPcdProtocolGuid) AND (gEfiPcdProtocolGuid) AND (gEfiPcdProtocolGuid) AND (gEfiBdsArchProtocolGuid AND gEfiCpuArchProtocolGuid AND gEfiMetronomeArchProtocolGuid AND gEfiMonotonicCounterArchProtocolGuid AND gEfiRealTimeClockArchProtocolGuid AND gEfiResetArchProtocolGuid AND gEfiRuntimeArchProtocolGuid AND gEfiSecurityArchProtocolGuid AND gEfiTimerArchProtocolGuid AND gEfiVariableWriteArchProtocolGuid AND gEfiVariableArchProtocolGuid AND gEfiWatchdogTimerArchProtocolGuid)
+
+[BuildOptions.IA32]
+## @AsBuilt
+##   MSFT:DEBUG_VS2008x86_IA32_SYMRENAME_FLAGS = Symbol renaming not needed for
+##   MSFT:DEBUG_VS2008x86_IA32_ASLDLINK_FLAGS = /NODEFAULTLIB /ENTRY:ReferenceAcpiTable /SUBSYSTEM:CONSOLE
+##   MSFT:DEBUG_VS2008x86_IA32_VFR_FLAGS = -l -n
+##   MSFT:DEBUG_VS2008x86_IA32_PP_FLAGS = /nologo /E /TC /FIAutoGen.h
+##   MSFT:DEBUG_VS2008x86_IA32_GENFW_FLAGS = 
+##   MSFT:DEBUG_VS2008x86_IA32_OPTROM_FLAGS = -e
+##   MSFT:DEBUG_VS2008x86_IA32_SLINK_FLAGS = /NOLOGO /LTCG
+##   MSFT:DEBUG_VS2008x86_IA32_ASM_FLAGS = /nologo /c /WX /W3 /Cx /coff /Zd /Zi
+##   MSFT:DEBUG_VS2008x86_IA32_ASL_FLAGS = 
+##   MSFT:DEBUG_VS2008x86_IA32_CC_FLAGS = /nologo /c /WX /GS- /W4 /Gs32768 /D UNICODE /O1ib2 /GL /FIAutoGen.h /EHs-c- /GR- /GF /Gy /Zi /Gm /wd4200
+##   MSFT:DEBUG_VS2008x86_IA32_VFRPP_FLAGS = /nologo /E /TC /DVFRCOMPILE /FI$(MODULE_NAME)StrDefs.h
+##   MSFT:DEBUG_VS2008x86_IA32_ASLCC_FLAGS = /nologo /c /FIAutoGen.h /TC /Dmain=ReferenceAcpiTable
+##   MSFT:DEBUG_VS2008x86_IA32_APP_FLAGS = /nologo /E /TC
+##   MSFT:DEBUG_VS2008x86_IA32_DLINK_FLAGS = /NOLOGO /NODEFAULTLIB /IGNORE:4001 /OPT:REF /OPT:ICF=10 /MAP /ALIGN:32 /SECTION:.xdata,D /SECTION:.pdata,D /MACHINE:X86 /LTCG /DLL /ENTRY:$(IMAGE_ENTRY_POINT) /SUBSYSTEM:EFI_BOOT_SERVICE_DRIVER /SAFESEH:NO /BASE:0 /DRIVER /DEBUG
+##   MSFT:DEBUG_VS2008x86_IA32_ASLPP_FLAGS = /nologo /E /C /FIAutoGen.h
+##   MSFT:DEBUG_VS2008x86_IA32_OBJCOPY_FLAGS = objcopy not needed for
+##   MSFT:DEBUG_VS2008x86_IA32_MAKE_FLAGS = /nologo
+##   MSFT:DEBUG_VS2008x86_IA32_ASMLINK_FLAGS = /nologo /tiny

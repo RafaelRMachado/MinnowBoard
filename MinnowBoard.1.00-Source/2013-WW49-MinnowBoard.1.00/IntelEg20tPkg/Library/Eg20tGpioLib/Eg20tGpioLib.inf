@@ -1,0 +1,44 @@
+## @file
+#  E6xx GPIO support library
+#
+#  Provides library for E6xx GPIO support
+#
+#  Copyright (c) 2012, Intel Corporation
+#  All rights reserved. This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution.  The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = Eg20tGpioLib
+  FILE_GUID                      = 9556201E-280C-40bc-9E72-41CB37B8B0E9
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = Eg20tGpioLib
+
+#
+# The following information is for reference only and not required by the build tools.
+#
+#  VALID_ARCHITECTURES           = IA32 X64 IPF EBC
+#
+
+[Sources]
+  Eg20tGpio.c
+
+[Packages]
+  IntelEg20tPkg/IntelEg20tPkg.dec
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+
+[LibraryClasses]
+  IoLib
+  PcdLib
+  PciLib
+  UefiLib

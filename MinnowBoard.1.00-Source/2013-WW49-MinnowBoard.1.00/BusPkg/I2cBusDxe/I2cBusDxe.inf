@@ -1,0 +1,68 @@
+## @file
+#
+#    Component description file for the I2C bus driver.
+#
+#  Copyright (c) 2012, Intel Corporation
+#  All rights reserved. This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution.  The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = I2cBusDxe
+  FILE_GUID                      = C55D8045-A2AB-465e-BAE9-62255965CB4B
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+
+  ENTRY_POINT                    = DlEntryPoint
+
+#
+# The following information is for reference only and not required by the build tools.
+#
+#  VALID_ARCHITECTURES           = IA32 X64
+#
+
+[Sources.common]
+  DevicePath.c
+  I2cBusDriver.c
+  I2cBus.c
+  I2cBus.h
+  Tables.c
+
+[LibraryClasses]
+  AsciiDump
+  BaseMemoryLib
+  DebugLib
+  DevicePathLib
+  DriverLib
+  MemoryAllocationLib
+  TimerLib
+  PcdLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
+
+[Packages]
+  BusPkg/BusPkg.dec
+  MdePkg/MdePkg.dec
+
+[Pcd]
+  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel
+
+[Protocols]
+  gEfiDriverBindingProtocolGuid
+  gEfiI2cEnumerateProtocolGuid
+  gEfiI2cHostProtocolGuid
+  gEfiI2cIoProtocolGuid
+
+[Depex]
+  gEfiI2cHostProtocolGuid
+  END
+

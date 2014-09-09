@@ -1,0 +1,104 @@
+## @file
+#  Build file for DiagOutputResetPei
+#
+#  Copyright (c) 2013, Intel Corporation. All rights reserved.<BR>
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution.  The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+
+[Defines]
+  INF_VERSION                = 0x00010005
+  BASE_NAME                  = DiagOutputResetPeim
+  FILE_GUID                  = D32FCE44-818A-4c35-B2E8-800E47D0453D
+  MODULE_TYPE                = PEIM
+  VERSION_STRING             = 1.0
+
+[Packages.IA32]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+
+[Binaries.IA32]
+  PE32|DiagOutputResetPeim.efi
+  PEI_DEPEX|DiagOutputResetPeim.depex
+
+[PatchPcd.IA32]
+  ## CONSUMES
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialFifoControl|0x27|0x200
+
+  ## SOMETIMES_CONSUMES
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialDetectCable|0x00|0x41F
+
+
+[Protocols.IA32]
+
+[Ppis.IA32]
+  ## SOMETIMES_PRODUCES
+  gEfiPeiFirmwareVolumeInfoPpiGuid
+
+  ## SOMETIMES_CONSUMES
+  gPcdPpiGuid
+
+  ## CONSUMES
+  gEfiPeiPcdPpiGuid
+
+
+[Guids.IA32]
+  ## SOMETIMES_PRODUCES ## UNDEFINED # FV File System Guid.
+  gEfiFirmwareFileSystem2Guid
+
+
+[PcdEx.IA32]
+
+[LibraryClasses.IA32]
+## @LIB_INSTANCES
+#  MdePkg/Library/PeiMemoryAllocationLib/PeiMemoryAllocationLib.inf
+#  MdePkg/Library/PeiServicesTablePointerLibIdt/PeiServicesTablePointerLibIdt.inf
+#  MdePkg/Library/PeiServicesLib/PeiServicesLib.inf
+#  MdePkg/Library/BaseMemoryLibRepStr/BaseMemoryLibRepStr.inf
+#  MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
+#  MdePkg/Library/BaseLib/BaseLib.inf
+#  MdePkg/Library/PeiPcdLib/PeiPcdLib.inf
+#  MdePkg/Library/BaseIoLibIntrinsic/BaseIoLibIntrinsic.inf
+#  MdePkg/Library/BasePciExpressLib/BasePciExpressLib.inf
+#  MdePkg/Library/BasePciLibPciExpress/BasePciLibPciExpress.inf
+#  CommonExModulePkg/Library/PlatformHookLib/PlatformHookLib.inf
+#  MdePkg/Library/PeimEntryPoint/PeimEntryPoint.inf
+#  CommonExModulePkg/Library/BaseSerialPortLib16550/BaseSerialPortLib16550.inf
+
+[Depex.IA32]
+#  (TRUE) AND (gEfiPeiPcdPpiGuid) AND (gPeiSerialPortPpiGuid)
+
+
+
+#
+# The following information is for reference only and not required by the build tools.
+#
+#  VALID_ARCHITECTURES           = IA32 X64
+#
+
+[BuildOptions.IA32]
+## @AsBuilt
+##   MSFT:RELEASE_VS2008x86_IA32_SYMRENAME_FLAGS = Symbol renaming not needed for
+##   MSFT:RELEASE_VS2008x86_IA32_ASLDLINK_FLAGS = /NODEFAULTLIB /ENTRY:ReferenceAcpiTable /SUBSYSTEM:CONSOLE
+##   MSFT:RELEASE_VS2008x86_IA32_VFR_FLAGS = -l -n
+##   MSFT:RELEASE_VS2008x86_IA32_PP_FLAGS = /nologo /E /TC /FIAutoGen.h
+##   MSFT:RELEASE_VS2008x86_IA32_GENFW_FLAGS = 
+##   MSFT:RELEASE_VS2008x86_IA32_OPTROM_FLAGS = -e
+##   MSFT:RELEASE_VS2008x86_IA32_SLINK_FLAGS = /NOLOGO /LTCG
+##   MSFT:RELEASE_VS2008x86_IA32_ASM_FLAGS = /nologo /c /WX /W3 /Cx /coff /Zd
+##   MSFT:RELEASE_VS2008x86_IA32_ASL_FLAGS = 
+##   MSFT:RELEASE_VS2008x86_IA32_CC_FLAGS = /nologo /c /WX /GS- /W4 /Gs32768 /D UNICODE /O1ib2 /GL /FIAutoGen.h /EHs-c- /GR- /GF /wd4200 /D MDEPKG_NDEBUG
+##   MSFT:RELEASE_VS2008x86_IA32_VFRPP_FLAGS = /nologo /E /TC /DVFRCOMPILE /FI$(MODULE_NAME)StrDefs.h
+##   MSFT:RELEASE_VS2008x86_IA32_ASLCC_FLAGS = /nologo /c /FIAutoGen.h /TC /Dmain=ReferenceAcpiTable
+##   MSFT:RELEASE_VS2008x86_IA32_MAKE_FLAGS = /nologo
+##   MSFT:RELEASE_VS2008x86_IA32_DLINK_FLAGS = /NOLOGO /NODEFAULTLIB /IGNORE:4001 /IGNORE:4254 /OPT:REF /OPT:ICF=10 /MAP /ALIGN:32 /SECTION:.xdata,D /SECTION:.pdata,D /MACHINE:X86 /LTCG /DLL /ENTRY:$(IMAGE_ENTRY_POINT) /SUBSYSTEM:EFI_BOOT_SERVICE_DRIVER /SAFESEH:NO /BASE:0 /DRIVER /MERGE:.data=.text /MERGE:.rdata=.text
+##   MSFT:RELEASE_VS2008x86_IA32_ASLPP_FLAGS = /nologo /E /C /FIAutoGen.h
+##   MSFT:RELEASE_VS2008x86_IA32_OBJCOPY_FLAGS = objcopy not needed for
+##   MSFT:RELEASE_VS2008x86_IA32_APP_FLAGS = /nologo /E /TC
+##   MSFT:RELEASE_VS2008x86_IA32_ASMLINK_FLAGS = /nologo /tiny

@@ -1,0 +1,50 @@
+## @file
+#  Ethernet PHY Test Application
+#
+#  Copyright (c) 2013, Intel Corporation. All rights reserved.<BR>
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution.  The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = Eg20tMacPhy
+  FILE_GUID                      = C31E3CD6-8577-495f-8F70-018F5B4112B5
+  MODULE_TYPE                    = UEFI_APPLICATION
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = ShellCEntryLib
+
+[Sources.common]
+  Eg20tMacPhy.c
+
+[Packages]
+  IntelEg20tPkg/IntelEg20tPkg.dec
+  MdePkg/MdePkg.dec
+  ShellPkg/ShellPkg.dec
+
+[LibraryClasses]
+  BaseMemoryLib
+  Eg20tGpioLib
+  EthernetMac
+  EthernetPhy
+  IoLib
+  PhyConfigLib
+  PhyResetLib
+  ShellCEntryLib
+  UefiLib
+  UefiBootServicesTableLib
+
+[Pcd]
+  gIntelEg20tPkgTokenSpaceGuid.PcdEthernetPhyResetGpio
+  gIntelEg20tPkgTokenSpaceGuid.PcdEthernetPhyResetGpioController
+  gIntelEg20tPkgTokenSpaceGuid.PcdEthernetPhyResetDurationMsec
+  gIntelEg20tPkgTokenSpaceGuid.PcdEthernetPhyResetRecoveryMsec
+
+[Protocols]
+  gEfiPciIoProtocolGuid

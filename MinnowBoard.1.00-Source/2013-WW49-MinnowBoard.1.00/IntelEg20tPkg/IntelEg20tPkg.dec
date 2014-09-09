@@ -1,0 +1,75 @@
+## @file  BusPkg.dec
+#
+# Intel(R) PCH EG20T Platform Package
+#
+# Copyright (c) 2012-2013, Intel Corporation. All rights reserved.<BR>
+#
+# This program and the accompanying materials are licensed and made available under
+# the terms and conditions of the BSD License which accompanies this distribution.
+# The full text of the license may be found at
+# http://opensource.org/licenses/bsd-license.php
+#
+# THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+# WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+
+
+################################################################################
+#
+# Defines Section - statements that will be processed to create a Makefile.
+#
+################################################################################
+
+[Defines]
+  DEC_SPECIFICATION              = 0x00010005
+  PACKAGE_NAME                   = IntelEg20tPkg
+  PACKAGE_GUID                   = 7BEE6A43-C048-45bc-8CDB-B644AB55FD3D
+  PACKAGE_VERSION                = 0.2
+
+[Includes]
+  Include
+
+[Guids]
+  ## Defines the token space for the platform module PCDs.
+  #
+  gIntelEg20tPkgTokenSpaceGuid   = { 0x5ae1051b, 0xc797, 0x4dcf, { 0x90, 0xd5, 0x0f, 0x99, 0x74, 0x36, 0x32, 0xc5 } }
+
+#----------------------------------------------------------------------
+#  EG20T Support
+#  ID values: 0x21ddddxx, dddd: Device ID, xx: Device specific index
+#----------------------------------------------------------------------
+
+  #
+  ## Ethernet: Display the Ethernet controller registers
+  #
+[PcdsFeatureFlag]
+  gIntelEg20tPkgTokenSpaceGuid.PcdFeatureEthernetDisplayRegisters|FALSE|BOOLEAN|0x21880200
+
+[PcdsFixedAtBuild]
+  gIntelEg20tPkgTokenSpaceGuid.PcdEthernetPhyResetGpio|6|UINT32|21880201
+  gIntelEg20tPkgTokenSpaceGuid.PcdEthernetPhyResetGpioController|0|UINT32|21880202
+  gIntelEg20tPkgTokenSpaceGuid.PcdEthernetPhyResetDurationMsec|10|UINT32|21880203
+  gIntelEg20tPkgTokenSpaceGuid.PcdEthernetPhyResetRecoveryMsec|30|UINT32|21880204
+
+  #
+  ## I2C: Display the I2C controller registers
+  #
+[PcdsFeatureFlag]
+  gIntelEg20tPkgTokenSpaceGuid.PcdFeatureI2cDisplayRegisters|FALSE|BOOLEAN|0x21881700
+
+  #
+  ## SPI: Display the SPI controller registers
+  #
+[PcdsFeatureFlag]
+  gIntelEg20tPkgTokenSpaceGuid.PcdFeatureSpiDisplayRegisters|FALSE|BOOLEAN|0x21881600
+
+[Protocols]
+  gEfiSpiMasterProtocolGuid      = {0xef25d155, 0x7f8c, 0x47e1, {0xa4, 0x55, 0xe4, 0x25, 0xce, 0xe1, 0xbf, 0x11}}
+
+  #
+  ## USB Device: Display the USB device controller registers
+  #
+[PcdsFeatureFlag]
+  gIntelEg20tPkgTokenSpaceGuid.PcdFeatureUsbDeviceDisplayRegisters|FALSE|BOOLEAN|0x21880800
+

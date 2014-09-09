@@ -1,0 +1,395 @@
+================================================================================
+MinnowBoard UEFI Firmware Release Version 1.00
+2013 Dec 5th
+================================================================================
+
+================================================================================
+DISCLAIMER
+================================================================================
+This release note as well as the software described in it is furnished under license
+and may only be used or copied in accordance with the terms of the license. The
+information in this manual is furnished for informational use only, is subject to
+change without notice, and should not be construed as a commitment by Intel Corporation.
+Intel Corporation assumes no responsibility or liability for any errors or inaccuracies
+that may appear in this document or any software that may be provided in association
+with this document.
+Except as permitted by such license, no part of this document may be reproduced,
+stored in a retrieval system, or transmitted in any form or by any means without
+the express written consent of Intel Corporation.
+
+================================================================================
+ADDITIONAL DISCLAIMER
+================================================================================
+This code is based upon the EDK II code base as found on the UEFI Open Source 
+Community Website (URL:www.tianocore.org).
+
+================================================================================
+INDEX
+================================================================================
+A. INTRODUCTION
+B. FILE LIST
+C. SUPPORTED FEATURES
+D. FIRMWARE CHANGES
+E. UNSUPPORTED FEATURES
+F. KNOWN ISSUES
+G. MISC
+H. TECHNICAL INFORMATION REGUARDING THIS FIRMWARE IMAGE
+
+================================================================================
+A. INTRODUCTION
+================================================================================
+
+This is version 1.00 release of the UEFI firmware for the MinnowBoard.
+
+================================================================================
+B. FILE LIST
+================================================================================
+
+   1. 2013-WW49-MinnowBoard.1.00-ReleaseNotes.txt
+      (this file)
+   2. 2013-WW49-MinnowBoard.1.00.zip
+      - Revision (release) 1.00 of the firmware source and binary modules for MinnowBoard
+   3. 2013-WW49-MinnowBoard.1.00-BuildInstructions.txt
+        - Detailed build instructions. Please refer to it to build the firmware image
+   4. MINNOW.fd
+        - UEFI firmware image
+   5.  MINNOW_Debug.fd
+        - UEFI firmware debug image
+   6. FirmwareUpdate.efi
+        - UEFI firmware update tool
+   7. Documentation-2013-WW49-MinnowBoard.1.00.zip
+      - Firmware documents folder 
+   8. MB-UDK-EULA.pdf
+      - MinnowBoard UEFI Development Kit End User Liscense Agreement
+
+       The following documents provide instructions on how to update the MinnowBoard
+       firmware with a DediProg SF100 or from the UEFI Shell environment, using the
+       UEFI firmware update tool.
+
+       a. "Flashing MinnowBoard with Dediprog SF100 in Linux.pdf"
+       b. "Flashing MinnowBoard with Dediprog SF100 in Windows.pdf"
+       c. "Using the MinnowBoard Flash Utility.pdf"
+
+       This following documents describe how to setup a two-way serial communication 
+       between a MinnowBoard and a host computer for software development and debugging.
+
+       d. "MinnowBoard Serial Console with Linux.pdf"
+       e. "MinnowBoard Serial Console with Windows.pdf"
+
+===============================================================================
+C. SUPPORTED FEATURES
+===============================================================================
+The following features are supported and have been validated.
+   - CPU, Memory, Basic I/O Initialization
+   - Boot from SATA, micro SD, USB, Ethernet (PXE)
+   - Boot to UEFI Shell 2.0, Windows* 8.1, or Angström Linux* Distribution
+     (Yocto Project v1.3 Compatible)
+   - Intel(R) UDK Debugger Tool
+   - GCC 4.4 Tool Chain
+
+LED use by UEFI:
+   - LED1 on, LED2 on: Memory initialized
+   - LED1 off, LED2 blinking: Boot device selection running
+
+The MinnowBoard debug port uses a baud rate of 115200.  The error rate with the 
+50 MHz clock to the EG20T the error rate is 0.47% and with the 48 MHz clock for 
+the FTDI chip the error rate is 0.16%.  The combined error rate of 0.63% is well 
+below the 2.25% error rate which would cause communication errors.
+
+The error calculation is:
+
+* ErrorRate = ((INT(Input Clock Frequency / ( 16 * DesiredBaudRate)) * 16 * DesiredBaudRate)
+              - DesiredBaudRate)/DesiredBaudRate
+
+* UARTs typically sample the input data stream with a 16X clock.  Detecting the
+  start bit may be off by as much as half the 16X clock cycle (.03125).  
+  Additionally bit detection is done by checking the input data level near the 
+  center of the data bit.  If the 9th clock of the 16X clock is used then the 
+  remaining time is (1 - 0.03125 - (9/16)) = 0.40625.  Both ends of the 
+  communications path may be in error is opposite directions, cutting the 
+  allowable error in half (0.40625/2) = 0.203125.  The data stream consists of 
+  a start bit, 8 data bits and a stop bit, 10 bits total.  To properly receive
+  the data, the last sample position must properly land in the stop bit, meaning
+  all the error can occur during the first 9 bits.  The allowable error per bit
+  < (0.203125/9) = ~0.0225 or 2.25%.
+
+===============================================================================
+D. FIRMWARE CHANGES
+===============================================================================
+
+The following changes were made for Version 1.00:
+
+	1.  Set version to 1.00
+	2.  Set release date to 2013/10/22
+	3.  Works around the bad memory configuration
+	4.  Works around the graphics startup
+	5.  Supports the UEFI symbolic debugger
+	6.  Enables PXE booting via IPv4 or IPv6
+	7.  Enables CPU virtualization
+	8.  Initializes the watch dog timer (WDT)
+	9.  Enables secure boot support
+ 	10. Supports booting Windows 8.1
+	11. Renamed the commands BsdBlinkOff and BsdBlinkOn to BlinkOff and BlinkOn
+	12. Relocated the sources to support the BSD and binary build
+
+Validated Externals:
+
+AppPkg                     -r 14876 https://svn.code.sf.net/p/edk2/code/trunk/edk2/AppPkg
+BaseTools                  -r 14385 https://svn.code.sf.net/p/edk2/code/branches/UDK2010.SR1/BaseTools
+Conf                       -r 14385 https://svn.code.sf.net/p/edk2/code/branches/UDK2010.SR1/Conf
+CryptoPkg                  -r 14385 https://svn.code.sf.net/p/edk2/code/branches/UDK2010.SR1/CryptoPkg
+FatPkg                     -r 73    https://svn.code.sf.net/p/edk2-fatdriver2/code/trunk/FatPkg
+IntelFrameworkModulePkg    -r 14385 https://svn.code.sf.net/p/edk2/code/branches/UDK2010.SR1/IntelFrameworkModulePkg
+IntelFrameworkPkg          -r 14385 https://svn.code.sf.net/p/edk2/code/branches/UDK2010.SR1/IntelFrameworkPkg
+MdeModulePkg               -r 14385 https://svn.code.sf.net/p/edk2/code/branches/UDK2010.SR1/MdeModulePkg
+MdePkg                     -r 14385 https://svn.code.sf.net/p/edk2/code/branches/UDK2010.SR1/MdePkg
+NetworkPkg                 -r 14385 https://svn.code.sf.net/p/edk2/code/branches/UDK2010.SR1/NetworkPkg
+OptionRomPkg               -r 14876 https://svn.code.sf.net/p/edk2/code/trunk/edk2/OptionRomPkg
+PcAtChipsetPkg             -r 14385 https://svn.code.sf.net/p/edk2/code/branches/UDK2010.SR1/PcAtChipsetPkg
+PerformancePkg             -r 14385 https://svn.code.sf.net/p/edk2/code/branches/UDK2010.SR1/PerformancePkg
+SecurityPkg                -r 14385 https://svn.code.sf.net/p/edk2/code/branches/UDK2010.SR1/SecurityPkg
+ShellBinPkg                -r 14385 https://svn.code.sf.net/p/edk2/code/branches/UDK2010.SR1/ShellBinPkg
+ShellPkg                   -r 14385 https://svn.code.sf.net/p/edk2/code/branches/UDK2010.SR1/ShellPkg
+SourceLevelDebugPkg        -r 14385 https://svn.code.sf.net/p/edk2/code/branches/UDK2010.SR1/SourceLevelDebugPkg
+StdLib                     -r 14876 https://svn.code.sf.net/p/edk2/code/trunk/edk2/StdLib
+StdLibPrivateInternalFiles -r 14876 https://svn.code.sf.net/p/edk2/code/trunk/edk2/StdLibPrivateInternalFiles
+UefiCpuPkg                 -r 14385 https://svn.code.sf.net/p/edk2/code/branches/UDK2010.SR1/UefiCpuPkg
+
+===============================================================================
+E. UNSUPPORTED FEATURES
+===============================================================================
+The following features are not supported and have not been validated.
+   - Other GCC Tool Chains	
+   - ACPI 5.0
+   - GPIO Configuration
+
+================================================================================
+F. KNOWN ISSUES
+================================================================================
+1.  USB keyboard stops responding
+    USB 1.1 keyboards plugged directly into the MinnowBoard may stop responding
+    after 15 minutes when the system is left at the Shell prompt.  The workaround 
+    for this is to plug the USB keyboard into a USB 2.0 hub.
+
+2.  Multiple EFI DVD-ROM boot options
+    Occasionally multiple EFI DVD-ROM boot options will be listed when a SATA
+    DVD-ROM is attached.
+
+3.  Exiting the Shell
+    Occasionally it will be necessary to type "exit" twice to exit the Shell and
+    return to the boot option menu.
+
+4.  Boot option shown after device removed
+    Occasionally the boot option will be shown after the device is removed.  A
+    boot attempt to this device will fail causing the boot option to be removed.
+
+5.  Use a USB 2.0 powered hub with the MinnowBoard.  Directly connecting power
+    hungry USB devices such as a CD/DVD or disk to the MinnowBoard may cause the
+    MinnowBoard to power off, crash or hang during processing.  Plugging all USB
+    devices into a USB 2.0 powered hub eliminates this issue.
+    
+6.  Ethernet performance low in receiving data
+
+7.  Failed to boot from PXE IPV4
+
+8.  Failed to boot from PXE IPV6
+
+9.  Can't Resume from S3 state in Yocto.
+
+10. Secure Boot Manual Logo Test Fail
+
+================================================================================
+G. MISC
+================================================================================
+1.  EDKII documentation can be obtained from http://sourceforge.net/projects/edk2/files/.
+    General Documentation: EDKII User Manual and EDK II Module Writer's Guide.
+    Specifications: EDKII Build, FDF, INF, DSC, DEC and VFR Specification.
+2.  Virus scanned by McAfee VirusScan Enterprise 8.8.0, Virus Definitions 7278, 
+    no virus detected.
+
+================================================================================
+H. TECHNICAL INFORMATION REGUARDING THIS FIRMWARE IMAGE
+================================================================================
+Notes On Booting the Fast Boot Firmware:
+The Intel Fast Boot firmware is designed to optimize the boot flow from power-on 
+(or reset) to Operating system load.  This optimization uses several techniques 
+to reduce time spent in the boot process.  
+
+These notes are included to provide understanding of the firmware behavior and 
+provide insight and direction into using and reconfiguring the Fast Boot firmware 
+boot path as part for the development cycle.  (Also note, an operating system 
+environment will establish its own methods for handling system hardware, 
+independently of the firmware, so these instructions are specific to the firmware 
+and Shell environments only).
+
+-------------------------------------------------------------------------------- 
+H.1  FAST BOOT FIRMWARE BASICS 
+-------------------------------------------------------------------------------- 
+One important technique used by the firmware to minimize boot time, is the 
+simplification of the "boot path".  In the Fast Boot firmware, the system will
+attempt to boot directly to the device and environment, which has been established 
+in previous boots.  This direct boot mechanism can prevent the firmware from 
+identifying other possible boot devices, as it focuses upon the known and 
+established boot path.  This may be confusing to the developer, who is used to a 
+more automatic "hot plug" environment.  
+
+Since the firmware only establishes the support for devices actually configured for 
+use in the boot process, the Fast Boot firmware can save time by not running 
+initialization software for devices that are not required to boot the platform.  
+Considering some hardware devices require time to initialize, these time savings 
+are variable (by system configuration), but can be significant (some devices may 
+take seconds to power-up and initialize).  The firmware understands that the 
+Operating system will initialize those devices when they are required in the 
+Operating system environment, so by skipping them in the firmware boot, time is 
+saved with no impact upon the final configuration of the system in the operating 
+system.  If the system boots to the shell, the shell can be commanded to initialize 
+all supported devices by the shell.
+
+The first boot after updating the flash image on the system with the Fast Boot 
+firmware, is significant to the operation of the Fast Boot firmware, as the 
+firmware will spend a time analyzing the system's configuration.  During this time, 
+the firmware will display a 'splash screen'.  However, in subsequent boots, the 
+'Splash screen' is not displayed, as the firmware will have an understanding of 
+the system, and will avoid spending the time to generate a 'Splash Screen'.
+
+When the Fast Boot firmware is not operating in Fast Boot mode (first boot), the 
+system will seek devices to boot from in the following order:
+
+    1. USB Device 
+    2. SD Card
+    3. Hard Disk 
+    4. UEFI Shell
+
+Devices are to be formatted with a FAT partition to be readable by the UEFI file 
+management system.
+
+-------------------------------------------------------------------------------- 
+H.2  THE UEFI SHELL
+-------------------------------------------------------------------------------- 
+The Fast Boot firmware includes an user command environment referred to as the 
+UEFI shell.  This environment provides a useful set of commands for the user in 
+the firmware boot image, as an integral part of the system.   The Shell is a very 
+robust environment, and more information about the shell can be found at the UEFI 
+Open Source Community website (URL: www.Tianocore.org).   
+
+When the system cannot boot according to the established boot path, it will boot 
+to shell as a final default.  Therefore, if the boot device is removed from the 
+system, or is damaged and inaccessible, the system will boot to Shell to provide 
+the developer with an environment to evaluate the condition and health of the 
+system.
+
+There are a few commands in the Shell that will be of particular value to a 
+developer (in regards to boot path modification), "Help", "Exit", "connect -r", 
+"map -r", 'bcfg boot add 0 bootia32.efi "Loader"' and "reset".
+
+Help -b
+The Help command will display a list of commands available in the Shell.  The 
+"-b" option will display the output with "page breaks" allowing the user to see 
+data one page at a time.  
+
+Exit 
+The exit command will exit the Shell environment and allow the User to access 
+the Device Manager environment.  It is the Device Manger that is used to select 
+a working boot path configuration to a specific device (see below)
+
+Reset 
+The Reset Command in the Shell will cause the system to reset and reboot (not to be 
+confused with Exit above)
+
+Connect -r 
+The connect command (with the -r option) forces the shell to connect all available 
+device support drivers to all devices in the system.  The process may take a few 
+seconds (depending upon the nature of the external devices attached to the system).  
+When complete, this command will allow the user access to all connected devices 
+which the firmware can support.  
+
+Map -r
+The map command (with the -r option) causes the shell to create file system 
+devices (FSx:) for all of the FAT32 file systems that are available.  This 
+enables the user to access any of FAT32 file systems.
+
+Bcfg boot add 0 bootia32.efi "Loader"
+The bcfg command adds a boot option to the menu for the Device Manager.  The 
+number after "add" specifies the location in the list, where zero (0) is the 
+head of the list.  Next is the path and file name for the UEFI application to 
+be run, "bootia32.efi" is the file name for the default loader.  This may also
+be specified as "FS0:\EFI\Boot\bootia32.efi".  The last parameter, "Loader", 
+is the description displayed in the Device Manager menu.
+
+Note: Most Shell commands have a integrated help.  To access this information, 
+enter the command with the "-? -b" options.  The "-?" will access the help, 
+while the "-b" will insert page breaks making reading easier.
+
+-------------------------------------------------------------------------------- 
+H.3  BOOT ORDER AND BOOT PATH
+-------------------------------------------------------------------------------- 
+The boot order of the Fast Boot firmware is fixed in the following Manner:
+    1. USB Device
+    2. SD Card
+    3. Hard Disk
+    4. Internal Shell
+
+This is the order of the search the firmware will use when searching for a valid 
+boot device.  At the very end if all other options are expended without success, 
+the firmware will enter the UEFI Shell.
+
+For bootable devices, the firmware expects the Boot loader to be found in following
+directory off the root:
+            /EFI/BOOT
+
+The Boot Loader must be an UEFI Shell application with the name of:
+            BOOTIA32.EFI
+
+Thus for a device to be bootable, the OS must be UEFI aware, and the boot loader 
+must be of the name ad path of:
+            /EFI/BOOT/BOOTIA32.EFI
+
+-------------------------------------------------------------------------------- 
+H.4  CHANGING BOOT DEVICE
+-------------------------------------------------------------------------------- 
+How to Set a boot Path (when the system boots to the shell):
+1.  Attach the bootable device to the system and power-on the system
+2.  In the Shell, enter the "connect -r" command.  This will ensure the system 
+    identifies all supported devices attached
+3.  In the shell, enter the "map -r" command.  This will ensure that all FAT32
+    file systems are available
+4.  Optional: Use the bcfg command to add the new boot device to the Device 
+    Manager menu.  See section H.2 for more details
+5.  In the Shell, enter the "exit" command. This will exit the shell and open the 
+    device manager environment.  The device manager will allow the developer to 
+    select a boot device from a menu.  The system will boot to the selected device 
+    as part of the process.
+6.  Once the system has booted to that device, it will continue to use that boot 
+    path until it is no longer a valid boot path (the device removed or unable to 
+    function).
+
+How to get to the shell when a device is configured to boot to a valid device 
+(changing boot paths).  
+1.  With power off remove the current boot device from the system (if the developer 
+    wishes to establish a boot to another physical device, the new device may be 
+    added at this time as well.
+2.  Use the previous procedure to select the new boot device
+
+Alternate Method:
+How to get to the shell when a device is configured to boot to a valid device 
+(changing boot paths).  
+1.  On the current boot device, The boot loader is stored in the file:
+                /EFI/BOOT/BOOTIA32.EFI
+
+2.  From the Operating system (Yocto Linux)
+    a.  Mount the FAT32 partition containing the boot loader
+    b.  Change the name of the boot loader:
+                From: BOOTIA32.EFI
+                To:   BOOTIA32HOLD.EFI
+    Note: In Linux, the MV command is used to rename files.
+
+3.  Restart the system (reset or Power cycle)
+
+4.  The system will boot to shell. 
+
+To change the name of the boot loader back in the Shell, use the MV command. 
+
+
+* Other names and brands may be claimed as the property of others.
+
+[END OF RELEASE NOTES]

@@ -1,0 +1,58 @@
+## @file
+#  Intel EG20T Ethernet Support
+#
+#  Copyright (c) 2013, Intel Corporation. All rights reserved.<BR>
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution.  The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = Eg20tEthernetDxe
+  FILE_GUID                      = 7652F843-16DD-48d0-A636-83A37E2DEA88
+  MODULE_TYPE                    = UEFI_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = InitializeEg20tEthernet
+  UNLOAD_IMAGE                   = Eg20tEthernetUnload
+
+#
+# The following information is for reference only and not required by the build tools.
+#
+#  VALID_ARCHITECTURES           = IA32 X64
+#
+
+[Sources]
+  ComponentName.c
+  Ethernet.c
+  Ethernet.h
+  EthernetDriver.c
+  PciAccess.c
+  Phy.c
+  SimpleNetwork.c
+
+[Packages]
+  IntelEg20tPkg/IntelEg20tPkg.dec
+  MdePkg/MdePkg.dec
+
+[LibraryClasses]
+  BaseMemoryLib
+  DebugLib
+  MemoryAllocationLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
+  DevicePathLib
+
+[Protocols]
+  gEfiDevicePathProtocolGuid     ## PRODUCES/CONSUMES
+  gEfiPciIoProtocolGuid          ## CONSUMES
+  gEfiSimpleNetworkProtocolGuid  ## PRODUCES
+
+[Guids]
+  gEfiEventExitBootServicesGuid  ## CONSUMES ## Event

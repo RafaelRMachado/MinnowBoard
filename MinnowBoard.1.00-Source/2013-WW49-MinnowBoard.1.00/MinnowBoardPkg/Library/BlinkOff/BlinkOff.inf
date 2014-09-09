@@ -1,0 +1,46 @@
+## @file
+#  Shell Library for BlinkOff
+#
+#  Copyright (c) 2013, Intel Corporation. All rights reserved.<BR>
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution.  The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = BlinkOff
+  FILE_GUID                      = 09CC2F18-CF67-4bba-B43A-BF22A5D9604C
+  MODULE_TYPE                    = UEFI_DRIVER
+  LIBRARY_CLASS                  = BlinkOff
+  CONSTRUCTOR                    = BlinkOffInitialize
+  DESTRUCTOR                     = BlinkOffDestructor
+
+[Sources.common]
+  BlinkOff.c
+  BlinkOff.uni
+
+[Packages]
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  MinnowBoardPkg/MinnowBoardPkg.dec
+  ShellPkg/ShellPkg.dec
+
+[LibraryClasses]
+  DebugLib
+  Eg20tGpioLib
+  HiiLib
+  LedLib
+  PcdLib
+  ShellCommandLib
+  ShellLib
+  UefiLib
+
+[Pcd]
+  gMinnowBoardPkgTokenSpaceGuid.PcdDiagBootPhasesLedBlinkRate           ## CONSUMES
+

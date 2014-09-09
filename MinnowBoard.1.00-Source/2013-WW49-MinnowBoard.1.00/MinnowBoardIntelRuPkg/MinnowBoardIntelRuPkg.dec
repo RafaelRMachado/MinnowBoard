@@ -1,0 +1,3612 @@
+#
+# This file contains 'Framework Code' and is licensed as such
+# under the terms of your license agreement with Intel or your
+# vendor.  This file may not be modified, except as allowed by
+# additional terms of your license agreement.
+#
+## @file
+# Intel(R) Atom(TM) E6xx series processor and Intel(R) PCH EG20T Platform Package
+#
+# This package provides modules specific to a platform based on the Intel(R)
+# Atom(TM) E6xx series processor and the Intel(R) PCH EG20T.
+#
+# Copyright (c) 2012-2013, Intel Corporation. All rights reserved.<BR>
+#
+#    This software and associated documentation (if any) is furnished
+#    under a license and may only be used or copied in accordance
+#    with the terms of the license. Except as permitted by such
+#    license, no part of this software or documentation may be
+#    reproduced, stored in a retrieval system, or transmitted in any
+#    form or by any means without the express written consent of
+#    Intel Corporation.
+#
+##
+
+
+################################################################################
+#
+# Defines Section - statements that will be processed to create a Makefile.
+#
+################################################################################
+
+[Defines]
+  DEC_SPECIFICATION              = 0x00010005
+  PACKAGE_NAME                   = MinnowBoardIntelRuPkg
+  PACKAGE_GUID                   = 7123D8E0-A0E3-411a-BAEB-C56FB73D2C18
+  PACKAGE_VERSION                = 0.2
+
+[Includes]
+  Include
+
+[Guids]
+  ## Defines the token space for the platform module PCDs.
+  #
+  gCrownBayTokenSpaceGuid        = { 0xcec00952, 0x43f3, 0x422b, { 0x83, 0x92, 0x3e, 0x4b, 0xe5, 0x76, 0x9d, 0xd3 } }
+
+  ## Unknown
+  #
+  gSysConfigGuid                 = {0x038BCEF0, 0x21E2, 0x49d1, {0xA4, 0x7C, 0xB7, 0x25, 0x72, 0x96, 0xB9, 0x80}}
+
+  ## Unknown
+  #
+  gEfiUuidVariableGuid           = {0xD357C710, 0x0ADA, 0x4717, {0x8D, 0xBA, 0xC6, 0xAD, 0xC7, 0xCD, 0x2B, 0x2A}}
+
+  ## Unknown
+  #
+  gEfiFirmwareIdGuid             = {0xEFC071AE, 0x41B8, 0x4018, {0xAF, 0xA7, 0x31, 0x4B, 0x18, 0x5E, 0x57, 0x8B}}
+
+  ## Identifies a HOB describing the platforms memory layout.
+  #
+  ## Include/Guid/PlatformMemoryLayout.h
+  gEfiPlatformMemoryLayoutGuid   = {0x41C7B74E, 0xB839, 0x40D9, {0xA0, 0x56, 0xE3, 0xCA, 0xFC, 0x98, 0x0A, 0xAC}}
+
+  ## Identifies a HOB and Variable used to store the memory configuration data.
+  #
+  ## Include/Guid/MemoryConfigData.h
+  gEfiMemoryConfigDataGuid       = {0x80dbd530, 0xb74c, 0x4f11, {0x8c, 0x03, 0x41, 0x86, 0x65, 0x53, 0x28, 0x31}}
+
+  ## Identifies the FvFile used to store the ACPI Power Management Tables.
+  #
+  gPowerManagementAcpiTableStorageGuid = {0xc0cc43bd, 0xc920, 0x4064, {0x93, 0x5b, 0x93, 0xb4, 0x47, 0x37, 0x94, 0x70}}
+
+  ## Identifies a type of HII drivers configuration page whih will show up on frontpage
+  #
+  gEfiIfrFrontPageGuid           = { 0xe58809f8, 0xfbc1, 0x48e2, { 0x88, 0x3a, 0xa3, 0xf, 0xdc, 0x4b, 0x44, 0x1e } }
+
+[Protocols]
+  ## Provides a location for C code to store dynamic data used by ACPI tables.
+  #
+  ## Include/Protocol/GlobalNvsArea.h
+  gEfiGlobalNvsAreaProtocolGuid  = {0x074E1E48, 0x8132, 0x47A1, {0x8C, 0x2C, 0x3F, 0x14, 0xAD, 0x9A, 0x66, 0xDC}}
+
+[Ppis]
+  ## Provides an indication of the system being on the S3 resume boot path.
+  #
+  ## Include/Ppi/SStateBootMode.h
+  gPeiSStateBootModePpiGuid      = {0x9c44db3d, 0xf434, 0x4b91, {0x8e, 0xb3, 0x30, 0x38, 0xb1, 0x84, 0xab, 0xfc}}
+
+#
+# [Error.gCrownBayTokenSpaceGuid]
+#   0x80000001 | Invalid value provided.
+#   0x80000002 | Reserved bits must be set to zero.
+#   0x80000003 | Invalid boot order value provided.
+#   0x80000004 | Invalid interrupt source override value provided.
+#   0x80000005 | Invalid interrupt polarity value provided.
+#   0x80000006 | Invalid interrupt trigger mode value provided.
+#   0x80000007 | Invalid global system interrupt value provided.
+#   0x80000008 | Invalid I/O APIC ID value provided.
+#   0x80000009 | Invalid APIC LINT# value provided.
+#   0x8000000A | Invalid address provided.
+#   0x8000000B | Invalid number of PCI devices specified.
+#   0x8000000C | Invalid function number provided.
+#   0x8000000D | Invalid device number provided.
+#   0x8000000E | Invalid 8259 interrupt provided.
+#   0x8000000F | Invalid APIC IRQ provided.
+#   0x80000010 | Invalid system state provided.
+#   0x80000011 | Invalid base address provided.
+#   0x80000012 | Invalid size provided.
+#
+
+[PcdsFeatureFlag]
+
+  ## Unknown
+  #
+  gCrownBayTokenSpaceGuid.PcdMultipleFlashSupportLibDoSystemInitialization|TRUE|BOOLEAN|0x2000000D
+
+  ## When enabled, allows the system to load a legacy Option ROMs.
+  #
+  gCrownBayTokenSpaceGuid.PcdEnableNetworkBoot|FALSE|BOOLEAN|0x2000001A
+
+  ## Unknown
+  #
+  gCrownBayTokenSpaceGuid.PcdEhciRecoveryEnabled|FALSE|BOOLEAN|0x10001000
+
+
+[PcdsFixedAtBuild]
+  ## Determines if Serial Port 1 will be enabled during POST.
+  #
+  gCrownBayTokenSpaceGuid.PcdSioEnableSerialPort1|TRUE|BOOLEAN|0x20000000
+
+  ## Determines the state of the High Precision Event Timer structure in ACPI
+  #  tables.
+  #
+  gCrownBayTokenSpaceGuid.PcdHpetEnable|TRUE|BOOLEAN|0x20000018
+
+  ## Selects the performance state that BIOS will set prior to OS hand-off.<BR><BR>
+  #  0: Min Performance<BR>
+  #  1: Max Battery<BR>
+  #  2: Auto<BR>
+  #
+  # @ValidRange 0x80000001 | 0 - 2
+  #
+  gCrownBayTokenSpaceGuid.PcdBootPState|1|UINT8|0x2000001B
+
+  ## Unknown
+  #
+  gCrownBayTokenSpaceGuid.PcdPeiP2PMemoryBaseAddress|0xA0000000|UINT32|0x20002000
+
+  ## Unknown
+  #
+  gCrownBayTokenSpaceGuid.PcdPeiUsbControllerMemoryBaseAddress|0xA0010000|UINT32|0x20002001
+
+  ## Provides the BIOS Starting Address Segment to be used when generating the
+  #  SMBIOS Type 0 structure.  The size of the runtime BIOS image can be
+  #  computed by subtracting the Starting Address Segment from 10000h and
+  #  multiplying the result by 16.
+  #
+  gCrownBayTokenSpaceGuid.PcdSMBIOSBiosStartAddress|0xE000|UINT16|0xA0000036
+
+  ## Provides the BIOS Characteristics to be used when generating the SMBIOS
+  #  Type 0 structure.  The definition of each bit in this field can be found
+  #  in the SMBIOS specification.
+  #
+  gCrownBayTokenSpaceGuid.PcdSMBIOSBiosChar|0x03037C099880|UINT64|0xA0000037
+
+  ## Provides the BIOS Extension Characteristics Byte 1 to be used when
+  #  generating the SMBIOS Type 0 structure.  The definition of each bit in this
+  #  field can be found in the SMBIOS specification.
+  #
+  gCrownBayTokenSpaceGuid.PcdSMBIOSBiosCharEx1|0x03|UINT8|0xA0000038
+
+  ## Provides the BIOS Extension Characteristics Byte 2 to be used when
+  #  generating the SMBIOS Type 0 structure.  The definition of each bit in this
+  #  field can be found in the SMBIOS specification.
+  #
+  gCrownBayTokenSpaceGuid.PcdSMBIOSBiosCharEx2|0x03|UINT8|0xA0000039
+
+  # System Information (Type 1), Section 3.3.2
+  # System Manufacturer String
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemManufacturer|"Circuitco"|VOID*|0xA000003A
+  # System Product String
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemProductName|"MinnowBoard"|VOID*|0xA000003B
+  # System Version
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemVersion|"X3"|VOID*|0xA000003C
+  # System SerialNumber String
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSerialNumber|"Unknown"|VOID*|0xA000003D
+  # Manufacturer String
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSKUNumber|"System SKUNumber"|VOID*|0xA000003F
+  # System Family String
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemFamily|"Tunnel Creek"|VOID*|0xA0000040
+
+  # Base Board (or Module) Information (Type 2), Section 3.3.3
+  # Board Manufacturer String
+  gCrownBayTokenSpaceGuid.PcdSMBIOSBoardManufacturer|"Circuitco"|VOID*|0xA0000041
+  # Board Product Name| String
+  gCrownBayTokenSpaceGuid.PcdSMBIOSBoardProductName|"MinnowBoard"|VOID*|0xA0000042
+  # Board Version String
+  gCrownBayTokenSpaceGuid.PcdSMBIOSBoardVersion|"A1"|VOID*|0xA0000043
+  # Board Serial Number
+  gCrownBayTokenSpaceGuid.PcdSMBIOSBoardSerialNumber|"Unknown"|VOID*|0xA0000044
+
+  # System Enclosure or Chassis(Type 3) Section 3.3.4
+  # Chassis Manufacturer String
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisManufacturer|"Chassis Manufacturer"|VOID*|0xA0000045
+  # ChassisVersion
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisVersion|"Chassis Version"|VOID*|0xA0000046
+  # Chassis SerialNumber String
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisSerialNumber|"Chassis Serial Number"|VOID*|0xA0000047
+  # Chassis Asset Tag
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisAssetTag|"Chassis Asset Tag"|VOID*|0xA0000300
+  # Chassis Type
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisType|0x00000003|UINT8|0xA0000048
+  # Identifies the state of the enclosure when it was last booted. See 3.3.4.2 for definitions.
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisBootupState|0x03|UINT8|0xA0000049
+  # Identifies the state of the enclosures power supply (or supplies) when last booted. See 3.3.4.2 for definitions.
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisPowerSupplyState|0x03|UINT8|0xA000004A
+  # Identifies the enclosures physical security status when last booted. See 3.3.4.3 for definitions.
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisSecurityState|0x01|UINT8|0xA000004B
+  # Contains OEM- or BIOS vendor-specific information.
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisOemDefined|0x0|UINT32|0xA000004C
+  # The height of the enclosure, in 'U's. A U is a standard unit of measure for the height of a rack or rack-mountable component
+  # and is equal to 1.75 inches or 4.445 cm. A value of 00h indicates that the enclosure height is unspecified.
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisHeight|0x0|UINT8|0xA000004D
+  # Identifies the number of power cords associated with the enclosure or chassis. A value of 00h indicates that the number is unspecified.
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisNumberPowerCords|0x0|UINT8|0xA000004E
+  # Identifies the number of Contained Element records that follow, in the range 0 to 255.
+  # Each Contained Element group comprises m bytes, as specified by the Contained Element Record Length field that follows.
+  # If no Contained Elements are included, this field is set to 0.
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisElementCount|0x0|UINT8|0xA000004F
+  # Identifies the byte length of each Contained Element record that follow, in the range 0 to 255.
+  # If no Contained Elements are included, this field is set to 0. For v2.3.2 and later of this specification,
+  # this field is set to at least 03h when Contained Elements are specified.
+  gCrownBayTokenSpaceGuid.PcdSMBIOSChassisElementRecordLength|0x0|UINT8|0xA0000050
+
+  # Defines the number of connectors existent on the board
+  # The valid range is between 0 and 16
+  gCrownBayTokenSpaceGuid.PcdSMBIOSConnectorNumber|16|UINT8|0xA0000060
+
+  # Defines the designator of port1 internal connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort1InternalConnectorDesignator|"X14 "|VOID*|0xA0000061
+  # Defines the designator of port1 external connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort1ExternalConnectorDesignator|"Keyboard"|VOID*|0xA0000062
+  # Defines the type of port1 internal connector
+  # The valid range is between 0 to 0xFF, and 0 here means EfiPortConnectorTypeNone
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort1InternalConnectorType|0x0F|UINT8|0xA0000063
+  # Defines the type of port1 external connector
+  # The valid range is between 0 to 0xFF, and 0x0F here means EfiPortConnectorTypePS2
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort1ExternalConnectorType|0x0F|UINT8|0xA0000064
+  # Defines the type of port1
+  # The valid range is between 0 to 0xFF, and 0x0D here means EfiPortTypeKeyboard
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort1Type|0x0D|UINT8|0xA0000065
+
+  # Defines the designator of port2 internal connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort2InternalConnectorDesignator|"X15 "|VOID*|0xA0000066
+  # Defines the designator of port2 external connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort2ExternalConnectorDesignator|"Mouse"|VOID*|0xA0000067
+  # Defines the type of port2 internal connector
+  # The valid range is between 0 to 0xFF, and 0 here means EfiPortConnectorTypeNone
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort2InternalConnectorType|0x0F|UINT8|0xA0000068
+  # Defines the type of port2 external connector
+  # The valid range is between 0 to 0xFF, and 0x0F here means EfiPortConnectorTypePS2
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort2ExternalConnectorType|0x0F|UINT8|0xA0000069
+  # Defines the type of port2
+  # The valid range is between 0 to 0xFF, and 0x0E here means EfiPortTypeMouse
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort2Type|0x0E|UINT8|0xA000006A
+
+  # Defines the designator of port3 internal connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort3InternalConnectorDesignator|"X16 "|VOID*|0xA000006B
+  # Defines the designator of port3 external connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort3ExternalConnectorDesignator|"COM 1"|VOID*|0xA000006C
+  # Defines the type of port3 internal connector
+  # The valid range is between 0 to 0xFF, and 0xFF here means EfiPortConnectorTypeOther
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort3InternalConnectorType|0xFF|UINT8|0xA000006D
+  # Defines the type of port3 external connector
+  # The valid range is between 0 to 0xFF, and 0 here means EfiPortConnectorTypeNone
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort3ExternalConnectorType|0x0|UINT8|0xA000006E
+  # Defines the type of port3
+  # The valid range is between 0 to 0xFF, and 0x09 here means EfiPortTypeSerial16550ACompatible
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort3Type|0x09|UINT8|0xA000006F
+
+  # Defines the designator of port4 internal connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort4InternalConnectorDesignator|"X17 "|VOID*|0xA0000070
+  # Defines the designator of port4 external connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort4ExternalConnectorDesignator|"COM 2"|VOID*|0xA0000071
+  # Defines the type of port4 internal connector
+  # The valid range is between 0 to 0xFF, and 0xFF here means EfiPortConnectorTypeOther
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort4InternalConnectorType|0xFF|UINT8|0xA0000072
+  # Defines the type of port4 external connector
+  # The valid range is between 0 to 0xFF, and 0 here means EfiPortConnectorTypeNone
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort4ExternalConnectorType|0x0|UINT8|0xA0000073
+  # Defines the type of port4
+  # The valid range is between 0 to 0xFF, and 0x09 here means EfiPortTypeSerial16550ACompatible
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort4Type|0x09|UINT8|0xA0000074
+
+  # Defines the designator of port5 internal connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort5InternalConnectorDesignator|"X18 "|VOID*|0xA0000075
+  # Defines the designator of port5 external connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort5ExternalConnectorDesignator|"COM 3"|VOID*|0xA0000076
+  # Defines the type of port5 internal connector
+  # The valid range is between 0 to 0xFF, and 0xFF here means EfiPortConnectorTypeOther
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort5InternalConnectorType|0xFF|UINT8|0xA0000077
+  # Defines the type of port5 external connector
+  # The valid range is between 0 to 0xFF, and 0 here means EfiPortConnectorTypeNone
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort5ExternalConnectorType|0x0|UINT8|0xA0000078
+  # Defines the type of port5
+  # The valid range is between 0 to 0xFF, and 0x09 here means EfiPortTypeSerial16550ACompatible
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort5Type|0x09|UINT8|0xA0000079
+
+  # Defines the designator of port6 internal connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort6InternalConnectorDesignator|"X19 "|VOID*|0xA000007A
+  # Defines the designator of port6 external connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort6ExternalConnectorDesignator|"COM 4"|VOID*|0xA000007B
+  # Defines the type of port6 internal connector
+  # The valid range is between 0 to 0xFF, and 0xFF here means EfiPortConnectorTypeOther
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort6InternalConnectorType|0xFF|UINT8|0xA000007C
+  # Defines the type of port6 external connector
+  # The valid range is between 0 to 0xFF, and 0 here means EfiPortConnectorTypeNone
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort6ExternalConnectorType|0x0|UINT8|0xA000007D
+  # Defines the type of port6
+  # The valid range is between 0 to 0xFF, and 0x09 here means EfiPortTypeSerial16550ACompatible
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort6Type|0x09|UINT8|0xA000007E
+
+  # Defines the designator of port7 internal connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort7InternalConnectorDesignator|"J4A2"|VOID*|0xA000007F
+  # Defines the designator of port7 external connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort7ExternalConnectorDesignator|"LPT 1"|VOID*|0xA0000080
+  # Defines the type of port7 internal connector
+  # The valid range is between 0 to 0xFF, and 0 here means EfiPortConnectorTypeNone
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort7InternalConnectorType|0x0|UINT8|0xA0000081
+  # Defines the type of port7 external connector
+  # The valid range is between 0 to 0xFF, and 0x12 here means EfiPortConnectorTypeDB25Male
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort7ExternalConnectorType|0x04|UINT8|0xA0000082
+  # Defines the type of port7
+  # The valid range is between 0 to 0xFF, and 0x10 here means EfiPortTypeEcpEpp
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort7Type|0x05|UINT8|0xA0000083
+
+  # Defines the designator of port8 internal connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort8InternalConnectorDesignator|"X20 "|VOID*|0xA0000084
+  # Defines the designator of port8 external connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort8ExternalConnectorDesignator|"USB1"|VOID*|0xA0000085
+  # Defines the type of port8 internal connector
+  # The valid range is between 0 to 0xFF, and 0 here means EfiPortConnectorTypeNone
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort8InternalConnectorType|0x0|UINT8|0xA0000086
+  # Defines the type of port8 external connector
+  # The valid range is between 0 to 0xFF, and 0x12 here means EfiPortConnectorTypeUsb
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort8ExternalConnectorType|0x12|UINT8|0xA0000087
+  # Defines the type of port8
+  # The valid range is between 0 to 0xFF, and 0x10 here means EfiPortTypeUsb
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort8Type|0x10|UINT8|0xA0000088
+
+  # Defines the designator of port9 internal connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort9InternalConnectorDesignator|"X21 "|VOID*|0xA0000089
+  # Defines the designator of port9 external connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort9ExternalConnectorDesignator|"USB2"|VOID*|0xA000008A
+  # Defines the type of port9 internal connector
+  # The valid range is between 0 to 0xFF, and 0 here means EfiPortConnectorTypeNone
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort9InternalConnectorType|0x0|UINT8|0xA000008B
+  # Defines the type of port9 external connector
+  # The valid range is between 0 to 0xFF, and 0x12 here means EfiPortConnectorTypeUsb
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort9ExternalConnectorType|0x12|UINT8|0xA000008C
+  # Defines the type of port9
+  # The valid range is between 0 to 0xFF, and 0x10 here means EfiPortTypeUsb
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort9Type|0x10|UINT8|0xA000008D
+
+  # Defines the designator of port10 internal connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort10InternalConnectorDesignator|"X22 "|VOID*|0xA000008E
+  # Defines the designator of port10 external connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort10ExternalConnectorDesignator|"USB3"|VOID*|0xA000008F
+  # Defines the type of port10 internal connector
+  # The valid range is between 0 to 0xFF, and 0 here means EfiPortConnectorTypeNone
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort10InternalConnectorType|0x0|UINT8|0xA0000090
+  # Defines the type of port10 external connector
+  # The valid range is between 0 to 0xFF, and 0x12 here means EfiPortConnectorTypeUsb
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort10ExternalConnectorType|0x12|UINT8|0xA0000091
+  # Defines the type of port10
+  # The valid range is between 0 to 0xFF, and 0x10 here means EfiPortTypeUsb
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort10Type|0x10|UINT8|0xA0000092
+
+  # Defines the designator of port11 internal connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort11InternalConnectorDesignator|"X23 "|VOID*|0xA0000093
+  # Defines the designator of port11 external connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort11ExternalConnectorDesignator|"USB4"|VOID*|0xA0000094
+  # Defines the type of port11 internal connector
+  # The valid range is between 0 to 0xFF, and 0 here means EfiPortConnectorTypeNone
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort11InternalConnectorType|0x0|UINT8|0xA0000095
+  # Defines the type of port11 external connector
+  # The valid range is between 0 to 0xFF, and 0x12 here means EfiPortConnectorTypeUsb
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort11ExternalConnectorType|0x12|UINT8|0xA0000096
+  # Defines the type of port11
+  # The valid range is between 0 to 0xFF, and 0x10 here means EfiPortTypeUsb
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort11Type|0x10|UINT8|0xA0000097
+
+  # Defines the designator of port12 internal connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort12InternalConnectorDesignator|"X28 "|VOID*|0xA0000098
+  # Defines the designator of port12 external connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort12ExternalConnectorDesignator|"RJ-45 Type"|VOID*|0xA0000099
+  # Defines the type of port12 internal connector
+  # The valid range is between 0 to 0xFF, and 0 here means EfiPortConnectorTypeNone
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort12InternalConnectorType|0x0|UINT8|0xA000009A
+  # Defines the type of port12 external connector
+  # The valid range is between 0 to 0xFF, and 0x0B here means EfiPortConnectorTypeRJ45
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort12ExternalConnectorType|0x0B|UINT8|0xA000009B
+  # Defines the type of port12
+  # The valid range is between 0 to 0xFF, and 0x1F here means EfiPortTypeNetworkPort
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort12Type|0x1F|UINT8|0xA000009C
+
+  # Defines the designator of port13 internal connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort13InternalConnectorDesignator|"J1G1"|VOID*|0xA000009D
+  # Defines the designator of port13 external connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort13ExternalConnectorDesignator|"Floppy"|VOID*|0xA000009E
+  # Defines the type of port13 internal connector
+  # The valid range is between 0 to 0xFF, and 0x16 here means EfiPortConnectorTypeOnboardFloppy
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort13InternalConnectorType|0x17|UINT8|0xA000009F
+  # Defines the type of port13 external connector
+  # The valid range is between 0 to 0xFF, and 0 here means EfiPortConnectorTypeNone
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort13ExternalConnectorType|0x0|UINT8|0xA00000A0
+  # Defines the type of port13
+  # The valid range is between 0 to 0xFF, and 0xFF here means EfiPortTypeOther
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort13Type|0xFF|UINT8|0xA00000A1
+
+  # Defines the designator of port14 internal connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort14InternalConnectorDesignator|"J2H2"|VOID*|0xA00000A2
+  # Defines the designator of port14 external connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort14ExternalConnectorDesignator|"IDE"|VOID*|0xA00000A3
+  # Defines the type of port14 internal connector
+  # The valid range is between 0 to 0xFF, and 0x16 here means EfiPortConnectorTypeOnboardIde
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort14InternalConnectorType|0x16|UINT8|0xA00000A4
+  # Defines the type of port14 external connector
+  # The valid range is between 0 to 0xFF, and 0 here means EfiPortConnectorTypeNone
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort14ExternalConnectorType|0x0|UINT8|0xA00000A5
+  # Defines the type of port14
+  # The valid range is between 0 to 0xFF, and 0xFF here means EfiPortTypeOther
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort14Type|0xFF|UINT8|0xA00000A6
+
+  # Defines the designator of port15 internal connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort15InternalConnectorDesignator|"X29 "|VOID*|0xA00000A7
+  # Defines the designator of port15 external connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort15ExternalConnectorDesignator|"SATA1"|VOID*|0xA00000A8
+  # Defines the type of port15 internal connector
+  # The valid range is between 0 to 0xFF, and 0x16 here means EfiPortConnectorTypeOnboardIde
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort15InternalConnectorType|0x16|UINT8|0xA00000A9
+  # Defines the type of port15 external connector
+  # The valid range is between 0 to 0xFF, and 0 here means EfiPortConnectorTypeNone
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort15ExternalConnectorType|0x0|UINT8|0xA00000AA
+  # Defines the type of port15
+  # The valid range is between 0 to 0xFF, and 0xFF here means EfiPortTypeOther
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort15Type|0xFF|UINT8|0xA00000AB
+
+  # Defines the designator of port16 internal connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort16InternalConnectorDesignator|"X30 "|VOID*|0xA00000AC
+  # Defines the designator of port16 external connector
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort16ExternalConnectorDesignator|"SATA2"|VOID*|0xA00000AD
+  # Defines the type of port16 internal connector
+  # The valid range is between 0 to 0xFF, and 0x16 here means EfiPortConnectorTypeOnboardIde
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort16InternalConnectorType|0x16|UINT8|0xA00000AE
+  # Defines the type of port16 external connector
+  # The valid range is between 0 to 0xFF, and 0 here means EfiPortConnectorTypeNone
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort16ExternalConnectorType|0x0|UINT8|0xA00000AF
+  # Defines the type of port16
+  # The valid range is between 0 to 0xFF, and 0xFF here means EfiPortTypeOther
+  gCrownBayTokenSpaceGuid.PcdSMBIOSPort16Type|0xFF|UINT8|0xA00000B0
+
+  # Defines a punch of Pcds for IO APIC setting:
+  # IoApicAddress, GlobalInterruptBase, IoApicId, NmiEnable, NmiSource, Polarity and TrigerMode
+  gCrownBayTokenSpaceGuid.PcdIoApicSettingIoApicAddress|0xFEC00000|UINT32|0xA0000170
+  gCrownBayTokenSpaceGuid.PcdIoApicSettingGlobalInterruptBase|0x0|UINT32|0xA0000171
+
+
+  gCrownBayTokenSpaceGuid.PcdLocalApicAddress|0xFEE00000|UINT32|0xA000017D
+
+  # Defines the number of the slots existent on board
+  # The valid range is between 0 and 14
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlotNumber|5|UINT8|0xA000023F
+  # Defines the designation of system slot1
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot1Designation|"PCI SLOT1"|VOID*|0xA0000240
+  # Defines the type of system slot1
+  # The valid range is between 0x01 to 0xA5, and 0x06 here means EfiSlotTypePci
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot1Type|0x6|UINT8|0xA0000241
+  # Defines the data bus width of system slot1
+  # The valid range is between 0x01 to 0x07, and 0x05 here means EfiSlotDataBusWidth32Bit
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot1DataBusWidth|0x5|UINT8|0xA0000242
+  # Defines the usage of system slot1
+  # The valid range is between 0x01 to 0x04, and 0x03 here means EfiSlotUsageAvailable
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot1Usage|0x3|UINT8|0xA0000243
+  # Defines the length of system slot1
+  # The valid range is between 0x01 to 0x04, and 0x04 here means EfiSlotLengthLong
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot1Length|0x4|UINT8|0xA0000244
+  # Defines the ID of system slot1, a number of UINT16
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot1Id|0x01|UINT16|0xA0000245
+  # Defines the characteristics of system slot1 , a bit mask of EFI_MISC_SLOT_CHARACTERISTICS
+  # typedef struct {
+  #   UINT32  CharacteristicsUnknown  :1;
+  #   UINT32  Provides50Volts         :1;
+  #   UINT32  Provides33Volts         :1;
+  #   UINT32  SharedSlot              :1;
+  #   UINT32  PcCard16Supported       :1;
+  #   UINT32  CardBusSupported        :1;
+  #   UINT32  ZoomVideoSupported      :1;
+  #   UINT32  ModemRingResumeSupported:1;
+  #   UINT32  PmeSignalSupported      :1;
+  #   UINT32  HotPlugDevicesSupported :1;
+  #   UINT32  SmbusSignalSupported    :1;
+  #   UINT32  Reserved                :21;
+  # } EFI_MISC_SLOT_CHARACTERISTICS;
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot1Characteristics|0x504|UINT32|0xA0000246
+
+  # Defines the designation of system slot2
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot2Designation|"PCI-Express 1"|VOID*|0xA0000247
+
+  # Defines the type of system slot2
+  # The valid range is between 0x01 to 0xA5, and 0x06 here means EfiSlotTypePci
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot2Type|0xA5|UINT8|0xA0000248
+  # Defines the data bus width of system slot2
+  # The valid range is between 0x01 to 0x07, and 0x05 here means EfiSlotDataBusWidth32Bit
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot2DataBusWidth|0x5|UINT8|0xA0000249
+  # Defines the usage of system slot2
+  # The valid range is between 0x01 to 0x04, and 0x03 here means EfiSlotUsageAvailable
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot2Usage|0x3|UINT8|0xA000024A
+  # Defines the length of system slot2
+  # The valid range is between 0x01 to 0x04, and 0x04 here means EfiSlotLengthLong
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot2Length|0x4|UINT8|0xA000024B
+  # Defines the ID of system slot2, a number of UINT16
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot2Id|0x02|UINT16|0xA000024C
+  # Defines the characteristics of system slot2 , a bit mask of EFI_MISC_SLOT_CHARACTERISTICS
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot2Characteristics|0x504|UINT32|0xA000024D
+
+  # Defines the designation of system slot3
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot3Designation|"PCI-Express 2"|VOID*|0xA000024E
+  # Defines the type of system slot3
+  # The valid range is between 0x01 to 0xA5, and 0x06 here means EfiSlotTypePci
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot3Type|0xA5|UINT8|0xA000024F
+  # Defines the data bus width of system slot3
+  # The valid range is between 0x01 to 0x07, and 0x05 here means EfiSlotDataBusWidth32Bit
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot3DataBusWidth|0x5|UINT8|0xA0000250
+  # Defines the usage of system slot3
+  # The valid range is between 0x01 to 0x04, and 0x03 here means EfiSlotUsageAvailable
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot3Usage|0x3|UINT8|0xA0000251
+  # Defines the length of system slot3
+  # The valid range is between 0x01 to 0x04, and 0x04 here means EfiSlotLengthLong
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot3Length|0x4|UINT8|0xA0000252
+  # Defines the ID of system slot3, a number of UINT16
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot3Id|0x03|UINT16|0xA0000253
+  # Defines the characteristics of system slot3 , a bit mask of EFI_MISC_SLOT_CHARACTERISTICS
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot3Characteristics|0x504|UINT32|0xA000254
+
+  # Defines the designation of system slot4
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot4Designation|"PCI-Express 3"|VOID*|0xA0000255
+  # Defines the type of system slot4
+  # The valid range is between 0x01 to 0xA5, and 0xA5 here means EfiSlotTypePciExpress
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot4Type|0xA5|UINT8|0xA0000256
+  # Defines the data bus width of system slot4
+  # The valid range is between 0x01 to 0x07, and 0x05 here means EfiSlotDataBusWidth32Bit
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot4DataBusWidth|0x5|UINT8|0xA0000257
+  # Defines the usage of system slot4
+  # The valid range is between 0x01 to 0x04, and 0x03 here means EfiSlotUsageAvailable
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot4Usage|0x3|UINT8|0xA0000258
+  # Defines the length of system slot4
+  # The valid range is between 0x01 to 0x04, and 0x04 here means EfiSlotLengthLong
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot4Length|0x4|UINT8|0xA0000259
+  # Defines the ID of system slot4, a number of UINT16
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot4Id|0x04|UINT16|0xA0000260
+  # Defines the characteristics of system slot4 , a bit mask of EFI_MISC_SLOT_CHARACTERISTICS
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot4Characteristics|0x504|UINT32|0xA0000261
+
+  # Defines the designation of system slot5
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot5Designation|"Mini PCI-E"|VOID*|0xA0000262
+  # Defines the type of system slot5
+  # The valid range is between 0x01 to 0xA5, and 0xA5 here means EfiSlotTypePciExpress
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot5Type|0xA5|UINT8|0xA0000263
+  # Defines the data bus width of system slot5
+  # The valid range is between 0x01 to 0x07, and 0x05 here means EfiSlotDataBusWidth32Bit
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot5DataBusWidth|0x5|UINT8|0xA0000264
+  # Defines the usage of system slot5
+  # The valid range is between 0x01 to 0x04, and 0x03 here means EfiSlotUsageAvailable
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot5Usage|0x3|UINT8|0xA0000265
+  # Defines the length of system slot5
+  # The valid range is between 0x01 to 0x04, and 0x04 here means EfiSlotLengthLong
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot5Length|0x4|UINT8|0xA0000266
+  # Defines the ID of system slot5, a number of UINT16
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot5Id|0x05|UINT16|0xA0000267
+  # Defines the characteristics of system slot5 , a bit mask of EFI_MISC_SLOT_CHARACTERISTICS
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot5Characteristics|0x504|UINT32|0xA0000268
+
+  # Defines the designation of system slot6
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot6Designation|"NONE"|VOID*|0xA0000269
+  # Defines the type of system slot6
+  # The valid range is between 0x01 to 0xA5, and 0x02 here means EfiSlotTypeUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot6Type|0x2|UINT8|0xA000026A
+  # Defines the data bus width of system slot6
+  # The valid range is between 0x01 to 0x07, and 0x02 here means EfiSlotDataBusWidthUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot6DataBusWidth|0x2|UINT8|0xA000026B
+  # Defines the usage of system slot6
+  # The valid range is between 0x01 to 0x04, and 0x02 here means EfiSlotUsageUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot6Usage|0x2|UINT8|0xA000026C
+  # Defines the length of system slot6
+  # The valid range is between 0x01 to 0x04, and 0x02 here means EfiSlotLengthUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot6Length|0x2|UINT8|0xA000026D
+  # Defines the ID of system slot6, a number of UINT16
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot6Id|0x0|UINT16|0xA000026E
+  # Defines the characteristics of system slot6 , a bit mask of EFI_MISC_SLOT_CHARACTERISTICS
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot6Characteristics|0x0|UINT32|0xA000026F
+
+  # Defines the designation of system slot7
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot7Designation|"NONE"|VOID*|0xA0000270
+  # Defines the type of system slot7
+  # The valid range is between 0x01 to 0xA5, and 0x02 here means EfiSlotTypeUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot7Type|0x2|UINT8|0xA0000271
+  # Defines the data bus width of system slot7
+  # The valid range is between 0x01 to 0x07, and 0x02 here means EfiSlotDataBusWidthUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot7DataBusWidth|0x2|UINT8|0xA0000272
+  # Defines the usage of system slot7
+  # The valid range is between 0x01 to 0x04, and 0x02 here means EfiSlotUsageUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot7Usage|0x2|UINT8|0xA0000273
+  # Defines the length of system slot7
+  # The valid range is between 0x01 to 0x04, and 0x02 here means EfiSlotLengthUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot7Length|0x2|UINT8|0xA0000274
+  # Defines the ID of system slot7, a number of UINT16
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot7Id|0x0|UINT16|0xA0000275
+  # Defines the characteristics of system slot7 , a bit mask of EFI_MISC_SLOT_CHARACTERISTICS
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot7Characteristics|0x0|UINT32|0xA0000276
+
+  # Defines the designation of system slot8
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot8Designation|"NONE"|VOID*|0xA0000277
+  # Defines the type of system slot8
+  # The valid range is between 0x01 to 0xA5, and 0x02 here means EfiSlotTypeUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot8Type|0x2|UINT8|0xA0000278
+  # Defines the data bus width of system slot8
+  # The valid range is between 0x01 to 0x07, and 0x02 here means EfiSlotDataBusWidthUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot8DataBusWidth|0x2|UINT8|0xA0000279
+  # Defines the usage of system slot8
+  # The valid range is between 0x01 to 0x04, and 0x02 here means EfiSlotUsageUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot8Usage|0x2|UINT8|0xA000027A
+  # Defines the length of system slot8
+  # The valid range is between 0x01 to 0x04, and 0x02 here means EfiSlotLengthUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot8Length|0x2|UINT8|0xA000027B
+  # Defines the ID of system slot8, a number of UINT16
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot8Id|0x0|UINT16|0xA000027C
+  # Defines the characteristics of system slot8 , a bit mask of EFI_MISC_SLOT_CHARACTERISTICS
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot8Characteristics|0x0|UINT32|0xA000027D
+
+  # Defines the designation of system slot9
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot9Designation|"NONE"|VOID*|0xA000027E
+  # Defines the type of system slot9
+  # The valid range is between 0x01 to 0xA5, and 0x02 here means EfiSlotTypeUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot9Type|0x2|UINT8|0xA000027F
+  # Defines the data bus width of system slot9
+  # The valid range is between 0x01 to 0x07, and 0x02 here means EfiSlotDataBusWidthUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot9DataBusWidth|0x2|UINT8|0xA0000280
+  # Defines the usage of system slot9
+  # The valid range is between 0x01 to 0x04, and 0x02 here means EfiSlotUsageUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot9Usage|0x2|UINT8|0xA0000281
+  # Defines the length of system slot9
+  # The valid range is between 0x01 to 0x04, and 0x02 here means EfiSlotLengthUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot9Length|0x2|UINT8|0xA0000282
+  # Defines the ID of system slot9, a number of UINT16
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot9Id|0x0|UINT16|0xA0000283
+  # Defines the characteristics of system slot9 , a bit mask of EFI_MISC_SLOT_CHARACTERISTICS
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot9Characteristics|0x0|UINT32|0xA0000284
+
+  # Defines the designation of system slot10
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot10Designation|"None"|VOID*|0xA0000285
+  # Defines the type of system slot10
+  # The valid range is between 0x01 to 0xA5, and 0x02 here means EfiSlotTypeUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot10Type|0x2|UINT8|0xA0000286
+  # Defines the data bus width of system slot10
+  # The valid range is between 0x01 to 0x07, and 0x02 here means EfiSlotDataBusWidthUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot10DataBusWidth|0x2|UINT8|0xA0000287
+  # Defines the usage of system slot10
+  # The valid range is between 0x01 to 0x04, and 0x02 here means EfiSlotUsageUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot10Usage|0x2|UINT8|0xA0000288
+  # Defines the length of system slot10
+  # The valid range is between 0x01 to 0x04, and 0x02 here means EfiSlotLengthUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot10Length|0x2|UINT8|0xA0000289
+  # Defines the ID of system slot10, a number of UINT16
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot10Id|0x0|UINT16|0xA000028A
+  # Defines the characteristics of system slot10 , a bit mask of EFI_MISC_SLOT_CHARACTERISTICS
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot10Characteristics|0x0|UINT32|0xA000028B
+
+  # Defines the designation of system slot11
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot11Designation|"None"|VOID*|0xA000028C
+  # Defines the type of system slot11
+  # The valid range is between 0x01 to 0xA5, and 0x02 here means EfiSlotTypeUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot11Type|0x2|UINT8|0xA000028D
+  # Defines the data bus width of system slot11
+  # The valid range is between 0x01 to 0x07, and 0x02 here means EfiSlotDataBusWidthUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot11DataBusWidth|0x2|UINT8|0xA000028E
+  # Defines the usage of system slot11
+  # The valid range is between 0x01 to 0x04, and 0x02 here means EfiSlotUsageUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot11Usage|0x2|UINT8|0xA000028F
+  # Defines the length of system slot11
+  # The valid range is between 0x01 to 0x04, and 0x02 here means EfiSlotLengthUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot11Length|0x2|UINT8|0xA0000290
+  # Defines the ID of system slot11, a number of UINT16
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot11Id|0x0|UINT16|0xA00000EE
+  # Defines the characteristics of system slot11 , a bit mask of EFI_MISC_SLOT_CHARACTERISTICS
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot11Characteristics|0x0|UINT32|0xA0000291
+
+  # Defines the designation of system slot12
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot12Designation|"None"|VOID*|0xA0000292
+  # Defines the type of system slot12
+  # The valid range is between 0x01 to 0xA5, and 0x02 here means EfiSlotTypeUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot12Type|0x2|UINT8|0xA0000293
+  # Defines the data bus width of system slot12
+  # The valid range is between 0x01 to 0x07, and 0x02 here means EfiSlotDataBusWidthUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot12DataBusWidth|0x2|UINT8|0xA0000294
+  # Defines the usage of system slot12
+  # The valid range is between 0x01 to 0x04, and 0x02 here means EfiSlotUsageUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot12Usage|0x2|UINT8|0xA0000295
+  # Defines the length of system slot12
+  # The valid range is between 0x01 to 0x04, and 0x02 here means EfiSlotLengthUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot12Length|0x2|UINT8|0xA0000296
+  # Defines the ID of system slot12, a number of UINT16
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot12Id|0x0|UINT16|0xA0000297
+  # Defines the characteristics of system slot12 , a bit mask of EFI_MISC_SLOT_CHARACTERISTICS
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot12Characteristics|0x0|UINT32|0xA0000298
+
+  # Defines the designation of system slot13
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot13Designation|"None"|VOID*|0xA0000299
+  # Defines the type of system slot13
+  # The valid range is between 0x01 to 0xA5, and 0x02 here means EfiSlotTypeUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot13Type|0x2|UINT8|0xA000029A
+  # Defines the data bus width of system slot13
+  # The valid range is between 0x01 to 0x07, and 0x02 here means EfiSlotDataBusWidthUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot13DataBusWidth|0x2|UINT8|0xA000029B
+  # Defines the usage of system slot13
+  # The valid range is between 0x01 to 0x04, and 0x02 here means EfiSlotUsageUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot13Usage|0x2|UINT8|0xA000029C
+  # Defines the length of system slot13
+  # The valid range is between 0x01 to 0x04, and 0x02 here means EfiSlotLengthUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot13Length|0x2|UINT8|0xA000029D
+  # Defines the ID of system slot13, a number of UINT16
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot13Id|0x0|UINT16|0xA000029E
+  # Defines the characteristics of system slot13 , a bit mask of EFI_MISC_SLOT_CHARACTERISTICS
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot13Characteristics|0x0|UINT32|0xA000029F
+
+  # Defines the designation of system slot14
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot14Designation|"None"|VOID*|0xA00002A0
+  # Defines the type of system slot14
+  # The valid range is between 0x01 to 0xA5, and 0x02 here means EfiSlotTypeUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot14Type|0x2|UINT8|0xA00002A1
+  # Defines the data bus width of system slot14
+  # The valid range is between 0x01 to 0x07, and 0x02 here means EfiSlotDataBusWidthUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot14DataBusWidth|0x2|UINT8|0xA00002A2
+  # Defines the usage of system slot14
+  # The valid range is between 0x01 to 0x04, and 0x02 here means EfiSlotUsageUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot14Usage|0x2|UINT8|0xA00002A3
+  # Defines the length of system slot14
+  # The valid range is between 0x01 to 0x04, and 0x02 here means EfiSlotLengthUnknown
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot14Length|0x2|UINT8|0xA00002A4
+  # Defines the ID of system slot14, a number of UINT16
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot14Id|0x0|UINT16|0xA00002A5
+  # Defines the characteristics of system slot14 , a bit mask of EFI_MISC_SLOT_CHARACTERISTICS
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemSlot14Characteristics|0x0|UINT32|0xA00002A6
+
+  ## Defines for the BDS
+  # Defines the SimpleTextOut Colors, a number of UINT32
+  gCrownBayTokenSpaceGuid.PcdBdsUiTextAttribute|0x0007|UINT32|0x00000001
+  # Defines the SimpleTextOut Colors, a number of UINT32
+  gCrownBayTokenSpaceGuid.PcdBdsUiTextInverseAttribute|0x0070|UINT32|0x00000002
+  # Defines the start position to set the cursor to, a number of UINT32
+  gCrownBayTokenSpaceGuid.PcdBdsUiTextStartColumn|4|UINT32|0x00000003
+  # Defines the max cloumn in BDS, a number of UINT32
+  gCrownBayTokenSpaceGuid.PcdBdsUiTextMaxColumn|76|UINT32|0x00000004
+  # Defines the start position to set the cursor to, a number of UINT32
+  gCrownBayTokenSpaceGuid.PcdBdsUiTextStartRow|2|UINT32|0x00000005
+
+[PcdsPatchableInModule]
+  ## Provides the ability to control the different power management features of
+  #  the installed processor.  A bit value of 1 will enable the feature.  A bit
+  #  value of 0 will disable the feature.<BR><BR>
+  #  Bit 0 - Eist<BR>
+  #  Bit 1 - C states<BR>
+  #  Bit 2 - Extended C states<BR>
+  #  Bit 3 - Hard C4E<BR>
+  #  Bit 4 - Thermal monitor 1<BR>
+  #  Bit 5 - Thermal monitor 2<BR>
+  #  Bit 6 - bi-directional PROCHOT# signal<BR>
+  #  Bit 7 - T states<BR>
+  #  Bit 15:8 - Reserved<BR>
+  #
+  # @Prompt Processor Power Management Configuration
+  #
+  # @ValidRange 0x80000002 | 0x00 - 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdPPMFunctionEnables|0x00FF|UINT16|0x20000019
+
+  ## Provides the ability to override the default boot order and provide a
+  #  platform specific boot order.<BR><BR>
+  #  TRUE - Override default boot order with platform specific order.<BR>
+  #  FALSE - Use default boot order.<BR>
+  #
+  # @Prompt Boot Order Policy Enable
+  #
+  gCrownBayTokenSpaceGuid.PcdBootOrderPolicyEnable|TRUE|BOOLEAN|0xA0000020
+
+  ## Provides the order that will be used by the BIOS to sequentially attempt to
+  #  boot to different devices.  If the device does not exist, the BIOS will
+  #  bypass the device and attempt to boot the next device in the specified
+  #  order.<BR><BR>
+  #  Valid values are 0 - 4.<BR>
+  #
+  # @Prompt Boot Order For Payload
+  #
+  # @ValidRange 0x80000003 | 0 - 4
+  #
+  gCrownBayTokenSpaceGuid.PcdBootOrderPayload|0|UINT16|0xA0000028
+
+  ## Provides the order that will be used by the BIOS to sequentially attempt to
+  #  boot to different devices.  If the device does not exist, the BIOS will
+  #  bypass the device and attempt to boot the next device in the specified
+  #  order.<BR><BR>
+  #  Valid values are 0 - 4.<BR>
+  #
+  # @Prompt Boot Order For Hard Disk
+  #
+  # @ValidRange 0x80000003 | 0 - 4
+  #
+  gCrownBayTokenSpaceGuid.PcdBootOrderHD|1|UINT16|0xA0000024
+
+  ## Provides the order that will be used by the BIOS to sequentially attempt to
+  #  boot to different devices.  If the device does not exist, the BIOS will
+  #  bypass the device and attempt to boot the next device in the specified
+  #  order.<BR><BR>
+  #  Valid values are 0 - 4.<BR>
+  #
+  # @Prompt Boot Order For CD/DVD-ROM
+  #
+  # @ValidRange 0x80000003 | 0 - 4
+  #
+  gCrownBayTokenSpaceGuid.PcdBootOrderDvdCd|2|UINT16|0xA0000023
+
+  ## Provides the order that will be used by the BIOS to sequentially attempt to
+  #  boot to different devices.  If the device does not exist, the BIOS will
+  #  bypass the device and attempt to boot the next device in the specified
+  #  order.<BR><BR>
+  #  Valid values are 0 - 4.<BR>
+  #
+  # @Prompt Boot Order For USB Disk
+  #
+  # @ValidRange 0x80000003 | 0 - 4
+  #
+  gCrownBayTokenSpaceGuid.PcdBootOrderUsb|3|UINT16|0xA0000022
+
+
+  ## Provides the order that will be used by the BIOS to sequentially attempt to
+  #  boot to different devices.  If the device does not exist, the BIOS will
+  #  bypass the device and attempt to boot the next device in the specified
+  #  order.<BR><BR>
+  #  Valid values are 0 - 4.<BR>
+  #
+  # @Prompt Boot Order For Network
+  #
+  # @ValidRange 0x80000003 | 0 - 4
+  #
+  gCrownBayTokenSpaceGuid.PcdBootOrderNetwork|4|UINT16|0xA0000026
+
+  ## Provides the ability to enable the Interrupt Source Override structure 0 in
+  #  the Multiple APIC Descriptor Table (MADT).<BR><BR>
+  #  TRUE - Enables the Interrupt Source Override structure.<BR>
+  #  FALSE - Disables the Interrupt Source Override structure.<BR>
+  #
+  # @Prompt Interrupt Source Override 0
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable0Enable|TRUE|BOOLEAN|0xA0000100
+
+  ## Provides the bus-relative IRQ of the Interrupt Source Override structure 0.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 0: Source IRQ
+  #
+  # @ValidRange 0x80000004 | 0x00 - 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable0SourceIrq|0x00|UINT8|0xA0000101
+
+  ## Provides the polarity of the APIC I/O input signal of the Interrupt Source
+  #  Override structure 0.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Active high.<BR>
+  #  3: Active low.<BR>
+  #
+  # @Prompt Interrupt Source Override 0: Polarity
+  #
+  # @ValidList 0x80000005 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable0Polarity|0x00|UINT8|0xA0000102
+
+  ## Provides the trigger mode of the APIC I/O input signal of the Interrupt
+  #  Source Override structure 0.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Edge-triggered<BR>
+  #  3: Level-triggered<BR>
+  #
+  # @Prompt Interrupt Source Override 0: Trigger Mode
+  #
+  # @ValidList 0x80000006 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable0TrigerMode|0x00|UINT8|0xA0000103
+
+  ## Provides the Global System Interrupt of the Interrupt Source Override
+  #  structure 0.  This is the interrupt that the bus-relative IRQ will signal.<BR><BR>
+  #  Valid values are 0x00000000 - 0xFFFFFFFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 0: Global System Interrupt
+  #
+  # @ValidRange 0x80000007 | 0x00000000 - 0xFFFFFFFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable0GlobalIrq|0x02|UINT32|0xA0000104
+
+  ## Provides the ability to enable the Interrupt Source Override structure 1 in
+  #  the Multiple APIC Descriptor Table (MADT).<BR><BR>
+  #  TRUE - Enables the Interrupt Source Override structure.<BR>
+  #  FALSE - Disables the Interrupt Source Override structure.<BR>
+  #
+  # @Prompt Interrupt Source Override 1
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable1Enable|TRUE|BOOLEAN|0xA0000105
+
+  ## Provides the bus-relative IRQ of the Interrupt Source Override structure 1.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 1: Source IRQ
+  #
+  # @ValidRange 0x80000004 | 0x00 - 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable1SourceIrq|0x09|UINT8|0xA0000106
+
+  ## Provides the polarity of the APIC I/O input signal of the Interrupt Source
+  #  Override structure 1.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Active high.<BR>
+  #  3: Active low.<BR>
+  #
+  # @Prompt Interrupt Source Override 1: Polarity
+  #
+  # @ValidList 0x80000005 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable1Polarity|0x01|UINT8|0xA0000107
+
+  ## Provides the trigger mode of the APIC I/O input signal of the Interrupt
+  #  Source Override structure 1.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Edge-triggered<BR>
+  #  3: Level-triggered<BR>
+  #
+  # @Prompt Interrupt Source Override 1: Trigger Mode
+  #
+  # @ValidList 0x80000006 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable1TrigerMode|0x03|UINT8|0xA0000108
+
+  ## Provides the Global System Interrupt of the Interrupt Source Override
+  #  structure 1.  This is the interrupt that the bus-relative IRQ will signal.<BR><BR>
+  #  Valid values are 0x00000000 - 0xFFFFFFFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 1: Global System Interrupt
+  #
+  # @ValidRange 0x80000007 | 0x00000000 - 0xFFFFFFFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable1GlobalIrq|0x09|UINT32|0xA0000109
+
+  ## Provides the ability to enable the Interrupt Source Override structure 2 in
+  #  the Multiple APIC Descriptor Table (MADT).<BR><BR>
+  #  TRUE - Enables the Interrupt Source Override structure.<BR>
+  #  FALSE - Disables the Interrupt Source Override structure.<BR>
+  #
+  # @Prompt Interrupt Source Override 2
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable2Enable|FALSE|BOOLEAN|0xA000010F
+
+  ## Provides the bus-relative IRQ of the Interrupt Source Override structure 2.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 2: Source IRQ
+  #
+  # @ValidRange 0x80000004 | 0x00 - 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable2SourceIrq|0x0|UINT8|0xA0000110
+
+  ## Provides the polarity of the APIC I/O input signal of the Interrupt Source
+  #  Override structure 2.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Active high.<BR>
+  #  3: Active low.<BR>
+  #
+  # @Prompt Interrupt Source Override 2: Polarity
+  #
+  # @ValidList 0x80000005 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable2Polarity|0x0|UINT8|0xA0000111
+
+  ## Provides the trigger mode of the APIC I/O input signal of the Interrupt
+  #  Source Override structure 2.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Edge-triggered<BR>
+  #  3: Level-triggered<BR>
+  #
+  # @Prompt Interrupt Source Override 2: Trigger Mode
+  #
+  # @ValidList 0x80000006 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable2TrigerMode|0x0|UINT8|0xA0000112
+
+  ## Provides the Global System Interrupt of the Interrupt Source Override
+  #  structure 2.  This is the interrupt that the bus-relative IRQ will signal.<BR><BR>
+  #  Valid values are 0x00000000 - 0xFFFFFFFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 2: Global System Interrupt
+  #
+  # @ValidRange 0x80000007 | 0x00000000 - 0xFFFFFFFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable2GlobalIrq|0x0|UINT32|0xA0000113
+
+  ## Provides the ability to enable the Interrupt Source Override structure 3 in
+  #  the Multiple APIC Descriptor Table (MADT).<BR><BR>
+  #  TRUE - Enables the Interrupt Source Override structure.<BR>
+  #  FALSE - Disables the Interrupt Source Override structure.<BR>
+  #
+  # @Prompt Interrupt Source Override 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable3Enable|FALSE|BOOLEAN|0xA0000114
+
+  ## Provides the bus-relative IRQ of the Interrupt Source Override structure 3.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 3: Source IRQ
+  #
+  # @ValidRange 0x80000004 | 0x00 - 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable3SourceIrq|0x0|UINT8|0xA0000115
+
+  ## Provides the polarity of the APIC I/O input signal of the Interrupt Source
+  #  Override structure 3.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Active high.<BR>
+  #  3: Active low.<BR>
+  #
+  # @Prompt Interrupt Source Override 3: Polarity
+  #
+  # @ValidList 0x80000005 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable3Polarity|0x0|UINT8|0xA0000116
+
+  ## Provides the trigger mode of the APIC I/O input signal of the Interrupt
+  #  Source Override structure 3.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Edge-triggered<BR>
+  #  3: Level-triggered<BR>
+  #
+  # @Prompt Interrupt Source Override 3: Trigger Mode
+  #
+  # @ValidList 0x80000006 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable3TrigerMode|0x0|UINT8|0xA0000117
+
+  ## Provides the Global System Interrupt of the Interrupt Source Override
+  #  structure 3.  This is the interrupt that the bus-relative IRQ will signal.<BR><BR>
+  #  Valid values are 0x00000000 - 0xFFFFFFFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 3: Global System Interrupt
+  #
+  # @ValidRange 0x80000007 | 0x00000000 - 0xFFFFFFFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable3GlobalIrq|0x0|UINT32|0xA0000118
+
+  ## Provides the ability to enable the Interrupt Source Override structure 4 in
+  #  the Multiple APIC Descriptor Table (MADT).<BR><BR>
+  #  TRUE - Enables the Interrupt Source Override structure.<BR>
+  #  FALSE - Disables the Interrupt Source Override structure.<BR>
+  #
+  # @Prompt Interrupt Source Override 4
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable4Enable|FALSE|BOOLEAN|0xA0000119
+
+  ## Provides the bus-relative IRQ of the Interrupt Source Override structure 4.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 4: Source IRQ
+  #
+  # @ValidRange 0x80000004 | 0x00 - 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable4SourceIrq|0x0|UINT8|0xA000011A
+
+  ## Provides the polarity of the APIC I/O input signal of the Interrupt Source
+  #  Override structure 4.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Active high.<BR>
+  #  3: Active low.<BR>
+  #
+  # @Prompt Interrupt Source Override 4: Polarity
+  #
+  # @ValidList 0x80000005 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable4Polarity|0x0|UINT8|0xA0000120
+
+  ## Provides the trigger mode of the APIC I/O input signal of the Interrupt
+  #  Source Override structure 4.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Edge-triggered<BR>
+  #  3: Level-triggered<BR>
+  #
+  # @Prompt Interrupt Source Override 4: Trigger Mode
+  #
+  # @ValidList 0x80000006 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable4TrigerMode|0x0|UINT8|0xA0000121
+
+  ## Provides the Global System Interrupt of the Interrupt Source Override
+  #  structure 4.  This is the interrupt that the bus-relative IRQ will signal.<BR><BR>
+  #  Valid values are 0x00000000 - 0xFFFFFFFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 4: Global System Interrupt
+  #
+  # @ValidRange 0x80000007 | 0x00000000 - 0xFFFFFFFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable4GlobalIrq|0x0|UINT32|0xA0000122
+
+  ## Provides the ability to enable the Interrupt Source Override structure 5 in
+  #  the Multiple APIC Descriptor Table (MADT).<BR><BR>
+  #  TRUE - Enables the Interrupt Source Override structure.<BR>
+  #  FALSE - Disables the Interrupt Source Override structure.<BR>
+  #
+  # @Prompt Interrupt Source Override 5
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable5Enable|FALSE|BOOLEAN|0xA0000123
+
+  ## Provides the bus-relative IRQ of the Interrupt Source Override structure 5.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 5: Source IRQ
+  #
+  # @ValidRange 0x80000004 | 0x00 - 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable5SourceIrq|0x0|UINT8|0xA0000124
+
+  ## Provides the polarity of the APIC I/O input signal of the Interrupt Source
+  #  Override structure 5.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Active high.<BR>
+  #  3: Active low.<BR>
+  #
+  # @Prompt Interrupt Source Override 5: Polarity
+  #
+  # @ValidList 0x80000005 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable5Polarity|0x0|UINT8|0xA0000125
+
+  ## Provides the trigger mode of the APIC I/O input signal of the Interrupt
+  #  Source Override structure 5.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Edge-triggered<BR>
+  #  3: Level-triggered<BR>
+  #
+  # @Prompt Interrupt Source Override 5: Trigger Mode
+  #
+  # @ValidList 0x80000006 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable5TrigerMode|0x0|UINT8|0xA0000126
+
+  ## Provides the Global System Interrupt of the Interrupt Source Override
+  #  structure 5.  This is the interrupt that the bus-relative IRQ will signal.<BR><BR>
+  #  Valid values are 0x00000000 - 0xFFFFFFFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 5: Global System Interrupt
+  #
+  # @ValidRange 0x80000007 | 0x00000000 - 0xFFFFFFFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable5GlobalIrq|0x0|UINT32|0xA0000127
+
+  ## Provides the ability to enable the Interrupt Source Override structure 6 in
+  #  the Multiple APIC Descriptor Table (MADT).<BR><BR>
+  #  TRUE - Enables the Interrupt Source Override structure.<BR>
+  #  FALSE - Disables the Interrupt Source Override structure.<BR>
+  #
+  # @Prompt Interrupt Source Override 6
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable6Enable|FALSE|BOOLEAN|0xA0000128
+
+  ## Provides the bus-relative IRQ of the Interrupt Source Override structure 6.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 6: Source IRQ
+  #
+  # @ValidRange 0x80000004 | 0x00 - 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable6SourceIrq|0x0|UINT8|0xA0000129
+
+  ## Provides the polarity of the APIC I/O input signal of the Interrupt Source
+  #  Override structure 6.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Active high.<BR>
+  #  3: Active low.<BR>
+  #
+  # @Prompt Interrupt Source Override 6: Polarity
+  #
+  # @ValidList 0x80000005 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable6Polarity|0x0|UINT8|0xA000012A
+
+  ## Provides the trigger mode of the APIC I/O input signal of the Interrupt
+  #  Source Override structure 6.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Edge-triggered<BR>
+  #  3: Level-triggered<BR>
+  #
+  # @Prompt Interrupt Source Override 6: Trigger Mode
+  #
+  # @ValidList 0x80000006 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable6TrigerMode|0x0|UINT8|0xA000012B
+
+  ## Provides the Global System Interrupt of the Interrupt Source Override
+  #  structure 6.  This is the interrupt that the bus-relative IRQ will signal.<BR><BR>
+  #  Valid values are 0x00000000 - 0xFFFFFFFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 6: Global System Interrupt
+  #
+  # @ValidRange 0x80000007 | 0x00000000 - 0xFFFFFFFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable6GlobalIrq|0x0|UINT32|0xA000012C
+
+  ## Provides the ability to enable the Interrupt Source Override structure 7 in
+  #  the Multiple APIC Descriptor Table (MADT).<BR><BR>
+  #  TRUE - Enables the Interrupt Source Override structure.<BR>
+  #  FALSE - Disables the Interrupt Source Override structure.<BR>
+  #
+  # @Prompt Interrupt Source Override 7
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable7Enable|FALSE|BOOLEAN|0xA000012D
+
+  ## Provides the bus-relative IRQ of the Interrupt Source Override structure 7.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 7: Source IRQ
+  #
+  # @ValidRange 0x80000004 | 0x00 - 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable7SourceIrq|0x0|UINT8|0xA000012E
+
+  ## Provides the polarity of the APIC I/O input signal of the Interrupt Source
+  #  Override structure 7.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Active high.<BR>
+  #  3: Active low.<BR>
+  #
+  # @Prompt Interrupt Source Override 7: Polarity
+  #
+  # @ValidList 0x80000005 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable7Polarity|0x0|UINT8|0xA000012F
+
+  ## Provides the trigger mode of the APIC I/O input signal of the Interrupt
+  #  Source Override structure 7.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Edge-triggered<BR>
+  #  3: Level-triggered<BR>
+  #
+  # @Prompt Interrupt Source Override 7: Trigger Mode
+  #
+  # @ValidList 0x80000006 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable7TrigerMode|0x0|UINT8|0xA0000130
+
+  ## Provides the Global System Interrupt of the Interrupt Source Override
+  #  structure 7.  This is the interrupt that the bus-relative IRQ will signal.<BR><BR>
+  #  Valid values are 0x00000000 - 0xFFFFFFFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 7: Global System Interrupt
+  #
+  # @ValidRange 0x80000007 | 0x00000000 - 0xFFFFFFFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable7GlobalIrq|0x0|UINT32|0xA0000131
+
+  ## Provides the ability to enable the Interrupt Source Override structure 8 in
+  #  the Multiple APIC Descriptor Table (MADT).<BR><BR>
+  #  TRUE - Enables the Interrupt Source Override structure.<BR>
+  #  FALSE - Disables the Interrupt Source Override structure.<BR>
+  #
+  # @Prompt Interrupt Source Override 8
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable8Enable|FALSE|BOOLEAN|0xA0000132
+
+  ## Provides the bus-relative IRQ of the Interrupt Source Override structure 8.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 8: Source IRQ
+  #
+  # @ValidRange 0x80000004 | 0x00 - 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable8SourceIrq|0x0|UINT8|0xA0000133
+
+  ## Provides the polarity of the APIC I/O input signal of the Interrupt Source
+  #  Override structure 8.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Active high.<BR>
+  #  3: Active low.<BR>
+  #
+  # @Prompt Interrupt Source Override 8: Polarity
+  #
+  # @ValidList 0x80000005 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable8Polarity|0x0|UINT8|0xA0000134
+
+  ## Provides the trigger mode of the APIC I/O input signal of the Interrupt
+  #  Source Override structure 8.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Edge-triggered<BR>
+  #  3: Level-triggered<BR>
+  #
+  # @Prompt Interrupt Source Override 8: Trigger Mode
+  #
+  # @ValidList 0x80000006 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable8TrigerMode|0x0|UINT8|0xA0000135
+
+  ## Provides the Global System Interrupt of the Interrupt Source Override
+  #  structure 8.  This is the interrupt that the bus-relative IRQ will signal.<BR><BR>
+  #  Valid values are 0x00000000 - 0xFFFFFFFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 8: Global System Interrupt
+  #
+  # @ValidRange 0x80000007 | 0x00000000 - 0xFFFFFFFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable8GlobalIrq|0x0|UINT32|0xA0000136
+
+  ## Provides the ability to enable the Interrupt Source Override structure 9 in
+  #  the Multiple APIC Descriptor Table (MADT).<BR><BR>
+  #  TRUE - Enables the Interrupt Source Override structure.<BR>
+  #  FALSE - Disables the Interrupt Source Override structure.<BR>
+  #
+  # @Prompt Interrupt Source Override 9
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable9Enable|FALSE|BOOLEAN|0xA0000137
+
+  ## Provides the bus-relative IRQ of the Interrupt Source Override structure 9.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 9: Source IRQ
+  #
+  # @ValidRange 0x80000004 | 0x00 - 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable9SourceIrq|0x0|UINT8|0xA0000138
+
+  ## Provides the polarity of the APIC I/O input signal of the Interrupt Source
+  #  Override structure 9.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Active high.<BR>
+  #  3: Active low.<BR>
+  #
+  # @Prompt Interrupt Source Override 9: Polarity
+  #
+  # @ValidList 0x80000005 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable9Polarity|0x0|UINT8|0xA0000139
+
+  ## Provides the trigger mode of the APIC I/O input signal of the Interrupt
+  #  Source Override structure 9.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Edge-triggered<BR>
+  #  3: Level-triggered<BR>
+  #
+  # @Prompt Interrupt Source Override 9: Trigger Mode
+  #
+  # @ValidList 0x80000006 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable9TrigerMode|0x0|UINT8|0xA000013A
+
+  ## Provides the Global System Interrupt of the Interrupt Source Override
+  #  structure 9.  This is the interrupt that the bus-relative IRQ will signal.<BR><BR>
+  #  Valid values are 0x00000000 - 0xFFFFFFFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 9: Global System Interrupt
+  #
+  # @ValidRange 0x80000007 | 0x00000000 - 0xFFFFFFFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable9GlobalIrq|0x0|UINT32|0xA000013B
+
+  ## Provides the ability to enable the Interrupt Source Override structure 10 in
+  #  the Multiple APIC Descriptor Table (MADT).<BR><BR>
+  #  TRUE - Enables the Interrupt Source Override structure.<BR>
+  #  FALSE - Disables the Interrupt Source Override structure.<BR>
+  #
+  # @Prompt Interrupt Source Override 10
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable10Enable|FALSE|BOOLEAN|0xA000013C
+
+  ## Provides the bus-relative IRQ of the Interrupt Source Override structure 10.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 10: Source IRQ
+  #
+  # @ValidRange 0x80000004 | 0x00 - 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable10SourceIrq|0x0|UINT8|0xA000013D
+
+  ## Provides the polarity of the APIC I/O input signal of the Interrupt Source
+  #  Override structure 10.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Active high.<BR>
+  #  3: Active low.<BR>
+  #
+  # @Prompt Interrupt Source Override 10: Polarity
+  #
+  # @ValidList 0x80000005 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable10Polarity|0x0|UINT8|0xA000013E
+
+  ## Provides the trigger mode of the APIC I/O input signal of the Interrupt
+  #  Source Override structure 10.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Edge-triggered<BR>
+  #  3: Level-triggered<BR>
+  #
+  # @Prompt Interrupt Source Override 10: Trigger Mode
+  #
+  # @ValidList 0x80000006 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable10TrigerMode|0x0|UINT8|0xA000013F
+
+  ## Provides the Global System Interrupt of the Interrupt Source Override
+  #  structure 10.  This is the interrupt that the bus-relative IRQ will signal.<BR><BR>
+  #  Valid values are 0x00000000 - 0xFFFFFFFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 10: Global System Interrupt
+  #
+  # @ValidRange 0x80000007 | 0x00000000 - 0xFFFFFFFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable10GlobalIrq|0x0|UINT32|0xA0000140
+
+  ## Provides the ability to enable the Interrupt Source Override structure 11 in
+  #  the Multiple APIC Descriptor Table (MADT).<BR><BR>
+  #  TRUE - Enables the Interrupt Source Override structure.<BR>
+  #  FALSE - Disables the Interrupt Source Override structure.<BR>
+  #
+  # @Prompt Interrupt Source Override 11
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable11Enable|FALSE|BOOLEAN|0xA0000141
+
+  ## Provides the bus-relative IRQ of the Interrupt Source Override structure 11.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 11: Source IRQ
+  #
+  # @ValidRange 0x80000004 | 0x00 - 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable11SourceIrq|0x0|UINT8|0xA0000142
+
+  ## Provides the polarity of the APIC I/O input signal of the Interrupt Source
+  #  Override structure 11.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Active high.<BR>
+  #  3: Active low.<BR>
+  #
+  # @Prompt Interrupt Source Override 11: Polarity
+  #
+  # @ValidList 0x80000005 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable11Polarity|0x0|UINT8|0xA0000143
+
+  ## Provides the trigger mode of the APIC I/O input signal of the Interrupt
+  #  Source Override structure 11.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Edge-triggered<BR>
+  #  3: Level-triggered<BR>
+  #
+  # @Prompt Interrupt Source Override 11: Trigger Mode
+  #
+  # @ValidList 0x80000006 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable11TrigerMode|0x0|UINT8|0xA0000144
+
+  ## Provides the Global System Interrupt of the Interrupt Source Override
+  #  structure 11.  This is the interrupt that the bus-relative IRQ will signal.<BR><BR>
+  #  Valid values are 0x00000000 - 0xFFFFFFFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 11: Global System Interrupt
+  #
+  # @ValidRange 0x80000007 | 0x00000000 - 0xFFFFFFFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable11GlobalIrq|0x0|UINT32|0xA0000145
+
+  ## Provides the ability to enable the Interrupt Source Override structure 12 in
+  #  the Multiple APIC Descriptor Table (MADT).<BR><BR>
+  #  TRUE - Enables the Interrupt Source Override structure.<BR>
+  #  FALSE - Disables the Interrupt Source Override structure.<BR>
+  #
+  # @Prompt Interrupt Source Override 12
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable12Enable|FALSE|BOOLEAN|0xA0000146
+
+  ## Provides the bus-relative IRQ of the Interrupt Source Override structure 12.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 12: Source IRQ
+  #
+  # @ValidRange 0x80000004 | 0x00 - 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable12SourceIrq|0x0|UINT8|0xA0000147
+
+  ## Provides the polarity of the APIC I/O input signal of the Interrupt Source
+  #  Override structure 12.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Active high.<BR>
+  #  3: Active low.<BR>
+  #
+  # @Prompt Interrupt Source Override 12: Polarity
+  #
+  # @ValidList 0x80000005 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable12Polarity|0x0|UINT8|0xA0000148
+
+  ## Provides the trigger mode of the APIC I/O input signal of the Interrupt
+  #  Source Override structure 12.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Edge-triggered<BR>
+  #  3: Level-triggered<BR>
+  #
+  # @Prompt Interrupt Source Override 12: Trigger Mode
+  #
+  # @ValidList 0x80000006 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable12TrigerMode|0x0|UINT8|0xA0000149
+
+  ## Provides the Global System Interrupt of the Interrupt Source Override
+  #  structure 12.  This is the interrupt that the bus-relative IRQ will signal.<BR><BR>
+  #  Valid values are 0x00000000 - 0xFFFFFFFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 12: Global System Interrupt
+  #
+  # @ValidRange 0x80000007 | 0x00000000 - 0xFFFFFFFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable12GlobalIrq|0x0|UINT32|0xA000014A
+
+  ## Provides the ability to enable the Interrupt Source Override structure 13 in
+  #  the Multiple APIC Descriptor Table (MADT).<BR><BR>
+  #  TRUE - Enables the Interrupt Source Override structure.<BR>
+  #  FALSE - Disables the Interrupt Source Override structure.<BR>
+  #
+  # @Prompt Interrupt Source Override 13
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable13Enable|FALSE|BOOLEAN|0xA000014B
+
+  ## Provides the bus-relative IRQ of the Interrupt Source Override structure 13.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 13: Source IRQ
+  #
+  # @ValidRange 0x80000004 | 0x00 - 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable13SourceIrq|0x0|UINT8|0xA000014C
+
+  ## Provides the polarity of the APIC I/O input signal of the Interrupt Source
+  #  Override structure 13.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Active high.<BR>
+  #  3: Active low.<BR>
+  #
+  # @Prompt Interrupt Source Override 13: Polarity
+  #
+  # @ValidList 0x80000005 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable13Polarity|0x0|UINT8|0xA000014D
+
+  ## Provides the trigger mode of the APIC I/O input signal of the Interrupt
+  #  Source Override structure 13.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Edge-triggered<BR>
+  #  3: Level-triggered<BR>
+  #
+  # @Prompt Interrupt Source Override 13: Trigger Mode
+  #
+  # @ValidList 0x80000006 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable13TrigerMode|0x0|UINT8|0xA000014E
+
+  ## Provides the Global System Interrupt of the Interrupt Source Override
+  #  structure 13.  This is the interrupt that the bus-relative IRQ will signal.<BR><BR>
+  #  Valid values are 0x00000000 - 0xFFFFFFFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 13: Global System Interrupt
+  #
+  # @ValidRange 0x80000007 | 0x00000000 - 0xFFFFFFFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable13GlobalIrq|0x0|UINT32|0xA000014F
+
+  ## Provides the ability to enable the Interrupt Source Override structure 14 in
+  #  the Multiple APIC Descriptor Table (MADT).<BR><BR>
+  #  TRUE - Enables the Interrupt Source Override structure.<BR>
+  #  FALSE - Disables the Interrupt Source Override structure.<BR>
+  #
+  # @Prompt Interrupt Source Override 14
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable14Enable|FALSE|BOOLEAN|0xA0000150
+
+  ## Provides the bus-relative IRQ of the Interrupt Source Override structure 14.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 14: Source IRQ
+  #
+  # @ValidRange 0x80000004 | 0x00 - 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable14SourceIrq|0x0|UINT8|0xA0000151
+
+  ## Provides the polarity of the APIC I/O input signal of the Interrupt Source
+  #  Override structure 14.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Active high.<BR>
+  #  3: Active low.<BR>
+  #
+  # @Prompt Interrupt Source Override 14: Polarity
+  #
+  # @ValidList 0x80000005 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable14Polarity|0x0|UINT8|0xA0000152
+
+  ## Provides the trigger mode of the APIC I/O input signal of the Interrupt
+  #  Source Override structure 14.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Edge-triggered<BR>
+  #  3: Level-triggered<BR>
+  #
+  # @Prompt Interrupt Source Override 14: Trigger Mode
+  #
+  # @ValidList 0x80000006 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable14TrigerMode|0x0|UINT8|0xA0000153
+
+  ## Provides the Global System Interrupt of the Interrupt Source Override
+  #  structure 14.  This is the interrupt that the bus-relative IRQ will signal.<BR><BR>
+  #  Valid values are 0x00000000 - 0xFFFFFFFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 14: Global System Interrupt
+  #
+  # @ValidRange 0x80000007 | 0x00000000 - 0xFFFFFFFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable14GlobalIrq|0x0|UINT32|0xA0000154
+
+  ## Provides the ability to enable the Interrupt Source Override structure 15 in
+  #  the Multiple APIC Descriptor Table (MADT).<BR><BR>
+  #  TRUE - Enables the Interrupt Source Override structure.<BR>
+  #  FALSE - Disables the Interrupt Source Override structure.<BR>
+  #
+  # @Prompt Interrupt Source Override 15
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable15Enable|FALSE|BOOLEAN|0xA0000155
+
+  ## Provides the bus-relative IRQ of the Interrupt Source Override structure 15.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 15: Source IRQ
+  #
+  # @ValidRange 0x80000004 | 0x00 - 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable15SourceIrq|0x0|UINT8|0xA0000156
+
+  ## Provides the polarity of the APIC I/O input signal of the Interrupt Source
+  #  Override structure 15.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Active high.<BR>
+  #  3: Active low.<BR>
+  #
+  # @Prompt Interrupt Source Override 15: Polarity
+  #
+  # @ValidList 0x80000005 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable15Polarity|0x0|UINT8|0xA0000157
+
+  ## Provides the trigger mode of the APIC I/O input signal of the Interrupt
+  #  Source Override structure 15.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Edge-triggered<BR>
+  #  3: Level-triggered<BR>
+  #
+  # @Prompt Interrupt Source Override 15: Trigger Mode
+  #
+  # @ValidList 0x80000006 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable15TrigerMode|0x0|UINT8|0xA0000158
+
+  ## Provides the Global System Interrupt of the Interrupt Source Override
+  #  structure 15.  This is the interrupt that the bus-relative IRQ will signal.<BR><BR>
+  #  Valid values are 0x00000000 - 0xFFFFFFFF.<BR>
+  #
+  # @Prompt Interrupt Source Override 15: Global System Interrupt
+  #
+  # @ValidRange 0x80000007 | 0x00000000 - 0xFFFFFFFF
+  #
+  gCrownBayTokenSpaceGuid.PcdInterruptOverrideSettingTable15GlobalIrq|0x0|UINT32|0xA0000159
+
+  ## Provides the I/O APIC ID to be used in the MADT.  This assumes that only
+  #  a single I/O APIC is present in the system.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  # @Prompt System I/O APIC ID
+  #
+  # @ValidRange 0x80000008 | 0x00 - 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdIoApicSettingIoApicId|0x02|UINT8|0xA0000172
+
+  ## Provides the ability to enable a Non-Maskable Interrupt (NMI) Source
+  #  structure in the Multiple APIC Descriptor Table (MADT).  This allows the
+  #  platform to specify an I/O APIC input as non-maskable.<BR><BR>
+  #  TRUE - Enable the NMI Source structure.<BR>
+  #  FALSE - Disable the NMI Source structure.<BR>
+  #
+  # @Prompt Non-Maskable Interrupt Source
+  #
+  gCrownBayTokenSpaceGuid.PcdIoApicSettingNmiEnable|FALSE|BOOLEAN|0xA0000173
+
+  ## Provides the Global System Interrupt that this NMI will signal.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  # @Prompt Non-Maskable Interrupt Source: Global System Interrupt
+  #
+  # @ValidRange 0x80000007 | 0x00 - 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdIoApicSettingNmiSource|0x0|UINT8|0xA0000174
+
+  ## Provides the polarity of the APIC I/O input signal for the NMI source.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Active high.<BR>
+  #  3: Active low.<BR>
+  #
+  # @Prompt Non-Maskable Interrupt Source: Polarity
+  #
+  # @ValidList 0x80000005 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdIoApicSettingPolarity|0x0|UINT8|0xA0000175
+
+  ## Provides the trigger mode of the APIC I/O input signal for the NMI source.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Edge-triggered<BR>
+  #  3: Level-triggered<BR>
+  #
+  # @Prompt Non-Maskable Interrupt Source: Trigger Mode
+  #
+  # @ValidList 0x80000006 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdIoApicSettingTrigerMode|0x0|UINT8|0xA0000176
+
+
+  ## Provides an interface to enable or disable each processors Local APIC NMI
+  #  structure in the MADT.  Setting a bit value of 1 will enable the structure.
+  #  Setting a bit value of 0 will disable the structure.<BR><BR>
+  #  Bit 0 - CPU0 Local APIC NMI structure<BR>
+  #  Bit 1 - CPU1 Local APIC NMI structure<BR>
+  #  Bit 7:2 - Reserved<BR>
+  #
+  # @Prompt Local APIC NMI Structure Enables
+  #
+  # @Expression 0x80000002 | gCrownBayTokenSpaceGuid.PcdLocalApicSettingNmiEnabelApicIdMask & 0xFC == 0
+  #
+  gCrownBayTokenSpaceGuid.PcdLocalApicSettingNmiEnabelApicIdMask|0x03|UINT8|0xA0000177
+
+  ## Provides the polarity of the APIC I/O input signal for the Local APIC NMI
+  #  source.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Active high.<BR>
+  #  3: Active low.<BR>
+  #
+  # @Prompt Local APIC NMI Source: Polarity
+  #
+  # @ValidList 0x80000005 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdLocalApicSettingPolarity|0x01|UINT8|0xA0000179
+
+  ## Provides the trigger mode of the APIC I/O input signal for the Local APIC
+  #  NMI source.<BR><BR>
+  #  0: Conforms to Bus Specification<BR>
+  #  1: Edge-triggered<BR>
+  #  3: Level-triggered<BR>
+  #
+  # @Prompt Local APIC NMI Source: Trigger Mode
+  #
+  # @ValidList 0x80000006 | 0, 1, 3
+  #
+  gCrownBayTokenSpaceGuid.PcdLocalApicSettingTrigerMode|0x01|UINT8|0xA000017A
+
+  ## Provides the Local APIC Interrupt input (LINTn) that NMI is connected.<BR><BR>
+  #  Valid values are 0 and 1.<BR>
+  #
+  # @Prompt Local APIC NMI Source: Local APIC LINT
+  #
+  # @ValueRange 0x80000009 | 0 - 1
+  #
+  gCrownBayTokenSpaceGuid.PcdLocalApicSettingLocalApicLint|0x01|UINT8|0xA000017B
+
+  ## Provides the ability to include the Local APIC Address Override structure
+  #  in the MADT.  This must be used if the Local APIC resides at a different
+  #  address than the default value of 0xFEE00000.<BR><BR>
+  #  TRUE - Enables the Local APIC Address Override structure.<BR>
+  #  FALSE - Disables the Local APIC Address Override structure.<BR>
+  #
+  # @Prompt Local APIC Address Override
+  #
+  gCrownBayTokenSpaceGuid.PcdLocalApicSettingAddressOverrideEnable|FALSE|BOOLEAN|0xA0000178
+
+  ## Provides the updated Local APIC Address used in the Local APIC Address Override
+  #  structure.  The address must be located on a 4-KByte boundary.<BR>
+  #
+  # @Prompt Local APIC Address Override: Local APIC Address
+  #
+  # @Expression 0x8000000A | gCrownBayTokenSpaceGuid.PcdLocalApicAddressOverride & 0xFFF == 0
+  #
+  gCrownBayTokenSpaceGuid.PcdLocalApicAddressOverride|0x0|UINT64|0xA000017C
+
+
+  ## Provides the number of PCI devices that will be described in the ACPI
+  #  tables.  Each device entry provides routing related information required by
+  #  an ACPI aware OS.<BR><BR>
+  #  Valid values are 0 - 13.<BR>
+  #
+  # @Prompt PCI Device Routing Entries
+  #
+  # Invalid number of PCI devices specified.
+  # @ValidRange 0x8000000B | 0 - 13
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDeviceInfoNumber|0x0D|UINT8|0xB0000200
+
+  ## Provides a name for the device being described in the PCI Device Routing
+  #  entry 1.<BR><BR>
+  #  Must be a valid ASCII string.<BR>
+  #
+  # @Prompt PCI Device Routing Entry 1: Name
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice1Name|"Host Bridge"|VOID*|0xB0000201
+
+
+  ## Provides the address of the PCI bridge that the device is located behind.
+  #  The location is defined in terms of Bus, Device and Function.  If all all
+  #  functions associated with a specific bridge have the same routing, the
+  #  value 0xFF can be used for the function number.  Byte 3 must be set to 0x00
+  #  unless the entry is not used.  If an entry is not used, all bytes must be
+  #  set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 1: Bridge Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice1BridgeAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice1BridgeAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice1BridgeAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice1BridgeAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice1BridgeAddress|0|UINT32|0xB0000202
+
+
+  ## Provides the address of the PCI device the routing information associated
+  #  with.  The location is defined in terms of Bus, Device and Function.  Byte
+  #  3 must be set to 0x00 unless the entry is not used.  If an entry is not
+  #  used, all bytes must be set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 1: Device Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice1DeviceAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice1DeviceAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice1DeviceAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice1DeviceAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice1DeviceAddress|0|UINT32|0xB0000203
+
+  ## Provides the interrupt routing information for INTA.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 1: INTA
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice1INTA & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice1INTA & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice1INTA & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice1INTA & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice1INTA & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice1INTA & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice1INTA|0xFFFF|UINT16|0xB0000204
+
+  ## Provides the interrupt routing information for INTB.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 1: INTB
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice1INTB & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice1INTB & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice1INTB & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice1INTB & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice1INTB & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice1INTB & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice1INTB|0xFFFF|UINT16|0xB0000205
+
+  ## Provides the interrupt routing information for INTC.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 1: INTC
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice1INTC & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice1INTC & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice1INTC & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice1INTC & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice1INTC & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice1INTC & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice1INTC|0xFFFF|UINT16|0xB0000206
+
+  ## Provides the interrupt routing information for INTD.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 1: INTD
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice1INTD & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice1INTD & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice1INTD & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice1INTD & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice1INTD & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice1INTD & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice1INTD|0xFFFF|UINT16|0xB0000207
+
+  ## Provides the bit index in the General Purpose Event (GPE) enable register
+  #  the device uses to wake the system.  If the device does not provide the
+  #  ability to wake the system the value 0xFF must be entered.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 1: GPE PIN Index
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice1GpePin|0xFF|UINT8|0xB0000208
+
+  ## The lowest system sleep state that can be entered and still allow the
+  #  device to wake the system.  The values 0 - 5 refer to system states
+  #  S0 - S5.  If the device does not provide the ability to wake the system the
+  #  value 0xFF must be entered.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 1: Lowest Wake State
+  #
+  #  @ValidList 0x80000010 | 0, 1, 2, 3, 4, 5, 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice1SxNum|0xFF|UINT8|0xB0000209
+
+
+  ## Provides a name for the device being described in the PCI Device Routing
+  #  entry 2.<BR><BR>
+  #  Must be a valid ASCII string.<BR>
+  #
+  # @Prompt PCI Device Routing Entry 2: Name
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice2Name|"Integrated Graphics and Video Device"|VOID*|0xB000020A
+
+
+  ## Provides the address of the PCI bridge that the device is located behind.
+  #  The location is defined in terms of Bus, Device and Function.  If all all
+  #  functions associated with a specific bridge have the same routing, the
+  #  value 0xFF can be used for the function number.  Byte 3 must be set to 0x00
+  #  unless the entry is not used.  If an entry is not used, all bytes must be
+  #  set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 2: Bridge Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice2BridgeAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice2BridgeAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice2BridgeAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice2BridgeAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice2BridgeAddress|0|UINT32|0xB000020B
+
+
+  ## Provides the address of the PCI device the routing information associated
+  #  with.  The location is defined in terms of Bus, Device and Function.  Byte
+  #  3 must be set to 0x00 unless the entry is not used.  If an entry is not
+  #  used, all bytes must be set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 2: Device Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice2DeviceAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice2DeviceAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice2DeviceAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice2DeviceAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice2DeviceAddress|0x00000200|UINT32|0xB000020C
+
+
+  ## Provides the interrupt routing information for INTA.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 2: INTA
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice2INTA & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice2INTA & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice2INTA & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice2INTA & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice2INTA & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice2INTA & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice2INTA|0x1001|UINT16|0xB000020D
+
+  ## Provides the interrupt routing information for INTB.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 2: INTB
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice2INTB & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice2INTB & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice2INTB & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice2INTB & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice2INTB & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice2INTB & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice2INTB|0xFFFF|UINT16|0xB000020E
+
+  ## Provides the interrupt routing information for INTC.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 2: INTC
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice2INTC & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice2INTC & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice2INTC & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice2INTC & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice2INTC & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice2INTC & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice2INTC|0xFFFF|UINT16|0xB000020F
+
+  ## Provides the interrupt routing information for INTD.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 2: INTD
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice2INTD & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice2INTD & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice2INTD & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice2INTD & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice2INTD & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice2INTD & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice2INTD|0xFFFF|UINT16|0xB0000210
+
+
+  ## Provides the bit index in the General Purpose Event (GPE) enable register
+  #  the device uses to wake the system.  If the device does not provide the
+  #  ability to wake the system the value 0xFF must be entered.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 2: GPE PIN Index
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice2GpePin|0xFF|UINT8|0xB0000211
+
+  ## The lowest system sleep state that can be entered and still allow the
+  #  device to wake the system.  The values 0 - 5 refer to system states
+  #  S0 - S5.  If the device does not provide the ability to wake the system the
+  #  value 0xFF must be entered.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 2: Lowest Wake State
+  #
+  #  @ValidList 0x80000010 | 0, 1, 2, 3, 4, 5, 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice2SxNum|0xFF|UINT8|0xB0000212
+
+
+  ## Provides a name for the device being described in the PCI Device Routing
+  #  entry 3.<BR><BR>
+  #  Must be a valid ASCII string.<BR>
+  #
+  # @Prompt PCI Device Routing Entry 3: Name
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice3Name|"SDVO Display Unit"|VOID*|0xB0000213
+
+
+  ## Provides the address of the PCI bridge that the device is located behind.
+  #  The location is defined in terms of Bus, Device and Function.  If all all
+  #  functions associated with a specific bridge have the same routing, the
+  #  value 0xFF can be used for the function number.  Byte 3 must be set to 0x00
+  #  unless the entry is not used.  If an entry is not used, all bytes must be
+  #  set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 3: Bridge Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice3BridgeAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice3BridgeAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice3BridgeAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice3BridgeAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice3BridgeAddress|0|UINT32|0xB0000214
+
+
+  ## Provides the address of the PCI device the routing information associated
+  #  with.  The location is defined in terms of Bus, Device and Function.  Byte
+  #  3 must be set to 0x00 unless the entry is not used.  If an entry is not
+  #  used, all bytes must be set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 3: Device Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice3DeviceAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice3DeviceAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice3DeviceAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice3DeviceAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice3DeviceAddress|0x00000300|UINT32|0xB0000215
+
+  ## Provides the interrupt routing information for INTA.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 3: INTA
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice3INTA & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice3INTA & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice3INTA & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice3INTA & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice3INTA & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice3INTA & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice3INTA|0x1001|UINT16|0xB0000216
+
+  ## Provides the interrupt routing information for INTB.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 3: INTB
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice3INTB & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice3INTB & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice3INTB & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice3INTB & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice3INTB & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice3INTB & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice3INTB|0xFFFF|UINT16|0xB0000217
+
+  ## Provides the interrupt routing information for INTC.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 3: INTC
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice3INTC & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice3INTC & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice3INTC & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice3INTC & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice3INTC & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice3INTC & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice3INTC|0xFFFF|UINT16|0xB0000218
+
+  ## Provides the interrupt routing information for INTD.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 3: INTD
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice3INTD & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice3INTD & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice3INTD & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice3INTD & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice3INTD & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice3INTD & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice3INTD|0xFFFF|UINT16|0xB0000219
+
+
+  ## Provides the bit index in the General Purpose Event (GPE) enable register
+  #  the device uses to wake the system.  If the device does not provide the
+  #  ability to wake the system the value 0xFF must be entered.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 3: GPE PIN Index
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice3GpePin|0xFF|UINT8|0xB000021A
+
+  ## The lowest system sleep state that can be entered and still allow the
+  #  device to wake the system.  The values 0 - 5 refer to system states
+  #  S0 - S5.  If the device does not provide the ability to wake the system the
+  #  value 0xFF must be entered.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 3: Lowest Wake State
+  #
+  #  @ValidList 0x80000010 | 0, 1, 2, 3, 4, 5, 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice3SxNum|0xFF|UINT8|0xB000021B
+
+
+  ## Provides a name for the device being described in the PCI Device Routing
+  #  entry 4.<BR><BR>
+  #  Must be a valid ASCII string.<BR>
+  #
+  # @Prompt PCI Device Routing Entry 4: Name
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice4Name|"PCI Express Port 0"|VOID*|0xB000021C
+
+
+  ## Provides the address of the PCI bridge that the device is located behind.
+  #  The location is defined in terms of Bus, Device and Function.  If all all
+  #  functions associated with a specific bridge have the same routing, the
+  #  value 0xFF can be used for the function number.  Byte 3 must be set to 0x00
+  #  unless the entry is not used.  If an entry is not used, all bytes must be
+  #  set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 4: Bridge Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice4BridgeAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice4BridgeAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice4BridgeAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice4BridgeAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice4BridgeAddress|0|UINT32|0xB000021D
+
+
+  ## Provides the address of the PCI device the routing information associated
+  #  with.  The location is defined in terms of Bus, Device and Function.  Byte
+  #  3 must be set to 0x00 unless the entry is not used.  If an entry is not
+  #  used, all bytes must be set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 4: Device Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice4DeviceAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice4DeviceAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice4DeviceAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice4DeviceAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice4DeviceAddress|0x00001700|UINT32|0xB000021E
+
+  ## Provides the interrupt routing information for INTA.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 4: INTA
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice4INTA & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice4INTA & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice4INTA & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice4INTA & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice4INTA & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice4INTA & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice4INTA|0x1304|UINT16|0xB000021F
+
+  ## Provides the interrupt routing information for INTB.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 4: INTB
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice4INTB & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice4INTB & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice4INTB & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice4INTB & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice4INTB & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice4INTB & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice4INTB|0xFFFF|UINT16|0xB0000220
+
+  ## Provides the interrupt routing information for INTC.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 4: INTC
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice4INTC & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice4INTC & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice4INTC & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice4INTC & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice4INTC & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice4INTC & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice4INTC|0xFFFF|UINT16|0xB0000221
+
+  ## Provides the interrupt routing information for INTD.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 4: INTD
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice4INTD & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice4INTD & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice4INTD & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice4INTD & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice4INTD & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice4INTD & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice4INTD|0xFFFF|UINT16|0xB0000222
+
+
+  ## Provides the bit index in the General Purpose Event (GPE) enable register
+  #  the device uses to wake the system.  If the device does not provide the
+  #  ability to wake the system the value 0xFF must be entered.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 4: GPE PIN Index
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice4GpePin|0x06|UINT8|0xB0000223
+
+  ## The lowest system sleep state that can be entered and still allow the
+  #  device to wake the system.  The values 0 - 5 refer to system states
+  #  S0 - S5.  If the device does not provide the ability to wake the system the
+  #  value 0xFF must be entered.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 4: Lowest Wake State
+  #
+  #  @ValidList 0x80000010 | 0, 1, 2, 3, 4, 5, 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice4SxNum|0x03|UINT8|0xB0000224
+
+
+  ## Provides a name for the device being described in the PCI Device Routing
+  #  entry 5.<BR><BR>
+  #  Must be a valid ASCII string.<BR>
+  #
+  # @Prompt PCI Device Routing Entry 5: Name
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice5Name|"PCI Express Port 1"|VOID*|0xB0000225
+
+
+  ## Provides the address of the PCI bridge that the device is located behind.
+  #  The location is defined in terms of Bus, Device and Function.  If all all
+  #  functions associated with a specific bridge have the same routing, the
+  #  value 0xFF can be used for the function number.  Byte 3 must be set to 0x00
+  #  unless the entry is not used.  If an entry is not used, all bytes must be
+  #  set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 5: Bridge Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice5BridgeAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice5BridgeAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice5BridgeAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice5BridgeAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice5BridgeAddress|0|UINT32|0xB0000226
+
+
+  ## Provides the address of the PCI device the routing information associated
+  #  with.  The location is defined in terms of Bus, Device and Function.  Byte
+  #  3 must be set to 0x00 unless the entry is not used.  If an entry is not
+  #  used, all bytes must be set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 5: Device Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice5DeviceAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice5DeviceAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice5DeviceAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice5DeviceAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice5DeviceAddress|0x00001800|UINT32|0xB0000227
+
+  ## Provides the interrupt routing information for INTA.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 5: INTA
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice5INTA & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice5INTA & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice5INTA & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice5INTA & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice5INTA & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice5INTA & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice5INTA|0x1405|UINT16|0xB0000228
+
+  ## Provides the interrupt routing information for INTB.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 5: INTB
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice5INTB & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice5INTB & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice5INTB & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice5INTB & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice5INTB & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice5INTB & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice5INTB|0xFFFF|UINT16|0xB0000229
+
+  ## Provides the interrupt routing information for INTC.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 5: INTC
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice5INTC & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice5INTC & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice5INTC & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice5INTC & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice5INTC & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice5INTC & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice5INTC|0xFFFF|UINT16|0xB000022A
+
+  ## Provides the interrupt routing information for INTD.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 5: INTD
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice5INTD & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice5INTD & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice5INTD & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice5INTD & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice5INTD & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice5INTD & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice5INTD|0xFFFF|UINT16|0xB000022B
+
+
+  ## Provides the bit index in the General Purpose Event (GPE) enable register
+  #  the device uses to wake the system.  If the device does not provide the
+  #  ability to wake the system the value 0xFF must be entered.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 5: GPE PIN Index
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice5GpePin|0x07|UINT8|0xB000022C
+
+  ## The lowest system sleep state that can be entered and still allow the
+  #  device to wake the system.  The values 0 - 5 refer to system states
+  #  S0 - S5.  If the device does not provide the ability to wake the system the
+  #  value 0xFF must be entered.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 5: Lowest Wake State
+  #
+  #  @ValidList 0x80000010 | 0, 1, 2, 3, 4, 5, 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice5SxNum|0x03|UINT8|0xB000022D
+
+  ## Provides a name for the device being described in the PCI Device Routing
+  #  entry 6.<BR><BR>
+  #  Must be a valid ASCII string.<BR>
+  #
+  # @Prompt PCI Device Routing Entry 6: Name
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice6Name|"PCI Express Port 2"|VOID*|0xB000022E
+
+
+  ## Provides the address of the PCI bridge that the device is located behind.
+  #  The location is defined in terms of Bus, Device and Function.  If all all
+  #  functions associated with a specific bridge have the same routing, the
+  #  value 0xFF can be used for the function number.  Byte 3 must be set to 0x00
+  #  unless the entry is not used.  If an entry is not used, all bytes must be
+  #  set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 6: Bridge Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice6BridgeAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice6BridgeAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice6BridgeAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice6BridgeAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice6BridgeAddress|0|UINT32|0xB000022F
+
+
+  ## Provides the address of the PCI device the routing information associated
+  #  with.  The location is defined in terms of Bus, Device and Function.  Byte
+  #  3 must be set to 0x00 unless the entry is not used.  If an entry is not
+  #  used, all bytes must be set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 6: Device Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice6DeviceAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice6DeviceAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice6DeviceAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice6DeviceAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice6DeviceAddress|0x00001900|UINT32|0xB0000230
+
+  ## Provides the interrupt routing information for INTA.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 6: INTA
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice6INTA & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice6INTA & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice6INTA & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice6INTA & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice6INTA & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice6INTA & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice6INTA|0x1506|UINT16|0xB0000231
+
+  ## Provides the interrupt routing information for INTB.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 6: INTB
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice6INTB & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice6INTB & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice6INTB & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice6INTB & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice6INTB & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice6INTB & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice6INTB|0xFFFF|UINT16|0xB0000232
+
+  ## Provides the interrupt routing information for INTC.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 6: INTC
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice6INTC & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice6INTC & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice6INTC & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice6INTC & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice6INTC & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice6INTC & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice6INTC|0xFFFF|UINT16|0xB0000233
+
+  ## Provides the interrupt routing information for INTD.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 6: INTD
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice6INTD & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice6INTD & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice6INTD & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice6INTD & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice6INTD & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice6INTD & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice6INTD|0xFFFF|UINT16|0xB0000234
+
+
+  ## Provides the bit index in the General Purpose Event (GPE) enable register
+  #  the device uses to wake the system.  If the device does not provide the
+  #  ability to wake the system the value 0xFF must be entered.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 6: GPE PIN Index
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice6GpePin|0x08|UINT8|0xB0000235
+
+  ## The lowest system sleep state that can be entered and still allow the
+  #  device to wake the system.  The values 0 - 5 refer to system states
+  #  S0 - S5.  If the device does not provide the ability to wake the system the
+  #  value 0xFF must be entered.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 6: Lowest Wake State
+  #
+  #  @ValidList 0x80000010 | 0, 1, 2, 3, 4, 5, 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice6SxNum|0x03|UINT8|0xB0000236
+
+  ## Provides a name for the device being described in the PCI Device Routing
+  #  entry 7.<BR><BR>
+  #  Must be a valid ASCII string.<BR>
+  #
+  # @Prompt PCI Device Routing Entry 7: Name
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice7Name|"PCI Express Port 3"|VOID*|0xB0000237
+
+
+  ## Provides the address of the PCI bridge that the device is located behind.
+  #  The location is defined in terms of Bus, Device and Function.  If all all
+  #  functions associated with a specific bridge have the same routing, the
+  #  value 0xFF can be used for the function number.  Byte 3 must be set to 0x00
+  #  unless the entry is not used.  If an entry is not used, all bytes must be
+  #  set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 7: Bridge Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice7BridgeAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice7BridgeAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice7BridgeAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice7BridgeAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice7BridgeAddress|0|UINT32|0xB0000238
+
+
+  ## Provides the address of the PCI device the routing information associated
+  #  with.  The location is defined in terms of Bus, Device and Function.  Byte
+  #  3 must be set to 0x00 unless the entry is not used.  If an entry is not
+  #  used, all bytes must be set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 7: Device Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice7DeviceAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice7DeviceAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice7DeviceAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice7DeviceAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice7DeviceAddress|0x00001A00|UINT32|0xB0000239
+
+  ## Provides the interrupt routing information for INTA.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 7: INTA
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice7INTA & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice7INTA & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice7INTA & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice7INTA & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice7INTA & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice7INTA & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice7INTA|0x1607|UINT16|0xB000023A
+
+  ## Provides the interrupt routing information for INTB.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 7: INTB
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice7INTB & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice7INTB & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice7INTB & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice7INTB & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice7INTB & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice7INTB & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice7INTB|0xFFFF|UINT16|0xB000023B
+
+  ## Provides the interrupt routing information for INTC.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 7: INTC
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice7INTC & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice7INTC & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice7INTC & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice7INTC & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice7INTC & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice7INTC & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice7INTC|0xFFFF|UINT16|0xB000023C
+
+  ## Provides the interrupt routing information for INTD.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 7: INTD
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice7INTD & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice7INTD & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice7INTD & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice7INTD & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice7INTD & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice7INTD & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice7INTD|0xFFFF|UINT16|0xB000023D
+
+
+  ## Provides the bit index in the General Purpose Event (GPE) enable register
+  #  the device uses to wake the system.  If the device does not provide the
+  #  ability to wake the system the value 0xFF must be entered.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 7: GPE PIN Index
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice7GpePin|0x09|UINT8|0xB000023E
+
+  ## The lowest system sleep state that can be entered and still allow the
+  #  device to wake the system.  The values 0 - 5 refer to system states
+  #  S0 - S5.  If the device does not provide the ability to wake the system the
+  #  value 0xFF must be entered.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 7: Lowest Wake State
+  #
+  #  @ValidList 0x80000010 | 0, 1, 2, 3, 4, 5, 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice7SxNum|0x03|UINT8|0xB000023F
+
+  ## Provides a name for the device being described in the PCI Device Routing
+  #  entry 8.<BR><BR>
+  #  Must be a valid ASCII string.<BR>
+  #
+  # @Prompt PCI Device Routing Entry 8: Name
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice8Name|"Intel High Definition Audio Controller"|VOID*|0xB0000240
+
+
+  ## Provides the address of the PCI bridge that the device is located behind.
+  #  The location is defined in terms of Bus, Device and Function.  If all all
+  #  functions associated with a specific bridge have the same routing, the
+  #  value 0xFF can be used for the function number.  Byte 3 must be set to 0x00
+  #  unless the entry is not used.  If an entry is not used, all bytes must be
+  #  set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 8: Bridge Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice8BridgeAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice8BridgeAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice8BridgeAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice8BridgeAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice8BridgeAddress|0|UINT32|0xB0000241
+
+
+  ## Provides the address of the PCI device the routing information associated
+  #  with.  The location is defined in terms of Bus, Device and Function.  Byte
+  #  3 must be set to 0x00 unless the entry is not used.  If an entry is not
+  #  used, all bytes must be set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 8: Device Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice8DeviceAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice8DeviceAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice8DeviceAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice8DeviceAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice8DeviceAddress|0x00001B00|UINT32|0xB0000242
+
+  ## Provides the interrupt routing information for INTA.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 8: INTA
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice8INTA & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice8INTA & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice8INTA & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice8INTA & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice8INTA & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice8INTA & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice8INTA|0x1708|UINT16|0xB0000243
+
+  ## Provides the interrupt routing information for INTB.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 8: INTB
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice8INTB & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice8INTB & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice8INTB & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice8INTB & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice8INTB & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice8INTB & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice8INTB|0xFFFF|UINT16|0xB0000244
+
+  ## Provides the interrupt routing information for INTC.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 8: INTC
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice8INTC & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice8INTC & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice8INTC & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice8INTC & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice8INTC & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice8INTC & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice8INTC|0xFFFF|UINT16|0xB0000245
+
+  ## Provides the interrupt routing information for INTD.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 8: INTD
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice8INTD & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice8INTD & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice8INTD & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice8INTD & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice8INTD & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice8INTD & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice8INTD|0xFFFF|UINT16|0xB0000246
+
+
+  ## Provides the bit index in the General Purpose Event (GPE) enable register
+  #  the device uses to wake the system.  If the device does not provide the
+  #  ability to wake the system the value 0xFF must be entered.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 8: GPE PIN Index
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice8GpePin|0x19|UINT8|0xB0000247
+
+  ## The lowest system sleep state that can be entered and still allow the
+  #  device to wake the system.  The values 0 - 5 refer to system states
+  #  S0 - S5.  If the device does not provide the ability to wake the system the
+  #  value 0xFF must be entered.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 8: Lowest Wake State
+  #
+  #  @ValidList 0x80000010 | 0, 1, 2, 3, 4, 5, 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice8SxNum|0x03|UINT8|0xB0000248
+
+
+  ## Provides a name for the device being described in the PCI Device Routing
+  #  entry 9.<BR><BR>
+  #  Must be a valid ASCII string.<BR>
+  #
+  # @Prompt PCI Device Routing Entry 9: Name
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice9Name|"LPC interface"|VOID*|0xB0000249
+
+
+  ## Provides the address of the PCI bridge that the device is located behind.
+  #  The location is defined in terms of Bus, Device and Function.  If all all
+  #  functions associated with a specific bridge have the same routing, the
+  #  value 0xFF can be used for the function number.  Byte 3 must be set to 0x00
+  #  unless the entry is not used.  If an entry is not used, all bytes must be
+  #  set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 9: Bridge Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice9BridgeAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice9BridgeAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice9BridgeAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice9BridgeAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice9BridgeAddress|0|UINT32|0xB000024A
+
+
+  ## Provides the address of the PCI device the routing information associated
+  #  with.  The location is defined in terms of Bus, Device and Function.  Byte
+  #  3 must be set to 0x00 unless the entry is not used.  If an entry is not
+  #  used, all bytes must be set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 9: Device Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice9DeviceAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice9DeviceAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice9DeviceAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice9DeviceAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice9DeviceAddress|0x00001F00|UINT32|0xB000024B
+
+  ## Provides the interrupt routing information for INTA.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 9: INTA
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice9INTA & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice9INTA & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice9INTA & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice9INTA & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice9INTA & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice9INTA & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice9INTA|0x1001|UINT16|0xB000024C
+
+  ## Provides the interrupt routing information for INTB.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 9: INTB
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice9INTB & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice9INTB & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice9INTB & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice9INTB & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice9INTB & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice9INTB & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice9INTB|0xFFFF|UINT16|0xB000024D
+
+  ## Provides the interrupt routing information for INTC.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 9: INTC
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice9INTC & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice9INTC & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice9INTC & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice9INTC & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice9INTC & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice9INTC & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice9INTC|0xFFFF|UINT16|0xB000024E
+
+  ## Provides the interrupt routing information for INTD.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 9: INTD
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice9INTD & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice9INTD & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice9INTD & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice9INTD & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice9INTD & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice9INTD & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice9INTD|0xFFFF|UINT16|0xB000024F
+
+
+  ## Provides the bit index in the General Purpose Event (GPE) enable register
+  #  the device uses to wake the system.  If the device does not provide the
+  #  ability to wake the system the value 0xFF must be entered.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 9: GPE PIN Index
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice9GpePin|0xFF|UINT8|0xB0000250
+
+  ## The lowest system sleep state that can be entered and still allow the
+  #  device to wake the system.  The values 0 - 5 refer to system states
+  #  S0 - S5.  If the device does not provide the ability to wake the system the
+  #  value 0xFF must be entered.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 9: Lowest Wake State
+  #
+  #  @ValidList 0x80000010 | 0, 1, 2, 3, 4, 5, 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice9SxNum|0xFF|UINT8|0xB0000251
+
+
+  ## Provides a name for the device being described in the PCI Device Routing
+  #  entry 10.<BR><BR>
+  #  Must be a valid ASCII string.<BR>
+  #
+  # @Prompt PCI Device Routing Entry 10: Name
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice10Name|"PCI Device"|VOID*|0xB0000252
+
+
+  ## Provides the address of the PCI bridge that the device is located behind.
+  #  The location is defined in terms of Bus, Device and Function.  If all all
+  #  functions associated with a specific bridge have the same routing, the
+  #  value 0xFF can be used for the function number.  Byte 3 must be set to 0x00
+  #  unless the entry is not used.  If an entry is not used, all bytes must be
+  #  set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 10: Bridge Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice10BridgeAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice10BridgeAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice10BridgeAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice10BridgeAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice10BridgeAddress|0x00001700|UINT32|0xB0000253
+
+
+  ## Provides the address of the PCI device the routing information associated
+  #  with.  The location is defined in terms of Bus, Device and Function.  Byte
+  #  3 must be set to 0x00 unless the entry is not used.  If an entry is not
+  #  used, all bytes must be set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 10: Device Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice10DeviceAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice10DeviceAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice10DeviceAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice10DeviceAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice10DeviceAddress|0x00010000|UINT32|0xB0000254
+
+  ## Provides the interrupt routing information for INTA.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 10: INTA
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice10INTA & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice10INTA & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice10INTA & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice10INTA & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice10INTA & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice10INTA & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice10INTA|0x1001|UINT16|0xB0000255
+
+  ## Provides the interrupt routing information for INTB.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 10: INTB
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice10INTB & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice10INTB & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice10INTB & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice10INTB & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice10INTB & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice10INTB & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice10INTB|0x1102|UINT16|0xB0000256
+
+  ## Provides the interrupt routing information for INTC.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 10: INTC
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice10INTC & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice10INTC & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice10INTC & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice10INTC & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice10INTC & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice10INTC & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice10INTC|0x1203|UINT16|0xB0000257
+
+  ## Provides the interrupt routing information for INTD.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 10: INTD
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice10INTD & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice10INTD & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice10INTD & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice10INTD & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice10INTD & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice10INTD & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice10INTD|0x1304|UINT16|0xB0000258
+
+
+  ## Provides the bit index in the General Purpose Event (GPE) enable register
+  #  the device uses to wake the system.  If the device does not provide the
+  #  ability to wake the system the value 0xFF must be entered.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 10: GPE PIN Index
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice10GpePin|0xFF|UINT8|0xB0000259
+
+  ## The lowest system sleep state that can be entered and still allow the
+  #  device to wake the system.  The values 0 - 5 refer to system states
+  #  S0 - S5.  If the device does not provide the ability to wake the system the
+  #  value 0xFF must be entered.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 10: Lowest Wake State
+  #
+  #  @ValidList 0x80000010 | 0, 1, 2, 3, 4, 5, 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice10SxNum|0xFF|UINT8|0xB000025A
+
+
+  ## Provides a name for the device being described in the PCI Device Routing
+  #  entry 11.<BR><BR>
+  #  Must be a valid ASCII string.<BR>
+  #
+  # @Prompt PCI Device Routing Entry 11: Name
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice11Name|"PCI Device"|VOID*|0xB000025B
+
+
+  ## Provides the address of the PCI bridge that the device is located behind.
+  #  The location is defined in terms of Bus, Device and Function.  If all all
+  #  functions associated with a specific bridge have the same routing, the
+  #  value 0xFF can be used for the function number.  Byte 3 must be set to 0x00
+  #  unless the entry is not used.  If an entry is not used, all bytes must be
+  #  set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 11: Bridge Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice11BridgeAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice11BridgeAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice11BridgeAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice11BridgeAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice11BridgeAddress|0x00001800|UINT32|0xB000025C
+
+
+  ## Provides the address of the PCI device the routing information associated
+  #  with.  The location is defined in terms of Bus, Device and Function.  Byte
+  #  3 must be set to 0x00 unless the entry is not used.  If an entry is not
+  #  used, all bytes must be set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 11: Device Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice11DeviceAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice11DeviceAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice11DeviceAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice11DeviceAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice11DeviceAddress|0x00030000|UINT32|0xB000025D
+
+  ## Provides the interrupt routing information for INTA.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 11: INTA
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice11INTA & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice11INTA & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice11INTA & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice11INTA & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice11INTA & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice11INTA & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice11INTA|0x1102|UINT16|0xB000025E
+
+  ## Provides the interrupt routing information for INTB.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 11: INTB
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice11INTB & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice11INTB & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice11INTB & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice11INTB & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice11INTB & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice11INTB & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice11INTB|0x1203|UINT16|0xB000025F
+
+  ## Provides the interrupt routing information for INTC.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 11: INTC
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice11INTC & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice11INTC & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice11INTC & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice11INTC & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice11INTC & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice11INTC & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice11INTC|0x1304|UINT16|0xB0000260
+
+  ## Provides the interrupt routing information for INTD.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 11: INTD
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice11INTD & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice11INTD & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice11INTD & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice11INTD & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice11INTD & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice11INTD & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice11INTD|0x1001|UINT16|0xB0000261
+
+
+  ## Provides the bit index in the General Purpose Event (GPE) enable register
+  #  the device uses to wake the system.  If the device does not provide the
+  #  ability to wake the system the value 0xFF must be entered.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 11: GPE PIN Index
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice11GpePin|0xFF|UINT8|0xB0000262
+
+  ## The lowest system sleep state that can be entered and still allow the
+  #  device to wake the system.  The values 0 - 5 refer to system states
+  #  S0 - S5.  If the device does not provide the ability to wake the system the
+  #  value 0xFF must be entered.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 11: Lowest Wake State
+  #
+  #  @ValidList 0x80000010 | 0, 1, 2, 3, 4, 5, 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice11SxNum|0xFF|UINT8|0xB0000263
+
+
+  ## Provides a name for the device being described in the PCI Device Routing
+  #  entry 12.<BR><BR>
+  #  Must be a valid ASCII string.<BR>
+  #
+  # @Prompt PCI Device Routing Entry 12: Name
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice12Name|"PCI Device"|VOID*|0xB0000264
+
+
+  ## Provides the address of the PCI bridge that the device is located behind.
+  #  The location is defined in terms of Bus, Device and Function.  If all all
+  #  functions associated with a specific bridge have the same routing, the
+  #  value 0xFF can be used for the function number.  Byte 3 must be set to 0x00
+  #  unless the entry is not used.  If an entry is not used, all bytes must be
+  #  set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 12: Bridge Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice12BridgeAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice12BridgeAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice12BridgeAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice12BridgeAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice12BridgeAddress|0x00001900|UINT32|0xB0000265
+
+
+  ## Provides the address of the PCI device the routing information associated
+  #  with.  The location is defined in terms of Bus, Device and Function.  Byte
+  #  3 must be set to 0x00 unless the entry is not used.  If an entry is not
+  #  used, all bytes must be set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 12: Device Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice12DeviceAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice12DeviceAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice12DeviceAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice12DeviceAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice12DeviceAddress|0x00050000|UINT32|0xB0000266
+
+  ## Provides the interrupt routing information for INTA.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 12: INTA
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice12INTA & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice12INTA & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice12INTA & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice12INTA & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice12INTA & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice12INTA & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice12INTA|0x1203|UINT16|0xB0000267
+
+  ## Provides the interrupt routing information for INTB.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 12: INTB
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice12INTB & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice12INTB & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice12INTB & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice12INTB & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice12INTB & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice12INTB & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice12INTB|0x1304|UINT16|0xB0000268
+
+  ## Provides the interrupt routing information for INTC.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 12: INTC
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice12INTC & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice12INTC & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice12INTC & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice12INTC & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice12INTC & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice12INTC & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice12INTC|0x1001|UINT16|0xB0000269
+
+  ## Provides the interrupt routing information for INTD.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 12: INTD
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice12INTD & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice12INTD & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice12INTD & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice12INTD & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice12INTD & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice12INTD & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice12INTD|0x1102|UINT16|0xB000026A
+
+
+  ## Provides the bit index in the General Purpose Event (GPE) enable register
+  #  the device uses to wake the system.  If the device does not provide the
+  #  ability to wake the system the value 0xFF must be entered.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 12: GPE PIN Index
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice12GpePin|0xFF|UINT8|0xB000026B
+
+  ## The lowest system sleep state that can be entered and still allow the
+  #  device to wake the system.  The values 0 - 5 refer to system states
+  #  S0 - S5.  If the device does not provide the ability to wake the system the
+  #  value 0xFF must be entered.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 12: Lowest Wake State
+  #
+  #  @ValidList 0x80000010 | 0, 1, 2, 3, 4, 5, 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice12SxNum|0xFF|UINT8|0xB000026C
+
+
+  ## Provides a name for the device being described in the PCI Device Routing
+  #  entry 13.<BR><BR>
+  #  Must be a valid ASCII string.<BR>
+  #
+  # @Prompt PCI Device Routing Entry 13: Name
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice13Name|"PCI Device"|VOID*|0xB000026D
+
+
+  ## Provides the address of the PCI bridge that the device is located behind.
+  #  The location is defined in terms of Bus, Device and Function.  If all all
+  #  functions associated with a specific bridge have the same routing, the
+  #  value 0xFF can be used for the function number.  Byte 3 must be set to 0x00
+  #  unless the entry is not used.  If an entry is not used, all bytes must be
+  #  set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 13: Bridge Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice13BridgeAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice13BridgeAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice13BridgeAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice13BridgeAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice13BridgeAddress|0x00001A00|UINT32|0xB000026E
+
+
+  ## Provides the address of the PCI device the routing information associated
+  #  with.  The location is defined in terms of Bus, Device and Function.  Byte
+  #  3 must be set to 0x00 unless the entry is not used.  If an entry is not
+  #  used, all bytes must be set to 0xFF.<BR><BR>
+  #  Byte 3: Reserved<BR>
+  #  Byte 2: Bus Number<BR>
+  #  Byte 1: Device Number<BR>
+  #  Byte 0: Function Number<BR>
+  #
+  # @Prompt PCI Device Routing Entry 13: Device Address
+  #
+  # @Expression  0x8000000C | (((gCrownBayTokenSpaceGuid.PcdPciDevice13DeviceAddress & 0x000000FF) < 0x08) || (gCrownBayTokenSpaceGuid.PcdPciDevice13DeviceAddress == 0xFFFFFFFF))
+  # @Expression  0x8000000D | (((gCrownBayTokenSpaceGuid.PcdPciDevice13DeviceAddress & 0x0000FF00) < 0x2000) || (gCrownBayTokenSpaceGuid.PcdPciDevice13DeviceAddress == 0xFFFFFFFF))
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice13DeviceAddress|0x00070000|UINT32|0xB000026F
+
+  ## Provides the interrupt routing information for INTA.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 13: INTA
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice13INTA & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice13INTA & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice13INTA & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice13INTA & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice13INTA & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice13INTA & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice13INTA|0x1304|UINT16|0xB0000270
+
+  ## Provides the interrupt routing information for INTB.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 13: INTB
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice13INTB & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice13INTB & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice13INTB & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice13INTB & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice13INTB & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice13INTB & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice13INTB|0x1001|UINT16|0xB0000271
+
+  ## Provides the interrupt routing information for INTC.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 13: INTC
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice13INTC & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice13INTC & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice13INTC & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice13INTC & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice13INTC & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice13INTC & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice13INTC|0x1102|UINT16|0xB0000272
+
+  ## Provides the interrupt routing information for INTD.  Byte 0 provides the
+  #  8259 interrupt link and Byte 1 provides the I/O APIC IRQ number.  If the
+  #  interrupt link is not used a value of 0xFF must be provided.<BR><BR>
+  #  Byte 1: I/O APIC IRQ Number values 16 - 23<BR>
+  #  Byte 0: 8259 Interrupt Link values 1 - 8 (LINKA - LINKH)<BR>
+  #
+  # @Prompt PCI Device Routing Entry 13: INTD
+  #
+  # @Expression 0x8000000E | (((gCrownBayTokenSpaceGuid.PcdPciDevice13INTD & 0xFF) == 0xFF) || ((gCrownBayTokenSpaceGuid.PcdPciDevice13INTD & 0xFF) <= 8))
+  # @Expression 0x8000000E | (gCrownBayTokenSpaceGuid.PcdPciDevice13INTD & 0xFF) != 0x00
+  # @Expression 0x8000000F | (((gCrownBayTokenSpaceGuid.PcdPciDevice13INTD & 0xFF00) == 0xFF00) || ((gCrownBayTokenSpaceGuid.PcdPciDevice13INTD & 0xFF00) <= 0x1700))
+  # @Expression 0x8000000F | (gCrownBayTokenSpaceGuid.PcdPciDevice13INTD & 0xFF00) >= 0x1000
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice13INTD|0x1203|UINT16|0xB0000273
+
+
+  ## Provides the bit index in the General Purpose Event (GPE) enable register
+  #  the device uses to wake the system.  If the device does not provide the
+  #  ability to wake the system the value 0xFF must be entered.<BR><BR>
+  #  Valid values are 0x00 - 0xFF.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 13: GPE PIN Index
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice13GpePin|0xFF|UINT8|0xB0000274
+
+  ## The lowest system sleep state that can be entered and still allow the
+  #  device to wake the system.  The values 0 - 5 refer to system states
+  #  S0 - S5.  If the device does not provide the ability to wake the system the
+  #  value 0xFF must be entered.<BR>
+  #
+  #  @Prompt PCI Device Routing Entry 13: Lowest Wake State
+  #
+  #  @ValidList 0x80000010 | 0, 1, 2, 3, 4, 5, 0xFF
+  #
+  gCrownBayTokenSpaceGuid.PcdPciDevice13SxNum|0xFF|UINT8|0xB0000275
+
+  ## Provides the memory mapped base address of the Payload Area.  This area
+  #  must be within the memory mapped BIOS Image Area defined by the BIOS Image
+  #  Area Base Address and the BIOS Image Area Size.<BR><BR>
+  #  The address must be within the BIOS Image area.<BR>
+  #
+  # @Prompt Payload Area Base Address
+  #
+  gCrownBayTokenSpaceGuid.PcdFlashPayloadBase|0xFFF00000|UINT32|0x20000005
+
+  ## Provides the size of the Payload Area.<BR><BR>
+  #  Valid size values must not overlap other regions within the BIOS Image Area.<BR>
+  #
+  # @Prompt Payload Area Size
+  #
+  gCrownBayTokenSpaceGuid.PcdFlashPayloadSize|0x80000|UINT32|0x20000006
+
+  ## Provides the memory mapped base address of the Recovery Area Firmware
+  #  Volume (FV).  This area must be within the memory mapped BIOS Image Area
+  #  defined by the BIOS Image Area Base Address and the BIOS Image Area Size.<BR><BR>
+  #  The address must be within the BIOS Image area.<BR>
+  #
+  # @Prompt Recovery Area FV Base Address
+  #
+  gCrownBayTokenSpaceGuid.PcdFlashFvRecoveryBase|0xFFFD0000|UINT32|0x20000007
+
+  ## Provides the size of the Recovery Area FV.<BR><BR>
+  #  Valid size values must not overlap other regions within the BIOS Image Area.<BR>
+  #
+  # @Prompt Recovery Area FV Size
+  #
+  gCrownBayTokenSpaceGuid.PcdFlashFvRecoverySize|0x00030000|UINT32|0x20000008
+
+  ## Provides the memory mapped base address of the Main Area FV.  This area
+  #  must be within the memory mapped BIOS Image Area defined by the BIOS Image
+  #  Area Base Address and the BIOS Image Area Size.<BR><BR>
+  #  The address must be within the BIOS Image area.<BR>
+  #
+  # @Prompt Main Area FV Base Address
+  #
+  gCrownBayTokenSpaceGuid.PcdFlashFvMainBase|0xFFF00000|UINT32|0x20000009
+
+  ## Provides the size of the Main Area FV.<BR><BR>
+  #  Valid size values must not overlap other regions within the BIOS Image Area.<BR>
+  #
+  # @Prompt Main Area FV Size
+  #
+  gCrownBayTokenSpaceGuid.PcdFlashFvMainSize|0x000A0000|UINT32|0x2000000A
+
+  ## Provides the memory mapped base address of the Processor Microcode Area.
+  #  This area must be within the memory mapped BIOS Image Area defined by the
+  #  BIOS Image Area Base Address and the BIOS Image Area Size.<BR><BR>
+  #  The address must be within the BIOS Image area.<BR>
+  #
+  # @Prompt Processor Microcode Area Base Address
+  #
+  gCrownBayTokenSpaceGuid.PcdFlashTCMicrocodeBase|0xFFFB0000|UINT32|0x2000000B
+
+  ## Provides the size of the Processor Microcode Area Size.<BR><BR>
+  #  Valid size values must not overlap other regions within the BIOS Image Area.<BR>
+  #
+  # @Prompt Processor Microcode Area Size
+  #
+  gCrownBayTokenSpaceGuid.PcdFlashTCMicrocodeSize|0x00010000|UINT32|0x2000000C
+
+  ## Provides the memory mapped base address of the Second Recovery FV Area.
+  #  This area must be within the memory mapped region defined by the BIOS Image
+  #  Area Base Address and the BIOS Image Area Size.<BR><BR>
+  #  The address must be within the BIOS Image area.<BR>
+  #
+  # @Prompt Second Recovery FV Area Base Address
+  #
+  gCrownBayTokenSpaceGuid.PcdFlashFvRecovery2Base|0xFFF78000|UINT32|0x2000001E
+
+  ## Provides the size of the Second Recovery FV Area.<BR><BR>
+  #  Valid size values must not overlap other regions within the BIOS Image Area.<BR>
+  #
+  # @Prompt Second Recovery FV Area Size
+  #
+  gCrownBayTokenSpaceGuid.PcdFlashFvRecovery2Size|0x20000|UINT32|0x2000001F
+
+  ## Provides the ability to configure the terminal type to be used.<BR><BR>
+  #  0 - PcAnsi<BR>
+  #  1 - VT100<BR>
+  #  2 - VT100Plus<BR>
+  #  3 - VTUTF8<BR>
+  #
+  # @Prompt Terminal Configuration
+  #
+  # @ValidRange 0x80000006 | 0x00 - 0x03
+  #
+  gCrownBayTokenSpaceGuid.PcdTerminalType|0|UINT8|0x20000020
+
+  ## Provides the size of the vital product area.<BR><BR>
+  #  Valid size values must not overlap other regions within the BIOS Image Area.<BR>
+  #
+  # @Prompt Vital Product Data (VPD) Area Size
+  #
+  gCrownBayTokenSpaceGuid.PcdVpdSize|0|UINT32|0x20000022
+
+[PcdsDynamicEx]
+  ## Provides the ability to enable the Fast Boot feature of the BIOS.  This
+  #  enables the system to boot faster but may only enumerate the hardware
+  #  that is required to boot the system.<BR><BR>
+  #
+  # @Prompt Fast Boot Support
+  #
+  gCrownBayTokenSpaceGuid.PcdEnableFastBoot|FALSE|BOOLEAN|0xA000004
+
+[PcdsFixedAtBuild, PcdsPatchableInModule, PcdsDynamic, PcdsDynamicEx]
+  ## Provides the BIOS Vendor string to be used when generating the SMBIOS Type
+  #  0 structure.
+  #
+  gCrownBayTokenSpaceGuid.PcdSMBIOSBiosVendor|"Intel Corp."|VOID*|0xA0000033
+
+  ## Provides the BIOS Version string to be used when generating the SMBIOS Type
+  #  0 structure.
+  #
+  gCrownBayTokenSpaceGuid.PcdSMBIOSBiosVersion|"Tiano-E6XX"|VOID*|0xA0000034
+
+  ## Provides the BIOS Release Date string to be used when generating the SMBIOS
+  #  Type 0 structure.
+  #
+  gCrownBayTokenSpaceGuid.PcdSMBIOSBiosReleaseDate|"11/19/2010"|VOID*|0xA0000035
+
+  ## Provides the BIOS System UUID to be used when generating the SMBIOS Type 
+  #  0 structure.<BR><BR>
+  #
+  # @Prompt System UUID
+  # 
+  gCrownBayTokenSpaceGuid.PcdSMBIOSSystemUuid|{0x23, 0xef, 0xff, 0x13,0x54, 0x86, 0xda, 0x46, 0xa4, 0x7, 0x39, 0xc9, 0x12, 0x2, 0xd3, 0x56}|VOID*|0xA000003E
+
+#----------------------------------------------------------------------
+#  FirmwareUpdate Application
+#----------------------------------------------------------------------
+
+[PcdsFixedAtBuild]
+  gCrownBayTokenSpaceGuid.PcdFlashMinEraseSize|0x1000|UINT32|0x20000023
+  gCrownBayTokenSpaceGuid.PcdFlashBlocksPerDot|1|UINT32|0x20000024
+
+#----------------------------------------------------------------------
+#  Debugging features
+#----------------------------------------------------------------------
+
+[PcdsFeatureFlag]
+
+  ## ITP: Spin in SecCore until ITP changes PC
+  #
+  gCrownBayTokenSpaceGuid.PcdFeatureSecCoreWaitForItp|FALSE|BOOLEAN|0x20005000
+
+  ## Disable platform recovery support
+  #
+  gCrownBayTokenSpaceGuid.PcdFeatureRecoveryDisabled|FALSE|BOOLEAN|0x20005004
+
+#----------------------------------------------------------------------
+#  Subsystem Configuration
+#----------------------------------------------------------------------
+
+[PcdsPatchableInModule]
+  gCrownBayTokenSpaceGuid.PcdPciSubsystemVendorId|0|UINT16|0x20006000
+  gCrownBayTokenSpaceGuid.PcdPciSubsystemId|0|UINT16|0x20006001
+

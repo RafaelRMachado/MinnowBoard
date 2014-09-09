@@ -1,0 +1,273 @@
+#
+# This file contains 'Framework Code' and is licensed as such
+# under the terms of your license agreement with Intel or your
+# vendor.  This file may not be modified, except as allowed by
+# additional terms of your license agreement.
+#
+## @file
+# Intel(R) Platform Controller Hub EG20T Reference Implementations
+#
+# Provides support for devices found in the Intel(R) Platform Controller Hub
+# EG20T for use in UEFI based firmware.
+#
+# Copyright (c) 2010 - 2013, Intel Corporation. All rights reserved.<BR>
+#
+#    This software and associated documentation (if any) is furnished
+#    under a license and may only be used or copied in accordance
+#    with the terms of the license. Except as permitted by such
+#    license, no part of this software or documentation may be
+#    reproduced, stored in a retrieval system, or transmitted in any
+#    form or by any means without the express written consent of
+#    Intel Corporation.
+#
+##
+
+
+################################################################################
+#
+# Defines Section - statements that will be processed to create a Makefile.
+#
+################################################################################
+
+[Defines]
+  DEC_SPECIFICATION              = 0x00010005
+  PACKAGE_NAME                   = IntelEg20tRuPkg
+  PACKAGE_GUID                   = 95BED25C-52D6-41a0-94D6-5AADCE76004B
+  PACKAGE_VERSION                = 0.1
+
+
+################################################################################
+#
+# Include Section - list of Include Paths that are provided by this package.
+#                   Comments are used for Keywords and Module Types.
+#
+# Supported Module Types:
+#  SEC PEIM DXE_DRIVER DXE_RUNTIME_DRIVER DXE_SMM_DRIVER DXE_SAL_DRIVER UEFI_DRIVER BASE
+#
+################################################################################
+[Includes]
+  Include
+
+################################################################################
+#
+# Library Class Header section - list of Library Class header files that are
+#                                provided by this package.
+#
+################################################################################
+[LibraryClasses]
+
+################################################################################
+#
+# Global Guid Definition section - list of Global Guid C Name Data Structures
+#                                  that are provided by this package.
+#
+################################################################################
+[Guids]
+  ## Defines the token space for the EG20T PCDs.
+  #
+  gIntelEg20tRuTokenSpaceGuid  = { 0x97118d13, 0xdeeb, 0x4578, { 0x86, 0x70, 0xdf, 0xf2, 0xe8, 0x4e, 0xec, 0x08 }}
+
+  ## When this GUID is installed into the handle databas, it indicates 
+  #  that the EG20T Platform Controller Hub has been initialized and 
+  #  is in a usable state.
+  #
+  gEfiEg20tInitGuid = { 0x147ad26d, 0x6c33, 0x4e7f, { 0xa1, 0xc3, 0x44, 0xeb, 0x91, 0x15, 0xd1, 0x11 }}
+
+################################################################################
+#
+# Global Ppi Definition section - list of Global Ppi C Name Data Structures
+#                                  that are provided by this package.
+#
+################################################################################
+[Ppis]
+
+################################################################################
+#
+# Global Protocols Definition section - list of Global Protocols C Name Data
+#                                  Structures that are provided by this package.
+#
+################################################################################
+[Protocols]
+
+  ## Provides an I/O abstraction layer between the SD/MMC media level and the
+  #  controller implementation.
+  #
+  ## Include/SDHostIo.h
+  gEfiSDHostIoProtocolGuid = {0xb63f8ec7, 0xa9c9, 0x4472, {0xa4, 0xc0, 0x4d, 0x8b, 0xf3, 0x65, 0xcc, 0x51}}
+
+  ## Provides platform specific services required by the EG20T drivers.
+  #  
+  gEfiEg20tPlatformProtocolGuid =   {0x2119221f, 0x905c, 0x4f6c, { 0xbd, 0xec, 0x73, 0x6c, 0xbf, 0x2f, 0x4a, 0xae}}
+
+################################################################################
+#
+# PCD Declarations section - list of all PCDs Declared by this Package
+#                            Only this package should be providing the
+#                            declaration, other packages should not.
+#
+################################################################################
+
+#
+# [Error.gIntelEg20tRuTokenSpaceGuid]
+#   0x80000001 | Invalid value provided.
+#   0x80000002 | Reserved bits must be set to zero.
+#
+
+[PcdsFeatureFlag]
+  gIntelEg20tRuTokenSpaceGuid.PcdEhciRecoveryEnabled|FALSE|BOOLEAN|0x10000003
+
+[PcdsFixedAtBuild, PcdsPatchableInModule, PcdsDynamic, PcdsDynamicEx]
+  ## Select the pci uart device that can be used as logging terminal or
+  #  source level debug terminal.<BR><BR>
+  #
+  #   0: UART0.<BR>
+  #   1: UART1.<BR>
+  #   2: UART2.<BR>
+  #   3: UART3.<BR>
+  #
+  # @Prompt Index of EG20T UART device 
+  #
+  # @ValidRange 0x80000001 | 0 - 3
+  #
+  gIntelEg20tRuTokenSpaceGuid.PcdIohUartPortNumber|0|UINT8|0x20000001
+  
+  ## The CPU to PCIE memory base address. <BR><BR>
+  #
+  #  Bit0 - Bit19: Reserved Bits. Must be 0.<BR>
+  #  Bit20 - Bit31: Memory base address.<BR>
+  #
+  # @Prompt PCIE Memory Base Address
+  #
+  gIntelEg20tRuTokenSpaceGuid.PcdPeiP2PMemoryBaseAddress|0xA0000000|UINT32|0x20000002
+  
+  ## Configure EG20T USB host controller Memory Base Address. It claims a 256 byte address space.<BR><BR>
+  #
+  #  Bit0 - Bit7: Reserved Bits. Must be 0.<BR>
+  #  Bit8 - Bit31: Memory base address.<BR>
+  #
+  # @Expression 0x80000001 | gIntelEg20tRuTokenSpaceGuid.PcdPeiTcUsbControllerMemoryBaseAddress & 0xFFFFFF00 != 0
+  # @Expression 0x80000001 | gIntelEg20tRuTokenSpaceGuid.PcdPeiTcUsbControllerMemoryBaseAddress & 0x000000FF == 0
+  #
+  # @Prompt EG20T USB host controller Memory Base Address.
+  #
+  gIntelEg20tRuTokenSpaceGuid.PcdPeiTcUsbControllerMemoryBaseAddress|0xA0010000|UINT32|0x20000007
+
+  ## Frequency in Hz of the external clock connected to the UART_CLK pin.<BR><BR>
+  #
+  # @Prompt Baud Rate Clock for EG20T UART
+  #
+  # @Expression 0x80000001|  ((gIntelEg20tRuTokenSpaceGuid.PcdIohUartClk == 0) || (gIntelEg20tRuTokenSpaceGuid.PcdIohUartClk >= 2500000 && gIntelEg20tRuTokenSpaceGuid.PcdIohUartClk <= 64000000))
+  #
+  gIntelEg20tRuTokenSpaceGuid.PcdIohUartClk|1843200|UINT32|0x20000008
+
+  ## Config Baud rate Referrence Clock Select Register (BRCSR) which controls
+  #  the baud rate source clock selecting of UART.<BR><BR>
+  #
+  #  0: Using PLLDIVCLK. Must use BAUDSEL and use PLL2VCO and BAUDDIV if PLL2VC0 != 0.<BR>
+  #  1: Using UART_CLK.  Ignore BAUDSEL, PLL2VCO and BAUDDIV.<BR>
+  #
+  # @Prompt Referrence clock for EG20T UART
+  #
+  # @ValidList 0x80000001 | 0, 1
+  #
+  gIntelEg20tRuTokenSpaceGuid.PcdIohUartBrcsr|0x01|UINT8|0x20000009
+
+  ## Baud clock select (BAUDSEL).<BR><BR>
+  # 
+  #   0: UART_CLK pin.<BR>
+  #   1: 48 MHz.<BR>
+  #   2: 25 MHz.<BR>
+  #   3: 25 MHz.<BR>
+  #
+  # @Prompt Baud clock for EG20T UART
+  #
+  # @ValidList 0x80000001 | 0, 1, 2, 3
+  #
+  gIntelEg20tRuTokenSpaceGuid.PcdIohClkCfgBaudSel|0x00|UINT8|0x2000000A
+
+  ## Setting PLL2VCO (Phase LockedLoop Voltage Controller Oscillator) 
+  #  of CLKCFG register.<BR><BR>
+  #
+  #   0:  Disable PLL2VCO and BAUDDIV.<BR>
+  #   6:  Multiply by 6.<BR>
+  #   7:  Multiply by 7.<BR>
+  #   8:  Multiply by 8.<BR>
+  #   9:  Multiply by 9.<BR>
+  #   10: Multiply by 10.<BR>
+  #   11: Multiply by 11.<BR>
+  #
+  # @Prompt Setting EG20T UART PLL2VCO.
+  #
+  # @ValidList 0x80000001 | 0, 6, 7, 8, 9, 10, 11
+  #
+  gIntelEg20tRuTokenSpaceGuid.PcdIohClkCfgPll2Vc0|0x00|UINT8|0x2000000B
+
+  ## Divider setting for the PLL2 output.<BR><BR>
+  # 
+  #   0:  Divide by 16.<BR>
+  #   1:  Divide by 1.<BR>
+  #   2:  Divide by 2.<BR>
+  #   3:  Divide by 3.<BR>
+  #   4:  Divide by 4.<BR>
+  #   5:  Divide by 5.<BR>
+  #   6:  Divide by 6.<BR>
+  #   7:  Divide by 7.<BR>
+  #   8:  Divide by 8.<BR>
+  #   9:  Divide by 9.<BR>
+  #   10: Divide by 10.<BR>
+  #   11: Divide by 11.<BR>
+  #   12: Divide by 12.<BR>
+  #   13: Divide by 13.<BR>
+  #   14: Divide by 14.<BR>
+  #   15: Divide by 15.<BR>
+  #
+  # @Prompt Setting EG20T UART BAUDDIV
+  #
+  # @ValidRange 0x80000001 | 0 - 15
+  #
+  gIntelEg20tRuTokenSpaceGuid.PcdIohClkCfgBaudDiv|0x00|UINT8|0x2000000C
+
+  ## Bit mask of the UART devices that are enabled for Serial I/O Protocol.<BR><BR>
+  #  BIT0: Enable/Disable Serial I/O on EG20T UART 0.<BR>
+  #  BIT1: Enable/Disable Serial I/O on EG20T UART 1.<BR>
+  #  BIT2: Enable/Disable Serial I/O on EG20T UART 2.<BR>
+  #  BIT3: Enable/Disable Serial I/O on EG20T UART 3.<BR>
+  #  BIT4-BIT7: Reserved.  Must be 0.<BR>
+  #
+  # @Prompt Enable EG20T UART device.
+  #
+  gIntelEg20tRuTokenSpaceGuid.PcdEg20tUartSerialIoEnableMask|0x0f|UINT8|0x2000000D
+
+  ## PCI Bus number of the PCI root port connected to the EG20T.
+  #  Default value of Bus 0 is PCI Root Port #0 of Atom E6xx CPU.<BR><BR>
+  #
+  # @Prompt The PCI Bus number for EG20T.
+  #
+  gIntelEg20tRuTokenSpaceGuid.PcdEg20tParentPciBus|0x00|UINT8|0x20001000
+
+  ## PCI Device number of the PCI root port connected to the EG20T
+  #  Default value of Device 0x17 is PCI Root Port #0 of Atom E6xx CPU.<BR><BR>
+  #
+  # @Prompt The PCI Device number for EG20T.
+  #
+  gIntelEg20tRuTokenSpaceGuid.PcdEg20tParentPciDevice|0x17|UINT8|0x20001001
+
+  ## PCI Function number of the PCI root port connected to the EG20T
+  #  Default value of Function 0 is PCI Root Port #0 of Atom E6xx CPU.<BR><BR>
+  #
+  # @Prompt The PCI Function number for EG20T.
+  #
+  gIntelEg20tRuTokenSpaceGuid.PcdEg20tParentPciFunction|0x00|UINT8|0x20001002
+  
+  ## MAC address for the Gigabit Ethernet COntroller in Intel(R) Platform Controller Hub EG20T.  Default is 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff.<BR><BR>
+  # @Prompt Gigabit Ethernet MAC Address.
+  gIntelEg20tRuTokenSpaceGuid.Eg20tGigabitEthernetMac    |{0xff, 0xff, 0xff, 0xff, 0xff, 0xff}|VOID*|0x30000001
+
+  ## PCI Subsystem Vendor ID for all PCI controllers in the Intel(R) Platform Controller Hub EG20T.  Default is 0xFFFF.<BR><BR>
+  # @Prompt PCI Subsystem Vendor ID.
+  gIntelEg20tRuTokenSpaceGuid.Eg20tPciSubsystemVendorId  |0xFFFF|UINT16|0x40000001
+
+  ## PCI Subsystem Device ID for all PCI controllers in the Intel(R) Platform Controller Hub EG20T.  Default is 0xFFFF.<BR><BR>
+  # @Prompt PCI Subsystem Device ID.
+  gIntelEg20tRuTokenSpaceGuid.Eg20tPciSubsystemDeviceId  |0xFFFF|UINT16|0x40000002
+  

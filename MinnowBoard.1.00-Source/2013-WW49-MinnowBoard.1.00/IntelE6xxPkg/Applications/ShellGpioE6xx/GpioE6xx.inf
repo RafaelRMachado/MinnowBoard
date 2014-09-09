@@ -1,0 +1,44 @@
+## @file
+#  Simple Shell Library
+#
+#  Copyright (c) 2011-2013, Intel Corporation. All rights reserved.<BR>
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution.  The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = GpioE6xx
+  FILE_GUID                      = 9BF3C183-DFFE-4651-B624-39E9BED832C2
+  MODULE_TYPE                    = UEFI_APPLICATION
+  ENTRY_POINT                    = ShellCEntryLib
+
+[Sources.common]
+  GpioE6xx.c
+  GpioE6xxCommon.c
+  GpioE6xx.uni
+
+[Packages]
+  IntelE6xxPkg/IntelE6xxPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  MinnowBoardPkg/MinnowBoardPkg.dec   ## For ShellPrintHelp missing from UDK2010.SR1.UP1.P1 
+  ShellPkg/ShellPkg.dec
+
+[LibraryClasses]
+  DebugLib
+  E6xxGpioLib
+  HiiLib
+  ShellCEntryLib
+  ShellLib
+  UefiApplicationEntryPoint
+  UefiLib
+
+[Protocols]
+  gEfiShellParametersProtocolGuid   ## CONSUMES
